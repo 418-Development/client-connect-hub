@@ -56,7 +56,7 @@ Tasks are individual units of work that need to be completed to fulfill a user s
 
 To crate a new task you
 
-1. Add a item to the Todo colum on the task board.
+1. Add a item to the Todo column on the task board.
 2. Convert the item to an issue for the `client-connect-hub` repository.
 3. Each task should reference the user story it belongs to by including the issue number. (in the description of the task) For example:
 
