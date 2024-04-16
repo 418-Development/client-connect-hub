@@ -3,11 +3,11 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import Navigation from "./components/Navigation";
 import { NavigationItem } from "./enums/navigation";
 import SignUpForm from "./components/SignUpForm";
+import Welcome from "./components/Welcome";
 import Timeline from "./components/Timeline";
 
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [isLoginInvalid, setIsLoginInvalid] = useState<boolean>(false);
@@ -81,9 +81,9 @@ function App() {
                                 isLoginInvalid={isLoginInvalid}
                             />
 
-                            <div className="container mt-3">{isAuthenticated ? <h2>Authenticated</h2> : <h2>Not Authenticated</h2>}</div>
-                            <Timeline />
+                            <div className="container mt-3">{isAuthenticated ? <h2>Authenticated</h2> : <Welcome></Welcome>}</div>
 
+                            <Timeline></Timeline>
                             <SignUpForm
                                 signin={login}
                                 username={username}
