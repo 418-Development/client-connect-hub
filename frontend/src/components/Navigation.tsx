@@ -10,14 +10,26 @@ interface Props {
     onLogin: (email: string, password: string) => void;
     onSignOut: () => void;
     onSignUp: (email: string, password: string) => void;
+    username?: string;
+    password?: string;
+    setUsername: React.Dispatch<React.SetStateAction<string>>;
+    setPassword: React.Dispatch<React.SetStateAction<string>>;
+    isLoginInvalid: boolean;
 }
 
-function Navigation({ isAuthenticated, onLogin, onSignOut, onSignUp }: Props) {
+function Navigation({
+    isAuthenticated,
+    onLogin,
+    onSignOut,
+    onSignUp,
+    setUsername,
+    setPassword,
+    username = "",
+    password = "",
+    isLoginInvalid = false,
+}: Props) {
     const navigate = useNavigate();
     const [isNavCollapsed, setIsNavCollapsed] = useState(true);
-
-    const [usernameInput, setUsernameInput] = useState<string>("");
-    const [passwordInput, setPasswordInput] = useState<string>("");
 
     const toggleNav = () => setIsNavCollapsed(!isNavCollapsed);
 
@@ -35,7 +47,7 @@ function Navigation({ isAuthenticated, onLogin, onSignOut, onSignUp }: Props) {
     }, []);
 
     const login = async () => {
-        onLogin(usernameInput, passwordInput);
+        onLogin(username, password);
     };
 
     return (
@@ -59,10 +71,10 @@ function Navigation({ isAuthenticated, onLogin, onSignOut, onSignUp }: Props) {
                     {!isAuthenticated ? (
                         <div id="login-box" className="d-flex flex-column flex-lg-row align-items-center" style={{ gap: "0.5rem" }}>
                             <input
-                                className="form-control form-control-sm mb-2 mb-lg-0 me-lg-2"
+                                className={`form-control form-control-sm mb-2 mb-lg-0 me-lg-2${isLoginInvalid ? " is-invalid" : ""}`}
                                 type="text"
-                                value={usernameInput}
-                                onChange={(e) => setUsernameInput(e.target.value)}
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
                                 id="email"
                                 autoComplete="username"
                                 placeholder="Username"
@@ -70,10 +82,10 @@ function Navigation({ isAuthenticated, onLogin, onSignOut, onSignUp }: Props) {
                                 style={{ height: "40px" }}
                             />
                             <input
-                                className="form-control form-control-sm mb-2 mb-lg-0 me-lg-2"
+                                className={`form-control form-control-sm mb-2 mb-lg-0 me-lg-2${isLoginInvalid ? " is-invalid" : ""}`}
                                 type="password"
-                                value={passwordInput}
-                                onChange={(e) => setPasswordInput(e.target.value)}
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
                                 id="password"
                                 autoComplete="current-password"
                                 placeholder="Password"
@@ -90,7 +102,7 @@ function Navigation({ isAuthenticated, onLogin, onSignOut, onSignUp }: Props) {
                                     className="text-nowrap"
                                     modalTarget="#modalSignUpForm"
                                     onClick={() => {
-                                        onSignUp(usernameInput, passwordInput);
+                                        onSignUp(username, password);
                                     }}
                                 >
                                     Sign Up
