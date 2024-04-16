@@ -3,6 +3,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import Navigation from "./components/Navigation";
 import { NavigationItem } from "./enums/navigation";
 import SignUpForm from "./components/SignUpForm";
+import Timeline from "./components/Timeline";
 
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -81,6 +82,7 @@ function App() {
                             />
 
                             <div className="container mt-3">{isAuthenticated ? <h2>Authenticated</h2> : <h2>Not Authenticated</h2>}</div>
+                            <Timeline />
 
                             <SignUpForm
                                 signin={login}
