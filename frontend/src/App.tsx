@@ -9,6 +9,7 @@ function App() {
 
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
+    const [isLoginInvalid, setIsLoginInvalid] = useState<boolean>(false);
 
     useEffect(() => {
         if (document.cookie.startsWith("token=")) {
@@ -38,6 +39,9 @@ function App() {
             document.cookie = `token=${json.tokenType} ${json.accessToken};expires="${date.toUTCString()};SameSite=Strict;path=/`;
 
             setIsAuthenticated(true);
+        } else {
+            setIsLoginInvalid(true);
+            setPassword("");
         }
 
         console.log(url, response.ok, response.status);
@@ -69,6 +73,11 @@ function App() {
                                 onLogin={login}
                                 onSignOut={signOut}
                                 onSignUp={singUp}
+                                username={username}
+                                password={password}
+                                setPassword={setPassword}
+                                setUsername={setUsername}
+                                isLoginInvalid={isLoginInvalid}
                             />
 
                             <div className="container mt-3">{isAuthenticated ? <h2>Authenticated</h2> : <h2>Not Authenticated</h2>}</div>
