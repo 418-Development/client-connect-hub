@@ -5,6 +5,7 @@ import { NavigationItem } from "./enums/navigation";
 import SignUpForm from "./components/SignUpForm";
 import Welcome from "./components/Welcome";
 import DebugTimeline from "./components/DebugTimeline";
+import ProjectCard from "./components/ProjectCard";
 
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -19,7 +20,8 @@ function App() {
     }, []);
 
     const login = async (username: string, password: string) => {
-        const url = (import.meta.env.VITE_API_URL as string) + "api/auth/signin";
+        const url =
+            (import.meta.env.VITE_API_URL as string) + "api/auth/signin";
 
         const response = await fetch(url, {
             method: "POST",
@@ -37,7 +39,9 @@ function App() {
 
             const date = new Date();
             date.setTime(date.getTime() + 15 * 60 * 1000);
-            document.cookie = `token=${json.tokenType} ${json.accessToken};expires="${date.toUTCString()};SameSite=Strict;path=/`;
+            document.cookie = `token=${json.tokenType} ${
+                json.accessToken
+            };expires="${date.toUTCString()};SameSite=Strict;path=/`;
 
             setIsAuthenticated(true);
         } else {
@@ -81,7 +85,15 @@ function App() {
                                 isLoginInvalid={isLoginInvalid}
                             />
 
-                            <div className="container mt-3">{isAuthenticated ? <h2>Authenticated</h2> : <Welcome></Welcome>}</div>
+                            <div className="container mt-3">
+                                {isAuthenticated ? (
+                                    <h2>Authenticated</h2>
+                                ) : (
+                                    <Welcome></Welcome>
+                                )}
+                            </div>
+
+                            <ProjectCard></ProjectCard>
 
                             <SignUpForm
                                 signin={login}
