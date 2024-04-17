@@ -16,8 +16,6 @@
     position: relative;
     list-style: none;
 
-    border-left: 4px solid white;
-
     padding: 0;
     margin: 0 0 0 16px;
 }
@@ -47,15 +45,15 @@
     background-color: #198754;
     border: 3px solid white;
     width: 18px;
+    height: 18px;
 }
 
-.timeline li:last-of-type::before,
-.timeline li:first-of-type::before {
+.timeline li::before {
     content: "";
     display: block;
     background-color: white;
     width: 4px;
-    height: 50%;
+    height: 100%;
     padding: 0;
     margin: 0;
 
@@ -65,24 +63,25 @@
     transform: translate(calc(-50% - 2px), -50%);
 }
 
-.timeline li.indicate-more:last-of-type,
-.timeline li.indicate-more:first-of-type {
-    border-left: 4px dashed white;
-    margin-left: 16px;
-}
-
-.timeline li:last-of-type,
-.timeline li:first-of-type {
-    border-left: none;
-    margin-left: 20px;
-}
-
 .timeline li:first-of-type::before {
+    height: 50%;
     top: 75%;
 }
-
 .timeline li:last-of-type::before {
+    height: 50%;
     top: 25%;
+}
+
+.timeline li.indicate-more:first-of-type::before {
+    height: 100%;
+    top: 50%;
+    background: linear-gradient(#ffffff00, #ffffff, #ffffff);
+}
+
+.timeline li.indicate-more:last-of-type::before {
+    height: 100%;
+    top: 50%;
+    background: linear-gradient(#ffffffff, #ffffff, #ffffff00);
 }
 
 .timeline li:last-of-type:first-of-type::before {
