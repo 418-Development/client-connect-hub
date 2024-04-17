@@ -6,6 +6,8 @@ import SignUpForm from "./components/SignUpForm";
 import Welcome from "./components/Welcome";
 import DebugTimeline from "./components/DebugTimeline";
 import ProjectCard from "./components/ProjectCard";
+import ProgressBar from "./components/ProgressBar";
+import { UserProvider } from "./UserContext";
 
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -67,68 +69,74 @@ function App() {
 
     return (
         <div>
-            <Routes>
-                <Route
-                    path="/"
-                    element={
-                        <>
-                            <Navigation
-                                activeNavigationItem={NavigationItem.HOME}
-                                isAuthenticated={isAuthenticated}
-                                onLogin={login}
-                                onSignOut={signOut}
-                                onSignUp={singUp}
-                                username={username}
-                                password={password}
-                                setPassword={setPassword}
-                                setUsername={setUsername}
-                                isLoginInvalid={isLoginInvalid}
-                            />
+            <UserProvider>
+                <Routes>
+                    <Route
+                        path="/"
+                        element={
+                            <>
+                                <Navigation
+                                    activeNavigationItem={NavigationItem.HOME}
+                                    isAuthenticated={isAuthenticated}
+                                    onLogin={login}
+                                    onSignOut={signOut}
+                                    onSignUp={singUp}
+                                    username={username}
+                                    password={password}
+                                    setPassword={setPassword}
+                                    setUsername={setUsername}
+                                    isLoginInvalid={isLoginInvalid}
+                                />
 
-                            <div className="container mt-3">
-                                {isAuthenticated ? (
-                                    <h2>Authenticated</h2>
-                                ) : (
-                                    <Welcome></Welcome>
-                                )}
-                            </div>
+                                <div className="container mt-3">
+                                    {isAuthenticated ? (
+                                        <h2>Authenticated</h2>
+                                    ) : (
+                                        <Welcome></Welcome>
+                                    )}
+                                </div>
 
-                            <ProjectCard></ProjectCard>
+                                <ProjectCard></ProjectCard>
 
-                            <SignUpForm
-                                signin={login}
-                                username={username}
-                                password={password}
-                                setPassword={setPassword}
-                                setUsername={setUsername}
-                            ></SignUpForm>
-                        </>
-                    }
-                />
+                                <div className="container mt-3">
+                                    <ProgressBar progress={45} height={10} />
+                                </div>
 
-                <Route
-                    path="/debug/timeline"
-                    element={
-                        <>
-                            <Navigation
-                                activeNavigationItem={NavigationItem.HOME}
-                                isAuthenticated={isAuthenticated}
-                                onLogin={login}
-                                onSignOut={signOut}
-                                onSignUp={singUp}
-                                username={username}
-                                password={password}
-                                setPassword={setPassword}
-                                setUsername={setUsername}
-                                isLoginInvalid={isLoginInvalid}
-                            />
-                            <DebugTimeline />
-                        </>
-                    }
-                />
+                                <SignUpForm
+                                    signin={login}
+                                    username={username}
+                                    password={password}
+                                    setPassword={setPassword}
+                                    setUsername={setUsername}
+                                ></SignUpForm>
+                            </>
+                        }
+                    />
 
-                <Route path="*" element={<Navigate to="/" />} />
-            </Routes>
+                    <Route
+                        path="/debug/timeline"
+                        element={
+                            <>
+                                <Navigation
+                                    activeNavigationItem={NavigationItem.HOME}
+                                    isAuthenticated={isAuthenticated}
+                                    onLogin={login}
+                                    onSignOut={signOut}
+                                    onSignUp={singUp}
+                                    username={username}
+                                    password={password}
+                                    setPassword={setPassword}
+                                    setUsername={setUsername}
+                                    isLoginInvalid={isLoginInvalid}
+                                />
+                                <DebugTimeline />
+                            </>
+                        }
+                    />
+
+                    <Route path="*" element={<Navigate to="/" />} />
+                </Routes>
+            </UserProvider>
         </div>
     );
 }
