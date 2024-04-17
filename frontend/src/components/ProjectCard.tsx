@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import ProgressBar from "./ProgressBar";
 import Timeline from "./Timeline";
 
 function ProjectCard() {
@@ -34,7 +35,7 @@ function ProjectCard() {
                         ref={contentRef}
                         className="card p-1"
                         style={{
-                            maxHeight: isExpanded ? "none" : "75px",
+                            maxHeight: isExpanded ? "none" : "115px",
                             overflow: "hidden",
                             cursor: "pointer",
                         }}
@@ -102,8 +103,9 @@ function ProjectCard() {
                         onlyShowOverview
                     />
                     <h5 className="card-title">
-                        <br />
-                        Space for the Indicator
+                        <div className="container mt-3">
+                            <ProgressBar progress={75} height={20} />
+                        </div>
                     </h5>
                 </div>
             </div>

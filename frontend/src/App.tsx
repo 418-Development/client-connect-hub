@@ -98,10 +98,6 @@ function App() {
 
                                 <ProjectCard></ProjectCard>
 
-                                <div className="container mt-3">
-                                    <ProgressBar progress={45} height={10} />
-                                </div>
-
                                 <SignUpForm
                                     signin={login}
                                     username={username}
