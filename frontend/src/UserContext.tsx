@@ -1,18 +1,22 @@
 import React, { ReactNode, useState } from "react";
 
 export const UserContext = React.createContext("");
-export const UserUpdateContext = React.createContext("");
+export const UserUpdateContext = React.createContext(() => {});
 
 interface Props {
     children?: ReactNode;
 }
 
 export function UserProvider({ children }: Props) {
-    const [username, setUserName] = useState("");
+    const [username, setUserName] = useState("Karl");
 
     function requestUserInfo() {
         setUserName("Peter");
     }
 
-    return <UserContext.Provider value={username}>{children}</UserContext.Provider>;
+    return (
+        <UserContext.Provider value={username}>
+            <UserUpdateContext.Provider value={requestUserInfo}>{children}</UserUpdateContext.Provider>
+        </UserContext.Provider>
+    );
 }

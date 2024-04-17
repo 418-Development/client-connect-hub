@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import logo from "../assets/LogoWhitePulseOnly.png";
 import { NavigationItem } from "../enums/navigation";
 import Button from "./Button"; // Adjust the import path as necessary
-import { UserContext } from "../UserContext";
+import { UserContext, UserUpdateContext } from "../UserContext";
 
 interface Props {
     activeNavigationItem: NavigationItem;
@@ -33,6 +33,8 @@ function Navigation({
     const [isNavCollapsed, setIsNavCollapsed] = useState(true);
 
     const globalUser = useContext(UserContext);
+    const requestUserInfo = useContext(UserUpdateContext);
+    requestUserInfo();
 
     const toggleNav = () => setIsNavCollapsed(!isNavCollapsed);
 

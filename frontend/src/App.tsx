@@ -6,7 +6,7 @@ import SignUpForm from "./components/SignUpForm";
 import Welcome from "./components/Welcome";
 import DebugTimeline from "./components/DebugTimeline";
 import ProgressBar from "./components/ProgressBar";
-import UserProvider from "./UserContext";
+import { UserProvider } from "./UserContext";
 
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -87,7 +87,6 @@ function App() {
                                 <div className="container mt-3">{isAuthenticated ? <h2>Authenticated</h2> : <Welcome></Welcome>}</div>
 
                                 <div className="container mt-3">
-                                    <button o></button>
                                     <ProgressBar progress={45} height={10} />
                                 </div>
 
