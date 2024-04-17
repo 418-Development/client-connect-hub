@@ -1,3 +1,7 @@
+:root {
+    box-sizing: border-box;
+}
+
 .input-group-text {
     width: 150px !important;
 }
@@ -11,12 +15,14 @@
 .timeline li {
     position: relative;
     list-style: none;
+
     border-left: 4px solid white;
+
     padding: 0;
     margin: 0 0 0 16px;
 }
 
-.timeline li::before {
+.timeline li::after {
     content: "";
     display: block;
     background-color: var(--bs-body-bg);
@@ -33,12 +39,52 @@
     transform: translate(calc(-50% - 2px), -50%);
 }
 
-.timeline li.is-done::before {
+.timeline li.is-done::after {
     background-color: white;
 }
 
-.timeline li.is-active::before {
+.timeline li.is-active::after {
     background-color: #198754;
     border: 3px solid white;
     width: 18px;
+}
+
+.timeline li:last-of-type::before,
+.timeline li:first-of-type::before {
+    content: "";
+    display: block;
+    background-color: white;
+    width: 4px;
+    height: 50%;
+    padding: 0;
+    margin: 0;
+
+    position: absolute;
+    left: 0%;
+    top: 50%;
+    transform: translate(calc(-50% - 2px), -50%);
+}
+
+.timeline li.indicate-more:last-of-type,
+.timeline li.indicate-more:first-of-type {
+    border-left: 4px dashed white;
+    margin-left: 16px;
+}
+
+.timeline li:last-of-type,
+.timeline li:first-of-type {
+    border-left: none;
+    margin-left: 20px;
+}
+
+.timeline li:first-of-type::before {
+    top: 75%;
+}
+
+.timeline li:last-of-type::before {
+    top: 25%;
+}
+
+.timeline li:last-of-type:first-of-type::before {
+    height: 0;
 }

@@ -4,7 +4,7 @@ import Navigation from "./components/Navigation";
 import { NavigationItem } from "./enums/navigation";
 import SignUpForm from "./components/SignUpForm";
 import Welcome from "./components/Welcome";
-import Timeline from "./components/Timeline";
+import DebugTimeline from "./components/DebugTimeline";
 
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -83,7 +83,6 @@ function App() {
 
                             <div className="container mt-3">{isAuthenticated ? <h2>Authenticated</h2> : <Welcome></Welcome>}</div>
 
-                            <Timeline></Timeline>
                             <SignUpForm
                                 signin={login}
                                 username={username}
@@ -91,6 +90,27 @@ function App() {
                                 setPassword={setPassword}
                                 setUsername={setUsername}
                             ></SignUpForm>
+                        </>
+                    }
+                />
+
+                <Route
+                    path="/debug/timeline"
+                    element={
+                        <>
+                            <Navigation
+                                activeNavigationItem={NavigationItem.HOME}
+                                isAuthenticated={isAuthenticated}
+                                onLogin={login}
+                                onSignOut={signOut}
+                                onSignUp={singUp}
+                                username={username}
+                                password={password}
+                                setPassword={setPassword}
+                                setUsername={setUsername}
+                                isLoginInvalid={isLoginInvalid}
+                            />
+                            <DebugTimeline />
                         </>
                     }
                 />
