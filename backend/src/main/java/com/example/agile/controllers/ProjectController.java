@@ -82,4 +82,92 @@ public class ProjectController {
         }
     }
 
+    @GetMapping("/get-project/{projectId}")
+    public ResponseEntity<?> getProject(@PathVariable Long projectId) {
+        try {
+            // Fetch the project
+            Project project = projectRepository.findById(projectId).orElse(null);
+            if (project == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("Project not found"));
+            }
+
+            return ResponseEntity.ok(project);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Failed to fetch project: " + e.getMessage()));
+        }
+    }
+
+    @DeleteMapping("/delete-project/{projectId}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<?> deleteProject(@PathVariable Long projectId) {
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (authentication == null || !authentication.isAuthenticated() || !(authentication.getPrincipal() instanceof UserDetails)) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new MessageResponse("Unauthorized"));
+            }
+
+            // Fetch the project
+            Project project = projectRepository.findById(projectId).orElse(null);
+            if (project == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("Project not found"));
+            }
+
+            // Check if the user has the necessary role to delete projects
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            User currentUser = userRepository.findByUsername(userDetails.getUsername()).orElse(null);
+            if (currentUser == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new MessageResponse("User not found"));
+            }
+            if (!currentUser.getRoles().stream().anyMatch(role -> role.getName() == ERole.ROLE_ADMIN)) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new MessageResponse("User does not have permission to delete projects"));
+            }
+
+            // Delete the project
+            projectRepository.delete(project);
+
+            return ResponseEntity.ok(new MessageResponse("Project deleted successfully"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Failed to delete project: " + e.getMessage()));
+        }
+    }
+
+    @PutMapping("/update-project/{projectId}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<?> updateProject(@PathVariable Long projectId, @Valid @RequestBody Project projectDetails) {
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (authentication == null || !authentication.isAuthenticated() || !(authentication.getPrincipal() instanceof UserDetails)) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new MessageResponse("Unauthorized"));
+            }
+
+            // Fetch the project
+            Project project = projectRepository.findById(projectId).orElse(null);
+            if (project == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("Project not found"));
+            }
+
+            // Check if the user has the necessary role to update projects
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            User currentUser = userRepository.findByUsername(userDetails.getUsername()).orElse(null);
+            if (currentUser == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new MessageResponse("User not found"));
+            }
+            if (!currentUser.getRoles().stream().anyMatch(role -> role.getName() == ERole.ROLE_ADMIN)) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new MessageResponse("User does not have permission to update projects"));
+            }
+
+            // Update project details
+            project.setProjectName(projectDetails.getProjectName());
+            project.setDescription(projectDetails.getDescription());
+            // You can add more fields to update as needed
+
+            // Save the updated project
+            Project updatedProject = projectRepository.save(project);
+
+            return ResponseEntity.ok(new MessageResponse("Project updated successfully"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Failed to update project: " + e.getMessage()));
+        }
+    }
+
 }
