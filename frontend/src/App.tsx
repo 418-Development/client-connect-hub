@@ -4,10 +4,13 @@ import Navigation from "./components/Navigation";
 import { NavigationItem } from "./enums/navigation";
 import SignUpForm from "./components/SignUpForm";
 import DebugTimeline from "./routes/DebugTimeline";
+import ProjectCreation from "./routes/ProjectCreation";
 import ProjectCards from "./components/ProjectCards";
 import ProgressBar from "./components/ProgressBar";
 import { UserProvider } from "./UserContext";
 import Welcome from "./components/Welcome";
+import ManagerFooter from "./components/ManagerFooter";
+import ManageUser from "./routes/ManageUser";
 
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -70,24 +73,30 @@ function App() {
     return (
         <div>
             <UserProvider>
+                <Navigation
+                    activeNavigationItem={NavigationItem.HOME}
+                    isAuthenticated={isAuthenticated}
+                    onLogin={login}
+                    onSignOut={signOut}
+                    onSignUp={singUp}
+                    username={username}
+                    password={password}
+                    setPassword={setPassword}
+                    setUsername={setUsername}
+                    isLoginInvalid={isLoginInvalid}
+                />
+                <SignUpForm
+                    signin={login}
+                    username={username}
+                    password={password}
+                    setPassword={setPassword}
+                    setUsername={setUsername}
+                ></SignUpForm>
                 <Routes>
                     <Route
                         path="/"
                         element={
                             <>
-                                <Navigation
-                                    activeNavigationItem={NavigationItem.HOME}
-                                    isAuthenticated={isAuthenticated}
-                                    onLogin={login}
-                                    onSignOut={signOut}
-                                    onSignUp={singUp}
-                                    username={username}
-                                    password={password}
-                                    setPassword={setPassword}
-                                    setUsername={setUsername}
-                                    isLoginInvalid={isLoginInvalid}
-                                />
-
                                 <div className="container mt-3">
                                     {isAuthenticated ? (
                                         <h2>Authenticated</h2>
@@ -268,36 +277,18 @@ function App() {
                                     <ProgressBar progress={70} vertical />
                                 </div>
 
-                                <SignUpForm
-                                    signin={login}
-                                    username={username}
-                                    password={password}
-                                    setPassword={setPassword}
-                                    setUsername={setUsername}
-                                ></SignUpForm>
+                                <ManagerFooter />
                             </>
                         }
                     />
 
+                    <Route path="/debug/timeline" element={<DebugTimeline />} />
+
+                    <Route path="/manage-user" element={<ManageUser />} />
+
                     <Route
-                        path="/debug/timeline"
-                        element={
-                            <>
-                                <Navigation
-                                    activeNavigationItem={NavigationItem.HOME}
-                                    isAuthenticated={isAuthenticated}
-                                    onLogin={login}
-                                    onSignOut={signOut}
-                                    onSignUp={singUp}
-                                    username={username}
-                                    password={password}
-                                    setPassword={setPassword}
-                                    setUsername={setUsername}
-                                    isLoginInvalid={isLoginInvalid}
-                                />
-                                <DebugTimeline />
-                            </>
-                        }
+                        path="/create-project"
+                        element={<ProjectCreation />}
                     />
 
                     <Route path="*" element={<Navigate to="/" />} />
