@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import Navigation from "./components/Navigation";
 import { NavigationItem } from "./enums/navigation";
 import SignUpForm from "./components/SignUpForm";
 import DebugTimeline from "./routes/DebugTimeline";
+import ProjectCreation from "./routes/ProjectCreation"
 import ProjectCard from "./components/ProjectCard";
 import ProgressBar from "./components/ProgressBar";
 import { UserProvider } from "./UserContext";
@@ -124,6 +125,8 @@ function App() {
                             </>
                         }
                     />
+
+                    <Route path="/create-project" element={<ProjectCreation/>}/>
 
                     <Route path="*" element={<Navigate to="/" />} />
                 </Routes>
