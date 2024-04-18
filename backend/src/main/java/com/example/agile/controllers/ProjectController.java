@@ -1,10 +1,7 @@
 package com.example.agile.controllers;
 
 
-import com.example.agile.objecs.ERole;
-import com.example.agile.objecs.Project;
-import com.example.agile.objecs.Role;
-import com.example.agile.objecs.User;
+import com.example.agile.objecs.*;
 import com.example.agile.payload.request.SignupRequest;
 import com.example.agile.payload.response.MessageResponse;
 import com.example.agile.repositories.ProjectRepo;
@@ -81,20 +78,6 @@ public class ProjectController {
         }
     }
 
-    @GetMapping("/get-project/{projectId}")
-    public ResponseEntity<?> getProject(@PathVariable Long projectId) {
-        try {
-            // Fetch the project
-            Project project = projectRepository.findById(projectId).orElse(null);
-            if (project == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("Project not found"));
-            }
-
-            return ResponseEntity.ok(project);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Failed to fetch project: " + e.getMessage()));
-        }
-    }
 
     @DeleteMapping("/delete-project/{projectId}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -169,48 +152,53 @@ public class ProjectController {
         }
     }
 
-//    @PostMapping("/{projectId}/update-clients")
-//    public ResponseEntity<?> addClientToProject(@PathVariable Long projectId, @RequestBody Map<String, List<Long>> requestBody) {
-//        try {
-//
-//            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//            if (authentication == null || !authentication.isAuthenticated() || !(authentication.getPrincipal() instanceof UserDetails)) {
-//                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new MessageResponse("Unauthorized"));
-//            }
-//
-//            // Fetch the project
-//            Project project = projectRepository.findById(projectId).orElse(null);
-//            if (project == null) {
-//                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("Project not found"));
-//            }
-//
-//            // Check if the user has the necessary role to update projects
-//            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-//            User currentUser = userRepository.findByUsername(userDetails.getUsername()).orElse(null);
-//            if (currentUser == null) {
-//                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new MessageResponse("User not found"));
-//            }
-//            if (!currentUser.getRoles().stream().anyMatch(role -> role.getName() == ERole.ROLE_ADMIN)) {
-//                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new MessageResponse("User does not have permission to update projects"));
-//            }
-//
-//            // Add client to the project
-//            List<Long> clients = project.getClients();
-//            if (clients == null) {
-//                clients = new ArrayList<>();
-//            }
-//            for (Long userId : requestBody.get("listOfClients")) {
-//                if (!clients.contains(userId)) {
-//                    clients.add(userId);
-//                }
-//            }
-//            project.setClients(clients);
-//            logger.info(project.getClients().toString());
-//            // Save the updated project
-//            Project updatedProject = projectRepository.save(project);
-//            return ResponseEntity.ok(new MessageResponse("Client added to project successfully"));
-//        } catch (Exception e) {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Failed to add client to project: " + e.getMessage()));
-//        }
-//    }
+    @PostMapping("/{projectId}/update-clients")
+    public ResponseEntity<?> addClientToProject(@PathVariable Long projectId, @RequestBody Map<String, List<Long>> requestBody) {
+        try {
+
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (authentication == null || !authentication.isAuthenticated() || !(authentication.getPrincipal() instanceof UserDetails)) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new MessageResponse("Unauthorized"));
+            }
+
+            // Fetch the project
+            Project project = projectRepository.findById(projectId).orElse(null);
+            if (project == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("Project not found"));
+            }
+
+            // Check if the user has the necessary role to update projects
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            User currentUser = userRepository.findByUsername(userDetails.getUsername()).orElse(null);
+            if (currentUser == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new MessageResponse("User not found"));
+            }
+            if (!currentUser.getRoles().stream().anyMatch(role -> role.getName() == ERole.ROLE_ADMIN)) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new MessageResponse("User does not have permission to update projects"));
+            }
+            // Save the updated project
+            Project updatedProject = projectRepository.save(project);
+            return ResponseEntity.ok(new MessageResponse("Client added to project successfully"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Failed to add client to project: " + e.getMessage()));
+        }
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllProjects() {
+        List<Project> projects = projectRepository.findAll();
+        return ResponseEntity.ok(projects);
+    }
+
+    @GetMapping("/get/{id}")
+    public ResponseEntity<?> getProjectById(@PathVariable Long id) {
+        Optional<Project> project = projectRepository.findById(id);
+        if (project.isPresent()) {
+            return ResponseEntity.ok(project.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+
 }

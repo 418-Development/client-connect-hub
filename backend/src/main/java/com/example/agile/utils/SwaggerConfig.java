@@ -14,7 +14,7 @@ public class SwaggerConfig {
     public GroupedOpenApi customApi() {
         return GroupedOpenApi.builder()
                 .group("controllers")
-                .pathsToMatch("/users/**", "/projects/**")
+                .pathsToMatch("/users/**", "/projects/**","/milestones/**")
                 .build();
     }
 

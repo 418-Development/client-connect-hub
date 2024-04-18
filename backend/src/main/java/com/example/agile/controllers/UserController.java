@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.example.agile.objecs.ERole;
+import com.example.agile.objecs.Project;
 import com.example.agile.objecs.Role;
 import com.example.agile.objecs.User;
 import com.example.agile.payload.request.LoginRequest;
@@ -148,5 +149,20 @@ public class UserController {
         return null;
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllUsers() {
+        List<User> users = userRepository.findAll();
+        return ResponseEntity.ok(users);
+    }
+
+    @GetMapping("/get/{id}")
+    public ResponseEntity<?> getUserById(@PathVariable Long id) {
+        Optional<User> user = userRepository.findById(id);
+        if (user.isPresent()) {
+            return ResponseEntity.ok(user.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
 }
