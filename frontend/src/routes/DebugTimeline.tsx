@@ -1,4 +1,4 @@
-import Timeline from "./Timeline";
+import Timeline from "../components/Timeline";
 
 function DebugTimeline() {
     return (

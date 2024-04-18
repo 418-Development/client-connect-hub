@@ -4,7 +4,7 @@ import Navigation from "./components/Navigation";
 import { NavigationItem } from "./enums/navigation";
 import SignUpForm from "./components/SignUpForm";
 import Welcome from "./components/Welcome";
-import DebugTimeline from "./components/DebugTimeline";
+import DebugTimeline from "./routes/DebugTimeline";
 import ProgressBar from "./components/ProgressBar";
 import { UserProvider } from "./UserContext";
 
@@ -87,7 +87,7 @@ function App() {
                                 <div className="container mt-3">{isAuthenticated ? <h2>Authenticated</h2> : <Welcome></Welcome>}</div>
 
                                 <div className="container mt-3">
-                                    <ProgressBar progress={45} height={10} />
+                                    <ProgressBar progress={1} />
                                 </div>
 
                                 <SignUpForm
