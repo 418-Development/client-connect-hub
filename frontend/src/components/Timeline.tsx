@@ -56,7 +56,7 @@ function Timeline({ milestones, onlyShowOverview = false }: Props) {
                     }
                 >
                     <Button outline={true} className="ms-3">
-                        Milestone 1
+                        {milestone.title}
                     </Button>
                     {index == isActiveIndex - 1 ? (
                         <Button outline={true} style="danger" className="ms-2">
