@@ -12,7 +12,6 @@ import ManagerFooter from "./components/ManagerFooter";
 import ManageUser from "./routes/ManageUser";
 
 function App() {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [isLoginInvalid, setIsLoginInvalid] = useState<boolean>(false);
@@ -73,7 +72,6 @@ function App() {
         <div>
             <Navigation
                 activeNavigationItem={NavigationItem.HOME}
-                isAuthenticated={isAuthenticated}
                 onLogin={login}
                 onSignOut={signOut}
                 onSignUp={singUp}

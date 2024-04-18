@@ -7,7 +7,6 @@ import { UserContext } from "../UserContext";
 
 interface Props {
     activeNavigationItem: NavigationItem;
-    isAuthenticated: boolean;
     onLogin: (email: string, password: string) => void;
     onSignOut: () => void;
     onSignUp: (email: string, password: string) => void;
@@ -18,17 +17,7 @@ interface Props {
     isLoginInvalid: boolean;
 }
 
-function Navigation({
-    isAuthenticated,
-    onLogin,
-    onSignOut,
-    onSignUp,
-    setUsername,
-    setPassword,
-    username = "",
-    password = "",
-    isLoginInvalid = false,
-}: Props) {
+function Navigation({ onLogin, onSignOut, onSignUp, setUsername, setPassword, username = "", password = "", isLoginInvalid = false }: Props) {
     const navigate = useNavigate();
     const [isNavCollapsed, setIsNavCollapsed] = useState(true);
 
