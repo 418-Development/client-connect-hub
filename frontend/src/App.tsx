@@ -8,6 +8,8 @@ import ProjectCard from "./components/ProjectCard";
 import ProgressBar from "./components/ProgressBar";
 import { UserProvider } from "./UserContext";
 import Welcome from "./components/Welcome";
+import ManagerFooter from "./components/ManagerFooter";
+import ManageUser from "./routes/ManageUser";
 
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -67,31 +69,30 @@ function App() {
     return (
         <div>
             <UserProvider>
+                <Navigation
+                    activeNavigationItem={NavigationItem.HOME}
+                    isAuthenticated={isAuthenticated}
+                    onLogin={login}
+                    onSignOut={signOut}
+                    onSignUp={singUp}
+                    username={username}
+                    password={password}
+                    setPassword={setPassword}
+                    setUsername={setUsername}
+                    isLoginInvalid={isLoginInvalid}
+                />
                 <Routes>
                     <Route
                         path="/"
                         element={
                             <>
-                                <Navigation
-                                    activeNavigationItem={NavigationItem.HOME}
-                                    isAuthenticated={isAuthenticated}
-                                    onLogin={login}
-                                    onSignOut={signOut}
-                                    onSignUp={singUp}
-                                    username={username}
-                                    password={password}
-                                    setPassword={setPassword}
-                                    setUsername={setUsername}
-                                    isLoginInvalid={isLoginInvalid}
-                                />
-
                                 <div className="container mt-3">{isAuthenticated ? <h2>Authenticated</h2> : <Welcome></Welcome>}</div>
-
                                 <ProjectCard></ProjectCard>
-
                                 <div className="container" style={{ height: "300px" }}>
                                     <ProgressBar progress={70} vertical />
                                 </div>
+
+                                <ManagerFooter />
 
                                 <SignUpForm
                                     signin={login}
@@ -104,26 +105,9 @@ function App() {
                         }
                     />
 
-                    <Route
-                        path="/debug/timeline"
-                        element={
-                            <>
-                                <Navigation
-                                    activeNavigationItem={NavigationItem.HOME}
-                                    isAuthenticated={isAuthenticated}
-                                    onLogin={login}
-                                    onSignOut={signOut}
-                                    onSignUp={singUp}
-                                    username={username}
-                                    password={password}
-                                    setPassword={setPassword}
-                                    setUsername={setUsername}
-                                    isLoginInvalid={isLoginInvalid}
-                                />
-                                <DebugTimeline />
-                            </>
-                        }
-                    />
+                    <Route path="/debug/timeline" element={<DebugTimeline />} />
+
+                    <Route path="/manage-user" element={<ManageUser />} />
 
                     <Route path="*" element={<Navigate to="/" />} />
                 </Routes>
