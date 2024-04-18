@@ -15,21 +15,19 @@ function App() {
         <div>
             <Navigation />
             <Routes>
-                <Route path="/" element={<Dashboard />} />
-
-                {userInfo?.role === UserRole.MANAGER ? ( // Routes only the manager can visit
+                {/* Routes only the manager can visit */}
+                {userInfo?.role === UserRole.MANAGER ? (
                     <>
                         <Route path="/debug/timeline" element={<DebugTimeline />} />
-
                         <Route path="/manage-user" element={<ManageUser />} />
-
                         <Route path="/create-project" element={<ProjectCreation />} />
                     </>
                 ) : (
                     <></>
                 )}
 
-                {userInfo ? ( // Routes all logged in user can visit
+                {/* Routes all logged in user can visit */}
+                {userInfo ? (
                     <>
                         <Route path="/projects/*" element={<div>Test</div>} />
                     </>
@@ -37,6 +35,8 @@ function App() {
                     <></>
                 )}
 
+                {/* Routes all user can visit */}
+                <Route path="/" element={<Dashboard />} />
                 <Route path="*" element={<Navigate to="/" />} />
             </Routes>
         </div>
