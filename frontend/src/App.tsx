@@ -3,10 +3,11 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import Navigation from "./components/Navigation";
 import { NavigationItem } from "./enums/navigation";
 import SignUpForm from "./components/SignUpForm";
-import Welcome from "./components/Welcome";
 import DebugTimeline from "./routes/DebugTimeline";
+import ProjectCard from "./components/ProjectCard";
 import ProgressBar from "./components/ProgressBar";
 import { UserProvider } from "./UserContext";
+import Welcome from "./components/Welcome";
 
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -86,9 +87,7 @@ function App() {
 
                                 <div className="container mt-3">{isAuthenticated ? <h2>Authenticated</h2> : <Welcome></Welcome>}</div>
 
-                                <div className="container mt-3">
-                                    <ProgressBar progress={1} />
-                                </div>
+                                <ProjectCard></ProjectCard>
 
                                 <SignUpForm
                                     signin={login}
