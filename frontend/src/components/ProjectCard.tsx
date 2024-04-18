@@ -10,11 +10,24 @@ interface Props {
 function ProjectCard({ project }: Props) {
     const [isExpanded, setIsExpanded] = useState(false);
     const [hasOverflow, setHasOverflow] = useState(false);
+    const [progress, setProgress] = useState(0);
     const contentRef = useRef<HTMLDivElement>(null);
 
     const toggleExpand = () => {
         setIsExpanded(!isExpanded);
     };
+
+    useEffect(() => {
+        let localProgress = 0;
+        for (let index = 0; index < project.milestones.length; index++) {
+            const milestone = project.milestones[index];
+            if (milestone.isDone) localProgress++;
+            else break;
+        }
+        localProgress /= project.milestones.length;
+        localProgress *= 100;
+        setProgress(localProgress);
+    }, [project]);
 
     useEffect(() => {
         if (contentRef.current == null) {
@@ -61,7 +74,7 @@ function ProjectCard({ project }: Props) {
                 <Timeline milestones={project.milestones} onlyShowOverview />
                 <h5 className="card-title">
                     <div className="container mt-3">
-                        <ProgressBar progress={50} height={20} />
+                        <ProgressBar progress={progress} />
                     </div>
                 </h5>
             </div>
