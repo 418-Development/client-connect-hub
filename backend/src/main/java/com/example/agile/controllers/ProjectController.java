@@ -25,8 +25,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -76,7 +75,7 @@ public class ProjectController {
             project.setCreatorId(currentUser.getId());
             // Save the project
             Project savedProject = projectRepository.save(project);
-            return ResponseEntity.ok(new MessageResponse("Project created successfully with id: " + savedProject.getId()));
+            return ResponseEntity.ok(new MessageResponse("Project created successfully with id: " + savedProject.getProjectId()));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Failed to create project: " + e.getMessage()));
         }
@@ -170,4 +169,48 @@ public class ProjectController {
         }
     }
 
+//    @PostMapping("/{projectId}/update-clients")
+//    public ResponseEntity<?> addClientToProject(@PathVariable Long projectId, @RequestBody Map<String, List<Long>> requestBody) {
+//        try {
+//
+//            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//            if (authentication == null || !authentication.isAuthenticated() || !(authentication.getPrincipal() instanceof UserDetails)) {
+//                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new MessageResponse("Unauthorized"));
+//            }
+//
+//            // Fetch the project
+//            Project project = projectRepository.findById(projectId).orElse(null);
+//            if (project == null) {
+//                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("Project not found"));
+//            }
+//
+//            // Check if the user has the necessary role to update projects
+//            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+//            User currentUser = userRepository.findByUsername(userDetails.getUsername()).orElse(null);
+//            if (currentUser == null) {
+//                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new MessageResponse("User not found"));
+//            }
+//            if (!currentUser.getRoles().stream().anyMatch(role -> role.getName() == ERole.ROLE_ADMIN)) {
+//                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new MessageResponse("User does not have permission to update projects"));
+//            }
+//
+//            // Add client to the project
+//            List<Long> clients = project.getClients();
+//            if (clients == null) {
+//                clients = new ArrayList<>();
+//            }
+//            for (Long userId : requestBody.get("listOfClients")) {
+//                if (!clients.contains(userId)) {
+//                    clients.add(userId);
+//                }
+//            }
+//            project.setClients(clients);
+//            logger.info(project.getClients().toString());
+//            // Save the updated project
+//            Project updatedProject = projectRepository.save(project);
+//            return ResponseEntity.ok(new MessageResponse("Client added to project successfully"));
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Failed to add client to project: " + e.getMessage()));
+//        }
+//    }
 }

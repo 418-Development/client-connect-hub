@@ -61,6 +61,7 @@ public class WebSecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers("/users/**").permitAll()
+                                .requestMatchers(AUTH_WHITELIST).permitAll()
                                 .requestMatchers("/projects/**").authenticated()
                                 .anyRequest().authenticated()
                 );
@@ -71,5 +72,12 @@ public class WebSecurityConfig {
 
         return http.build();
     }
+
+    private static final String[] AUTH_WHITELIST = {
+            "/swagger-ui.html",
+            "/swagger-ui/**",
+            "/v3/api-docs/**",
+            "/swagger-resources/**"
+    };
 
 }
