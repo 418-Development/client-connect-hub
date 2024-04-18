@@ -1,4 +1,4 @@
-export interface User {
+export interface UserObj {
     username: string;
     role: UserRole;
     label: string;

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { User, UserRole } from "../interfaces/User";
+import { UserObj, UserRole } from "../interfaces/UserObj";
 
 function ManageUser() {
-    const [users, setUsers] = useState<User[]>([]);
+    const [users, setUsers] = useState<UserObj[]>([]);
 
     useEffect(() => {
         setUsers([
@@ -41,7 +41,7 @@ function ManageUser() {
 
     return (
         <div className="container">
-            {users.map((user: User, index: number) => (
+            {users.map((user: UserObj, index: number) => (
                 <div key={user.username} className="d-flex align-items-center">
                     <div className="col p-2">{user.username}</div>
                     <div className="col p-2">

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import logo from "../assets/LogoWhitePulseOnly.png";
 import { NavigationItem } from "../enums/navigation";
 import Button from "./Button"; // Adjust the import path as necessary
-import { UserContext, UserUpdateContext } from "../UserContext";
+import { UserContext } from "../UserContext";
 
 interface Props {
     activeNavigationItem: NavigationItem;
@@ -32,9 +32,7 @@ function Navigation({
     const navigate = useNavigate();
     const [isNavCollapsed, setIsNavCollapsed] = useState(true);
 
-    const globalUser = useContext(UserContext);
-    const requestUserInfo = useContext(UserUpdateContext);
-    requestUserInfo();
+    const userInfo = useContext(UserContext);
 
     const toggleNav = () => setIsNavCollapsed(!isNavCollapsed);
 
@@ -72,8 +70,8 @@ function Navigation({
 
                 <div className={`collapse navbar-collapse ${!isNavCollapsed ? "show" : ""}`} id="navbarSupportedContent">
                     <ul className="navbar-nav me-auto mb-2 mb-lg-0">{/* Navigation items here, if needed */}</ul>
-                    {globalUser}
-                    {!isAuthenticated ? (
+
+                    {!userInfo ? (
                         <div id="login-box" className="d-flex flex-column flex-lg-row align-items-center" style={{ gap: "0.5rem" }}>
                             <input
                                 className={`form-control form-control-sm mb-2 mb-lg-0 me-lg-2${isLoginInvalid ? " is-invalid" : ""}`}
@@ -115,9 +113,12 @@ function Navigation({
                             </div>
                         </div>
                     ) : (
-                        <Button onClick={() => onSignOut()} style="primary" outline={true}>
-                            Sign out
-                        </Button>
+                        <>
+                            <span className="me-3">{userInfo.username}</span>
+                            <Button onClick={() => onSignOut()} style="primary" outline={true}>
+                                Sign out
+                            </Button>
+                        </>
                     )}
                 </div>
             </div>
