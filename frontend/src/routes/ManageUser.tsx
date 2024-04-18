@@ -7,16 +7,22 @@ function ManageUser() {
     useEffect(() => {
         setUsers([
             {
+                id: 1,
+                email: "marc@gmail.com",
                 username: "Marc",
                 role: UserRole.MANAGER,
                 label: "Team Manager",
             },
             {
+                id: 2,
+                email: "robert@gmail.com",
                 username: "Robert",
                 role: UserRole.TEAM,
                 label: "Ui Designer",
             },
             {
+                id: 2,
+                email: "felix@gmail.com",
                 username: "Felix",
                 role: UserRole.CLIENT,
                 label: "CEO",
