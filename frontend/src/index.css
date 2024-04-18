@@ -87,3 +87,13 @@
 .timeline li:last-of-type:first-of-type::before {
     height: 0;
 }
+
+.card-header:hover + div {
+    transition: background-color 0.3s, text-decoration 0.3s;
+    background-color: #292c35;
+}
+
+.card-header:hover {
+    transition: background-color 0.3s, text-decoration 0.3s;
+    background-color: #313641;
+}

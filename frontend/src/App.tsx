@@ -284,6 +284,8 @@ function App() {
 
                     <Route path="/debug/timeline" element={<DebugTimeline />} />
 
+                    <Route path="/projects/*" element={<div>Test</div>} />
+
                     <Route path="/manage-user" element={<ManageUser />} />
 
                     <Route
