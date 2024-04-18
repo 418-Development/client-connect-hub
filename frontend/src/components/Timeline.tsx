@@ -26,6 +26,7 @@ function Timeline({ milestones, onlyShowOverview = false, style = {} }: Props) {
             if (milestones.length - 1 >= 0) displayedMilestones.push(milestones[milestones.length - 1]);
             indicateMoreAtBeginning = milestones.length - 3 > 0;
             if (isActiveIndex >= milestones.length - 1) isActiveIndex = displayedMilestones.length - 1;
+            if (isActiveIndex === -1) isActiveIndex = displayedMilestones.length;
         } else if (isActiveIndex == 0) {
             displayedMilestones.push(milestones[0]);
             if (milestones.length >= 2) displayedMilestones.push(milestones[1]);
