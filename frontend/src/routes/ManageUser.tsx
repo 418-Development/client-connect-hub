@@ -46,9 +46,9 @@ function ManageUser() {
                     <div className="col p-2">{user.username}</div>
                     <div className="col p-2">
                         <select className="form-control" value={user.role} onChange={(e) => handleRoleChange(e, index)}>
-                            <option value="0">Project Manager</option>
-                            <option value="1">Team Member</option>
-                            <option value="2">Client</option>
+                            <option value={UserRole.MANAGER}>Project Manager</option>
+                            <option value={UserRole.TEAM}>Team Member</option>
+                            <option value={UserRole.CLIENT}>Client</option>
                         </select>
                     </div>
                     <div className="col p-2">
