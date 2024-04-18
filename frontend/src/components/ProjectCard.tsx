@@ -4,6 +4,7 @@ import Timeline from "./Timeline";
 import { ProjectObj } from "../interfaces/Project";
 import { useNavigate } from "react-router";
 import "bootstrap-icons/font/bootstrap-icons.css";
+import Button from "./Button";
 
 interface Props {
     project: ProjectObj;
@@ -87,12 +88,12 @@ function ProjectCard({ project }: Props) {
                 </div>
 
                 <div className="d-flex justify-content-end me-2">
-                    <button className="btn btn-outline-danger me-2">
+                    <Button style="danger" className="me-2" outline>
                         <i className="bi bi-trash"></i>
-                    </button>
-                    <button className="btn btn-outline-secondary">
+                    </Button>
+                    <Button style="secondary" outline>
                         <i className="bi bi-pencil"></i>
-                    </button>
+                    </Button>
                 </div>
             </div>
         </div>
