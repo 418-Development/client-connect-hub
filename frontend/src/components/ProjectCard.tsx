@@ -30,7 +30,7 @@ function ProjectCard({ project }: Props) {
     return (
         <div className="card m-3 mx-auto" style={{ width: "300px" }}>
             <a
-                className="card-header"
+                className="card-header project-card-header"
                 onClick={() => {
                     navigate(`/projects/${project.id}`);
                 }}
