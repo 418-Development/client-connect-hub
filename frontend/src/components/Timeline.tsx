@@ -35,7 +35,7 @@ function Timeline({ milestones, onlyShowOverview = false }: Props) {
             displayedMilestones.push(milestones[isActiveIndex]);
             displayedMilestones.push(milestones[isActiveIndex + 1]);
             indicateMoreAtBeginning = isActiveIndex > 1;
-            indicateMoreAtEnd = isActiveIndex + 1 < milestones.length;
+            indicateMoreAtEnd = isActiveIndex + 2 < milestones.length;
             isActiveIndex = 1;
         }
     } else {

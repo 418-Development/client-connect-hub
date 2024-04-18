@@ -21,7 +21,6 @@ function DebugTimeline() {
                     { id: "milestone2", title: "Milestone 2", estimatedEnd: "06.04.2024", isDone: true },
                     { id: "milestone3", title: "Milestone 3", estimatedEnd: "18.04.2024", isDone: false },
                     { id: "milestone4", title: "Milestone 4", estimatedEnd: "22.04.2024", isDone: false },
-                    { id: "milestone5", title: "Milestone 5", estimatedEnd: "27.04.2024", isDone: false },
                 ]}
                 onlyShowOverview
             />
