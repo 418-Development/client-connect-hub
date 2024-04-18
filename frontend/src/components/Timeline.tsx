@@ -45,7 +45,7 @@ function Timeline({ milestones, onlyShowOverview = false, style = {} }: Props) {
 
     return (
         <ul className="timeline" style={style}>
-            {displayedMilestones.length === 0 ? <div className="text-center mt-5">No Milestones</div> : <></>}
+            {displayedMilestones.length === 0 ? <div className="text-center pt-5">No Milestones</div> : <></>}
             {displayedMilestones.map((milestone, index) => (
                 <li
                     key={milestone.id}
@@ -57,18 +57,18 @@ function Timeline({ milestones, onlyShowOverview = false, style = {} }: Props) {
                         (indicateMoreAtEnd && index == displayedMilestones.length - 1 ? " indicate-more" : "")
                     }
                 >
-                    <Button outline={true} className="ms-3">
+                    <Button outline className="ms-3">
                         {milestone.title}
                     </Button>
                     {index == isActiveIndex - 1 ? (
-                        <Button outline={true} style="danger" className="ms-2">
+                        <Button outline style="danger" className="ms-2">
                             X
                         </Button>
                     ) : (
                         <></>
                     )}
                     {index == isActiveIndex ? (
-                        <Button outline={true} style="success" className="ms-2">
+                        <Button outline style="success" className="ms-2">
                             ✓
                         </Button>
                     ) : (
