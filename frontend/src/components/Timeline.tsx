@@ -4,9 +4,10 @@ import Button from "./Button";
 interface Props {
     milestones: MilestoneObj[];
     onlyShowOverview?: boolean;
+    style?: React.CSSProperties;
 }
 
-function Timeline({ milestones, onlyShowOverview = false }: Props) {
+function Timeline({ milestones, onlyShowOverview = false, style = {} }: Props) {
     let displayedMilestones: MilestoneObj[] = [];
     let isActiveIndex = -1;
     let indicateMoreAtBeginning = false;
@@ -43,7 +44,8 @@ function Timeline({ milestones, onlyShowOverview = false }: Props) {
     }
 
     return (
-        <ul className="timeline">
+        <ul className="timeline" style={style}>
+            {displayedMilestones.length === 0 ? <div className="text-center mt-5">No Milestones</div> : <></>}
             {displayedMilestones.map((milestone, index) => (
                 <li
                     key={milestone.id}

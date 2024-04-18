@@ -166,38 +166,7 @@ function App() {
                                             startDate: "2024-01-01",
                                             description:
                                                 "Lorem ipsum dolor sit amet. Aliquam erat volutpat. Curabitur eu ante massa. Fusce nec felis id libero pretium vehicula. Vivamus lacinia sem vitae enim dictum, in ullamcorper elit ornare. Praesent tristique velit vel eros congue, at pellentesque eros vehicula. Ut ac est nunc. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Phasellus id ligula sed turpis sollicitudin dapibus. Sed luctus, mauris sit amet auctor aliquet, mi libero laoreet metus, non accumsan metus massa non nunc.",
-                                            milestones: [
-                                                {
-                                                    id: "milestone1",
-                                                    title: "Milestone 1",
-                                                    estimatedEnd: "01.04.2024",
-                                                    isDone: true,
-                                                },
-                                                {
-                                                    id: "milestone2",
-                                                    title: "Milestone 2",
-                                                    estimatedEnd: "06.04.2024",
-                                                    isDone: true,
-                                                },
-                                                {
-                                                    id: "milestone3",
-                                                    title: "Milestone 3",
-                                                    estimatedEnd: "18.04.2024",
-                                                    isDone: false,
-                                                },
-                                                {
-                                                    id: "milestone4",
-                                                    title: "Milestone 4",
-                                                    estimatedEnd: "22.04.2024",
-                                                    isDone: false,
-                                                },
-                                                {
-                                                    id: "milestone5",
-                                                    title: "Milestone 5",
-                                                    estimatedEnd: "27.04.2024",
-                                                    isDone: false,
-                                                },
-                                            ],
+                                            milestones: [],
                                         },
                                         {
                                             id: "Proj4",

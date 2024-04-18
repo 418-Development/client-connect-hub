@@ -20,6 +20,7 @@ function ProjectCard({ project }: Props) {
     };
 
     useEffect(() => {
+        if (project.milestones.length === 0) return;
         let localProgress = 0;
         for (let index = 0; index < project.milestones.length; index++) {
             const milestone = project.milestones[index];
@@ -79,7 +80,7 @@ function ProjectCard({ project }: Props) {
                         {isExpanded ? "collapse" : "expand"}
                     </div>
                 )}
-                <Timeline milestones={project.milestones} onlyShowOverview />
+                <Timeline style={{ height: "160px" }} milestones={project.milestones} onlyShowOverview />
                 <h5 className="card-title">
                     <div className="container mt-3">
                         <ProgressBar progress={progress} />
