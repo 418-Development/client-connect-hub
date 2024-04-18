@@ -89,6 +89,10 @@ function App() {
 
                                 <ProjectCard></ProjectCard>
 
+                                <div className="container" style={{ height: "300px" }}>
+                                    <ProgressBar progress={70} vertical />
+                                </div>
+
                                 <SignUpForm
                                     signin={login}
                                     username={username}
