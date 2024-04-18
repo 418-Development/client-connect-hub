@@ -87,6 +87,9 @@ function ProjectCard({ project }: Props) {
                 </div>
 
                 <div className="d-flex justify-content-end me-2">
+                    <button className="btn btn-outline-danger me-2">
+                        <i className="bi bi-trash"></i>
+                    </button>
                     <button className="btn btn-outline-secondary">
                         <i className="bi bi-pencil"></i>
                     </button>
