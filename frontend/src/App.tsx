@@ -25,7 +25,8 @@ function App() {
     }, []);
 
     const login = async (username: string, password: string) => {
-        const url = (import.meta.env.VITE_API_URL as string) + "api/auth/signin";
+        const url =
+            (import.meta.env.VITE_API_URL as string) + "api/auth/signin";
 
         const response = await fetch(url, {
             method: "POST",
@@ -43,7 +44,9 @@ function App() {
 
             const date = new Date();
             date.setTime(date.getTime() + 15 * 60 * 1000);
-            document.cookie = `token=${json.tokenType} ${json.accessToken};expires="${date.toUTCString()};SameSite=Strict;path=/`;
+            document.cookie = `token=${json.tokenType} ${
+                json.accessToken
+            };expires="${date.toUTCString()};SameSite=Strict;path=/`;
 
             setIsAuthenticated(true);
         } else {
@@ -94,7 +97,13 @@ function App() {
                         path="/"
                         element={
                             <>
-                                <div className="container mt-3">{isAuthenticated ? <h2>Authenticated</h2> : <Welcome></Welcome>}</div>
+                                <div className="container mt-3">
+                                    {isAuthenticated ? (
+                                        <h2>Authenticated</h2>
+                                    ) : (
+                                        <Welcome></Welcome>
+                                    )}
+                                </div>
 
                                 <ProjectCards
                                     projects={[
@@ -137,7 +146,8 @@ function App() {
                                             title: "Project 2",
                                             estimatedEnd: "2024-01-01",
                                             startDate: "2024-01-01",
-                                            description: "Lorem ipsum dolor sit amet.",
+                                            description:
+                                                "Lorem ipsum dolor sit amet.",
                                             milestones: [
                                                 {
                                                     id: "milestone1",
@@ -193,7 +203,10 @@ function App() {
                                     ]}
                                 ></ProjectCards>
 
-                                <div className="container" style={{ height: "300px" }}>
+                                <div
+                                    className="container"
+                                    style={{ height: "300px" }}
+                                >
                                     <ProgressBar progress={70} vertical />
                                 </div>
 
@@ -208,7 +221,10 @@ function App() {
 
                     <Route path="/manage-user" element={<ManageUser />} />
 
-                    <Route path="/create-project" element={<ProjectCreation />} />
+                    <Route
+                        path="/create-project"
+                        element={<ProjectCreation />}
+                    />
 
                     <Route path="*" element={<Navigate to="/" />} />
                 </Routes>

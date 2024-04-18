@@ -3,6 +3,7 @@ import ProgressBar from "./ProgressBar";
 import Timeline from "./Timeline";
 import { ProjectObj } from "../interfaces/Project";
 import { useNavigate } from "react-router";
+import "bootstrap-icons/font/bootstrap-icons.css";
 
 interface Props {
     project: ProjectObj;
@@ -81,11 +82,15 @@ function ProjectCard({ project }: Props) {
                     </div>
                 )}
                 <Timeline style={{ height: "160px" }} milestones={project.milestones} onlyShowOverview />
-                <h5 className="card-title">
-                    <div className="container mt-3">
-                        <ProgressBar progress={progress} />
-                    </div>
-                </h5>
+                <div className="container mt-3 mb-3">
+                    <ProgressBar progress={progress} />
+                </div>
+
+                <div className="d-flex justify-content-end me-2">
+                    <button className="btn btn-outline-secondary">
+                        <i className="bi bi-pencil"></i>
+                    </button>
+                </div>
             </div>
         </div>
     );
