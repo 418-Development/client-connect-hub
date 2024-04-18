@@ -6,7 +6,7 @@ interface Props {
   isEditing?: boolean;
 }
 
-function ProjectCreation({ isEditing = true }: Props) {
+function ProjectCreation({ isEditing = false }: Props) {
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
 
