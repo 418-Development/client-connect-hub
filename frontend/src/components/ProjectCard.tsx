@@ -2,12 +2,14 @@ import { useState, useRef, useEffect } from "react";
 import ProgressBar from "./ProgressBar";
 import Timeline from "./Timeline";
 import { ProjectObj } from "../interfaces/Project";
+import { useNavigate } from "react-router";
 
 interface Props {
     project: ProjectObj;
 }
 
 function ProjectCard({ project }: Props) {
+    const navigate = useNavigate();
     const [isExpanded, setIsExpanded] = useState(false);
     const [hasOverflow, setHasOverflow] = useState(false);
     const [progress, setProgress] = useState(0);
@@ -40,9 +42,15 @@ function ProjectCard({ project }: Props) {
 
     return (
         <div className="card m-3 mx-auto" style={{ width: "300px" }}>
-            <div className="card-header">
-                <h2>{project.title}</h2>
-            </div>
+            <a
+                className="card-header project-card-header"
+                onClick={() => {
+                    navigate(`/projects/${project.id}`);
+                }}
+                style={{ textDecoration: "none", cursor: "pointer" }}
+            >
+                <h2 className="m-0">{project.title}</h2>
+            </a>
             <div className="card-body">
                 <div
                     ref={contentRef}
