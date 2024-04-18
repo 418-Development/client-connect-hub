@@ -1,10 +1,12 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
 import ProgressBar from "./ProgressBar";
 import Timeline from "./Timeline";
 import { ProjectObj } from "../interfaces/Project";
 import { useNavigate } from "react-router";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import Button from "./Button";
+import { UserContext } from "../UserContext";
+import { UserRole } from "../interfaces/UserObj";
 
 interface Props {
     project: ProjectObj;
@@ -12,6 +14,7 @@ interface Props {
 
 function ProjectCard({ project }: Props) {
     const navigate = useNavigate();
+    const userInfo = useContext(UserContext);
     const [isExpanded, setIsExpanded] = useState(false);
     const [hasOverflow, setHasOverflow] = useState(false);
     const [progress, setProgress] = useState(0);
@@ -87,14 +90,18 @@ function ProjectCard({ project }: Props) {
                     <ProgressBar progress={progress} />
                 </div>
 
-                <div className="d-flex justify-content-end me-2">
-                    <Button style="danger" className="me-2" outline>
-                        <i className="bi bi-trash"></i>
-                    </Button>
-                    <Button style="secondary" outline>
-                        <i className="bi bi-pencil"></i>
-                    </Button>
-                </div>
+                {userInfo?.role === UserRole.MANAGER ? (
+                    <div className="d-flex justify-content-end me-2">
+                        <Button style="danger" className="me-2" outline>
+                            <i className="bi bi-trash"></i>
+                        </Button>
+                        <Button style="secondary" outline>
+                            <i className="bi bi-pencil"></i>
+                        </Button>
+                    </div>
+                ) : (
+                    <></>
+                )}
             </div>
         </div>
     );

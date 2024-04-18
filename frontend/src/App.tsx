@@ -10,6 +10,7 @@ import { UserContext, UserUpdateContext } from "./UserContext";
 import Welcome from "./components/Welcome";
 import ManagerFooter from "./components/ManagerFooter";
 import ManageUser from "./routes/ManageUser";
+import { UserRole } from "./interfaces/UserObj";
 
 function App() {
     const [username, setUsername] = useState<string>("");
@@ -192,7 +193,7 @@ function App() {
                                                 },
                                             ]}
                                         ></ProjectCards>
-                                        <ManagerFooter />
+                                        {userInfo.role === UserRole.MANAGER ? <ManagerFooter /> : <></>}
                                     </>
                                 ) : (
                                     <Welcome></Welcome>
@@ -202,13 +203,25 @@ function App() {
                     }
                 />
 
-                <Route path="/debug/timeline" element={<DebugTimeline />} />
+                {userInfo?.role === UserRole.MANAGER ? ( // Routes only the manager can visit
+                    <>
+                        <Route path="/debug/timeline" element={<DebugTimeline />} />
 
-                <Route path="/projects/*" element={<div>Test</div>} />
+                        <Route path="/manage-user" element={<ManageUser />} />
 
-                <Route path="/manage-user" element={<ManageUser />} />
+                        <Route path="/create-project" element={<ProjectCreation />} />
+                    </>
+                ) : (
+                    <></>
+                )}
 
-                <Route path="/create-project" element={<ProjectCreation />} />
+                {userInfo ? ( // Routes all logged in user can visit
+                    <>
+                        <Route path="/projects/*" element={<div>Test</div>} />
+                    </>
+                ) : (
+                    <></>
+                )}
 
                 <Route path="*" element={<Navigate to="/" />} />
             </Routes>
