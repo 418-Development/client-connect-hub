@@ -51,6 +51,7 @@ function UserAssignment() {
             </div>
             {/* Div for already added users */}
             <div>
+                <p>Current Participants</p>
                 {users.filter((user) => {return roleSearch === user.role || UserRole.MANAGER === user.role}).map((user: UserObj) => ( 
                     <div key={user.username} className="d-flex align-items-center">
                         <div className="col p-2">{user.username}</div>
@@ -65,6 +66,7 @@ function UserAssignment() {
             <hr/>
             {/* Div for addable users */}
             <div>
+                <p>Addable Participants</p>
                 {users.filter((user) => {return roleSearch === user.role}).map((user: UserObj) => (
                     <div key={user.username} className="d-flex align-items-center">
                         <div className="col p-2">{user.username}</div>

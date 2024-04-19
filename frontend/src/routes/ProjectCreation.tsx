@@ -75,7 +75,6 @@ function ProjectCreation({ isEditing = false }: Props) {
         <form className="mt-3">
             <div>
             <div>
-                <p>Placeholder for the User Adding/Editing UI</p>
                 <UserAssignment/>
                 <Button type="submit" style="primary" className="mt-3 me-3">
                 Save Changes
