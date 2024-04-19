@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import { UserObj, UserResponseObj, UserRole } from "./interfaces/UserObj";
 
 export const UserContext = React.createContext<UserObj | null>(null);
@@ -10,6 +10,20 @@ interface Props {
 
 export function UserProvider({ children }: Props) {
     const [user, setUser] = useState<UserObj | null>(null);
+
+    useEffect(() => {
+        console.log("import.meta.env.VITE_DEBUG || ", import.meta.env.VITE_DEBUG);
+
+        if (import.meta.env.VITE_DEBUG) {
+            setUser({
+                id: 0,
+                username: "DEBUG",
+                email: "DEBUG@DEBUG.DEBUG",
+                role: UserRole.MANAGER,
+                label: "DEBUG",
+            });
+        }
+    }, []);
 
     async function updateUserInfo() {
         if (document.cookie.startsWith("token=")) {

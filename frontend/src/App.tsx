@@ -29,7 +29,7 @@ function App() {
                 {/* Routes all logged in user can visit */}
                 {userInfo ? (
                     <>
-                        <Route path="/projects/*" element={<div>Test</div>} />
+                        <Route path="/project/*" element={<div>Test</div>} />
                     </>
                 ) : (
                     <></>
