@@ -1,0 +1,33 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:latest
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Familie
+    ports:
+      - "5432:5432"
+  #backend:
+  #  image: openjdk:18-jdk-slim
+  #  volumes:
+  #    - ./agile-0.0.1-SNAPSHOT.jar:/app.jar
+  #  command: java -jar /app.jar
+  #  ports:
+  #    - "8080:8080"
+  #  depends_on:
+  #    - db
+  #  environment:
+  #    SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/postgres
+  #    SPRING_DATASOURCE_USERNAME: postgres
+  #    SPRING_DATASOURCE_PASSWORD: Familie
+
+  #frontend:
+  #  image: nginx:stable
+  #  ports:
+  #    - "80:80"
+  #  volumes:
+  #    - ./dist:/usr/share/nginx/html
+  #    - ./nginx/conf.d:/etc/nginx/conf.d
