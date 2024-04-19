@@ -12,7 +12,7 @@ Run program and then it will be ready for accept requests.
 
 For API documentation
 
-[lo](http://localhost:8080/swagger-ui/index.html)
+http://localhost:8080/swagger-ui/index.html
 
 ****************************************************************************************************************
 
