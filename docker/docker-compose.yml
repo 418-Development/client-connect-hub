@@ -5,9 +5,9 @@ services:
     volumes:
       - ./postgres_data:/var/lib/postgresql/data
     environment:
-      POSTGRES_DB: postgres
+      POSTGRES_DB: client-connect-hub
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: Familie
+      POSTGRES_PASSWORD: 990399
     ports:
       - "5432:5432"
   #backend:
