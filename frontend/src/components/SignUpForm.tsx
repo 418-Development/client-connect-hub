@@ -51,7 +51,7 @@ function SignUpForm({ login, setUsername, setPassword, username = "", password =
             }),
         });
 
-        console.log("http://localhost:8080/api/auth/signup", response.ok, response.status);
+        console.log(url, response.ok, response.status);
 
         if (!response.ok) {
             const json = await response.json();

@@ -34,6 +34,7 @@ function ProjectCard({ project }: Props) {
         }
         localProgress /= project.milestones.length;
         localProgress *= 100;
+        localProgress = Number(localProgress.toFixed(2));
         setProgress(localProgress);
     }, [project]);
 
