@@ -1,98 +1,42 @@
-import { useEffect, useState } from "react";
+import { useContext } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import Navigation from "./components/Navigation";
-import { NavigationItem } from "./enums/navigation";
-import SignUpForm from "./components/SignUpForm";
+import DebugTimeline from "./routes/DebugTimeline";
+import ProjectCreation from "./routes/ProjectCreation";
+import { UserContext } from "./UserContext";
+import ManageUser from "./routes/ManageUser";
+import { UserRole } from "./interfaces/UserObj";
+import Dashboard from "./routes/Dashboard";
 
 function App() {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-    const [username, setUsername] = useState<string>("");
-    const [password, setPassword] = useState<string>("");
-    const [isLoginInvalid, setIsLoginInvalid] = useState<boolean>(false);
-
-    useEffect(() => {
-        if (document.cookie.startsWith("token=")) {
-            setIsAuthenticated(true);
-        }
-    }, []);
-
-    const login = async (username: string, password: string) => {
-        const url = (import.meta.env.VITE_API_URL as string) + "api/auth/signin";
-
-        const response = await fetch(url, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                username: username,
-                password: password,
-            }),
-        });
-
-        if (response.ok) {
-            const json = await response.json();
-
-            const date = new Date();
-            date.setTime(date.getTime() + 15 * 60 * 1000);
-            document.cookie = `token=${json.tokenType} ${json.accessToken};expires="${date.toUTCString()};SameSite=Strict;path=/`;
-
-            setIsAuthenticated(true);
-        } else {
-            setIsLoginInvalid(true);
-            setPassword("");
-        }
-
-        console.log(url, response.ok, response.status);
-    };
-
-    const singUp = async (username: string, password: string) => {
-        console.log("username", username, "password", password);
-
-        setUsername(username);
-        setPassword(password);
-    };
-
-    const signOut = async () => {
-        console.log("signOut");
-        document.cookie = "token=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
-        setIsAuthenticated(false);
-    };
+    const userInfo = useContext(UserContext);
 
     return (
         <div>
+            <Navigation />
             <Routes>
-                <Route
-                    path="/"
-                    element={
-                        <>
-                            <Navigation
-                                activeNavigationItem={NavigationItem.HOME}
-                                isAuthenticated={isAuthenticated}
-                                onLogin={login}
-                                onSignOut={signOut}
-                                onSignUp={singUp}
-                                username={username}
-                                password={password}
-                                setPassword={setPassword}
-                                setUsername={setUsername}
-                                isLoginInvalid={isLoginInvalid}
-                            />
+                {/* Routes only the manager can visit */}
+                {userInfo?.role === UserRole.MANAGER ? (
+                    <>
+                        <Route path="/debug/timeline" element={<DebugTimeline />} />
+                        <Route path="/manage-user" element={<ManageUser />} />
+                        <Route path="/create-project" element={<ProjectCreation />} />
+                    </>
+                ) : (
+                    <></>
+                )}
 
-                            <div className="container mt-3">{isAuthenticated ? <h2>Authenticated</h2> : <h2>Not Authenticated</h2>}</div>
+                {/* Routes all logged in user can visit */}
+                {userInfo ? (
+                    <>
+                        <Route path="/projects/*" element={<div>Test</div>} />
+                    </>
+                ) : (
+                    <></>
+                )}
 
-                            <SignUpForm
-                                signin={login}
-                                username={username}
-                                password={password}
-                                setPassword={setPassword}
-                                setUsername={setUsername}
-                            ></SignUpForm>
-                        </>
-                    }
-                />
-
+                {/* Routes all user can visit */}
+                <Route path="/" element={<Dashboard />} />
                 <Route path="*" element={<Navigate to="/" />} />
             </Routes>
         </div>
