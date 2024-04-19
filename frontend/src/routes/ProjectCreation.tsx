@@ -11,6 +11,8 @@ function ProjectCreation({ isEditing = false }: Props) {
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
 
+  const navigate = useNavigate()
+
   return (
     <div className="container">
       <form
@@ -137,7 +139,6 @@ function ProjectCreation({ isEditing = false }: Props) {
         <form onSubmit={(e) => {
           e.preventDefault();
 
-          const navigate = useNavigate()
           navigate("/edit-project")
         }}>
           <div>
