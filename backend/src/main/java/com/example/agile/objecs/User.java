@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.Getter;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -15,6 +16,7 @@ import java.util.Set;
                 @UniqueConstraint(columnNames = "email")
         })
 public class User {
+    @Getter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -40,11 +42,12 @@ public class User {
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
-    public User(String username,int age, int weight, int height) {
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "user_labels", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "label_id"))
+    private Set<Label> labels = new HashSet<>();
+
+    public User(String username) {
         this.username = username;
-        this.age = age;
-        this.weight = weight;
-        this.height = height;
     }
 
     public User(String username, String email, String password) {
@@ -55,10 +58,6 @@ public class User {
 
     public User() {
 
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public String getUsername() {
@@ -85,40 +84,19 @@ public class User {
         this.password = password;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
-
-    public int getWeight() {
-        return weight;
-    }
-
-    public void setWeight(int weight) {
-        this.weight = weight;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    public void setHeight(int height) {
-        this.height = height;
-    }
-
     public Set<Role> getRoles() {
         return roles;
     }
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public Set<Label> getLabels() {
+        return labels;
+    }
+
+    public void setLabels(Set<Label> labels) {
+        this.labels = labels;
     }
 
 }
