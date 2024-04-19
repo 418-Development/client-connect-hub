@@ -21,6 +21,7 @@ function App() {
                         <Route path="/debug/timeline" element={<DebugTimeline />} />
                         <Route path="/manage-user" element={<ManageUser />} />
                         <Route path="/create-project" element={<ProjectCreation />} />
+                        <Route path="/edit-project" element={<ProjectCreation isEditing/>} />
                     </>
                 ) : (
                     <></>

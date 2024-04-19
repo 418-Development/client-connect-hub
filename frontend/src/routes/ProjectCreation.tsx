@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Button from "../components/Button";
 import Timeline from "../components/Timeline";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
   isEditing?: boolean;
@@ -133,7 +134,12 @@ function ProjectCreation({ isEditing = false }: Props) {
       {isEditing ? (
         <div/>
       ) : (
-        <form>
+        <form onSubmit={(e) => {
+          e.preventDefault();
+
+          const navigate = useNavigate()
+          navigate("/edit-project")
+        }}>
           <div>
             <Button type="submit" style="primary" className="mt-3 me-3">
               Create Project
