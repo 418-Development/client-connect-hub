@@ -2,6 +2,7 @@ import { useState } from "react";
 import Button from "../components/Button";
 import Timeline from "../components/Timeline";
 import { useNavigate } from "react-router-dom";
+import UserAssignment from "../components/UserAssignment";
 
 interface Props {
   isEditing?: boolean;
@@ -75,6 +76,7 @@ function ProjectCreation({ isEditing = false }: Props) {
             <div>
             <div>
                 <p>Placeholder for the User Adding/Editing UI</p>
+                <UserAssignment/>
                 <Button type="submit" style="primary" className="mt-3 me-3">
                 Save Changes
                 </Button>
