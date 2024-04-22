@@ -11,35 +11,16 @@ function UserAssignment() {
     const { id } = useParams<{ id: string }>();
 
     useEffect(() => {
-        fetchProjectUser();
-
-        fetchAllUsers();
-
-        setRoleSearch(UserRole.CLIENT)
+        fetchUsers()
     }, []);
 
-    const removeUserFromProject = (user: UserObj) => {
-        // Can't remove manager from project
-        if (user.role === UserRole.MANAGER) return
+    const fetchUsers = async () => {
+        await fetchProjectUser();
 
-        const tempAllUsers = allUsers
-        tempAllUsers.push(user)
-        setAllUsers(tempAllUsers)
+        await fetchAllUsers();
 
-        var tempProjectUsers = projectUsers
-        tempProjectUsers = tempProjectUsers.filter((projectUser) => {return user.id != projectUser.id})
-        setProjectUsers(tempProjectUsers)
-    };
-
-    const addUserToProject = (projectUser: UserObj) => {
-        var tempAllUsers = allUsers
-        tempAllUsers = tempAllUsers.filter((user) => {return user.id != projectUser.id})
-        setAllUsers(tempAllUsers)
-
-        const tempProjectUsers = projectUsers
-        tempProjectUsers.push(projectUser)
-        setProjectUsers(tempProjectUsers)
-    };
+        setRoleSearch(UserRole.CLIENT)
+    }
 
     const fetchProjectUser = async () => {
         const url = (import.meta.env.VITE_API_URL as string) + "users/all";
@@ -107,6 +88,33 @@ function UserAssignment() {
         }
     };
 
+    const removeUserFromProject = (user: UserObj) => {
+        // Can't remove manager from project
+        if (user.role === UserRole.MANAGER) return
+
+        const tempAllUsers = allUsers
+        tempAllUsers.push(user)
+        setAllUsers(tempAllUsers)
+
+        var tempProjectUsers = projectUsers
+        tempProjectUsers = tempProjectUsers.filter((projectUser) => {return user.id != projectUser.id})
+        setProjectUsers(tempProjectUsers)
+    };
+
+    const addUserToProject = (projectUser: UserObj) => {
+        var tempAllUsers = allUsers
+        tempAllUsers = tempAllUsers.filter((user) => {return user.id != projectUser.id})
+        setAllUsers(tempAllUsers)
+
+        const tempProjectUsers = projectUsers
+        tempProjectUsers.push(projectUser)
+        setProjectUsers(tempProjectUsers)
+    };
+
+    const saveChanges = async () => {
+        
+    }
+
     const handleRoleSearch = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const value = Number(e.target.value);
         const roleSelect = value as UserRole;
@@ -133,7 +141,7 @@ function UserAssignment() {
                             <Button outline style="danger" className="ms-2 iconButton" onClick={() => removeUserFromProject(user)}>
                                 <i className="bi bi-caret-down" style={{ fontSize: "1.2rem" }}></i>
                             </Button>
-                        ) : (
+                        ) : (  
                             <div />
                         )}
                     </div>
