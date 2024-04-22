@@ -1,10 +1,10 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Button from "../components/Button";
 import Timeline from "../components/Timeline";
 import { useNavigate, useParams } from "react-router-dom";
 import { UserContext } from "../UserContext";
 import UserAssignment from "../components/UserAssignment";
-import { ProjectRespondsObj } from "../interfaces/Project";
+import { ProjectObj, ProjectRespondsObj } from "../interfaces/Project";
 
 interface Props {
     isEditing?: boolean;
@@ -13,8 +13,7 @@ interface Props {
 function ProjectCreation({ isEditing = false }: Props) {
     const userInfo = useContext(UserContext);
     const { id } = useParams<{ id: string }>();
-
-    console.log("id", id);
+    const [project, setProject] = useState<ProjectObj | null>(null);
 
     const [title, setTitle] = useState<string>("");
     const [description, setDescription] = useState<string>("");
@@ -22,6 +21,43 @@ function ProjectCreation({ isEditing = false }: Props) {
     const [endDate, setEndDate] = useState<string>("");
 
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (id !== undefined) fetchProjects(id);
+    }, [id]);
+
+    const fetchProjects = async (projectId: number | string) => {
+        const url = (import.meta.env.VITE_API_URL as string) + `projects/get/${projectId}`;
+
+        const response = await fetch(url, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: document.cookie.substring(6),
+            },
+        });
+
+        if (response.ok) {
+            const json = await response.json();
+            const projectResponse = json as ProjectRespondsObj;
+            setProject({
+                id: projectResponse.projectId,
+                title: projectResponse.projectName,
+                estimatedEnd: projectResponse.estimateDate,
+                startDate: projectResponse.startDate,
+                description: projectResponse.description,
+                milestones: [],
+            });
+
+            console.log("Set project", project, json);
+            if (project) {
+                setTitle(project.title);
+                setDescription(project.description);
+            }
+        } else {
+            setProject(null);
+        }
+    };
 
     const createProject = async () => {
         if (!userInfo) return;
