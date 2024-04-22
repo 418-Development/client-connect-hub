@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import Button from "../components/Button";
 import Timeline from "../components/Timeline";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { UserContext } from "../UserContext";
 import UserAssignment from "../components/UserAssignment";
 
@@ -11,6 +11,9 @@ interface Props {
 
 function ProjectCreation({ isEditing = false }: Props) {
     const userInfo = useContext(UserContext);
+    const { id } = useParams<{ id: string }>();
+
+    console.log("id", id);
 
     const [title, setTitle] = useState<string>("");
     const [description, setDescription] = useState<string>("");
@@ -164,12 +167,6 @@ function ProjectCreation({ isEditing = false }: Props) {
                     <div>
                         <div>
                             <UserAssignment />
-                            <Button type="submit" style="primary" className="mt-3 me-3">
-                                Save Changes
-                            </Button>
-                            <Button style="secondary" className="mt-3">
-                                Cancel
-                            </Button>
                         </div>
                     </div>
                 </form>
