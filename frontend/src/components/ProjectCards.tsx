@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { ProjectObj, ProjectRespondsObj } from "../interfaces/Project";
 import ProjectCard from "./ProjectCard";
+import DeleteProjectModal from "./DeleteProjectModal";
 
 function ProjectCards() {
     const [projects, setProjects] = useState<ProjectObj[]>([]);
+    const [selectedProjectIndex, setSelectedProjectIndex] = useState(0);
     const debugProjects: ProjectObj[] = [
         {
             id: 1,
@@ -144,15 +146,28 @@ function ProjectCards() {
     };
 
     return (
-        <div className="container p-3">
-            <div className="row">
-                {projects.map((project) => (
-                    <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4" key={project.id}>
-                        <ProjectCard project={project} />
-                    </div>
-                ))}
+        <>
+            <div className="container p-3">
+                <div className="row">
+                    {projects.map((project, index) => (
+                        <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4" key={project.id}>
+                            <ProjectCard
+                                project={project}
+                                deleteProject={() => {
+                                    setSelectedProjectIndex(index);
+                                }}
+                            />
+                        </div>
+                    ))}
+                </div>
             </div>
-        </div>
+            <DeleteProjectModal
+                project={projects[selectedProjectIndex]}
+                onDeletion={() => {
+                    fetchAllProjects();
+                }}
+            />
+        </>
     );
 }
 

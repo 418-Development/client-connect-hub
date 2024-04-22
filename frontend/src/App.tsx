@@ -22,7 +22,7 @@ function App() {
                         <Route path="/debug/timeline" element={<DebugTimeline />} />
                         <Route path="/manage-user" element={<ManageUser />} />
                         <Route path="/create-project" element={<ProjectCreation />} />
-                        <Route path="/edit-project" element={<ProjectCreation isEditing />} />
+                        <Route path="/edit-project/:id" element={<ProjectCreation isEditing />} />
                     </>
                 ) : (
                     <></>
@@ -31,7 +31,7 @@ function App() {
                 {/* Routes all logged in user can visit */}
                 {userInfo ? (
                     <>
-                        <Route path="/project/*" element={<div>Test</div>} />
+                        <Route path="/project/:id" element={<div>Test</div>} />
                     </>
                 ) : (
                     <></>
@@ -39,7 +39,7 @@ function App() {
 
                 {/* Routes all user can visit */}
                 <Route path="/" element={<Dashboard />} />
-                <Route path="*" element={<Navigate to="/" />} />
+                {/*<Route path="*" element={<Navigate to="/" />} /> */}
             </Routes>
             <ProjectView></ProjectView>
         </div>
