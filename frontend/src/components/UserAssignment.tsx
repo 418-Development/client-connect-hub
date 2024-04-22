@@ -31,9 +31,29 @@ function UserAssignment() {
             },
         ]);
 
+        fetchAllUsers();
+
         setRoleSearch(UserRole.CLIENT)
     }, []);
 
+    const fetchAllUsers = async () => {
+        const url = (import.meta.env.VITE_API_URL as string) + "users/all";
+
+        const response = await fetch(url, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: document.cookie.substring(6)
+            },
+        });
+
+        console.log(url, response.ok, response.status)
+
+        if (response.ok) {
+            const json = await response.json();
+            console.log(json)
+        }
+    }
 
     const handleRoleSearch = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const value = Number(e.target.value);
