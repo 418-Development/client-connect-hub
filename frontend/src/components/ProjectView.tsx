@@ -133,6 +133,31 @@ function ProjectView() {
                 <h2 className="m-0 text-truncate">{project.title}</h2>
             </div>
             <div className="card-body">
+                <div className="row">
+                    <div className="col">
+                        <p className="text-center">
+                            Created:
+                            <br />
+                            2024-12-14
+                        </p>
+                    </div>
+                    <div className="col">
+                        <p className="text-center">
+                            Start:
+                            <br />
+                            2024-12-14
+                        </p>
+                    </div>
+                    <div className="col">
+                        <p className="text-center">
+                            End:
+                            <br />
+                            2024-12-14
+                        </p>
+                    </div>
+                </div>
+
+                <h3>Description</h3>
                 <div
                     ref={contentRef}
                     className="card p-1"
