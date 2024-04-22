@@ -4,6 +4,7 @@ import Timeline from "../components/Timeline";
 import { useNavigate, useParams } from "react-router-dom";
 import { UserContext } from "../UserContext";
 import UserAssignment from "../components/UserAssignment";
+import { ProjectRespondsObj } from "../interfaces/Project";
 
 interface Props {
     isEditing?: boolean;
@@ -48,13 +49,14 @@ function ProjectCreation({ isEditing = false }: Props) {
 
         console.log(url, response.ok, response.status);
 
-        if (!response.ok) {
+        if (response.ok) {
             const json = await response.json();
 
-            console.log("json", json);
-        }
+            const project = json as ProjectRespondsObj;
 
-        navigate("/edit-project");
+            console.log("json", json);
+            navigate(`/edit-project/${project.projectId}`);
+        }
     };
 
     return (
