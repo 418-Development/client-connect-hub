@@ -47,6 +47,20 @@ function ProjectCard({ project }: Props) {
         setHasOverflow(contentHeight > containerHeight);
     }, []);
 
+    const deleteProject = async () => {
+        const url = (import.meta.env.VITE_API_URL as string) + `projects/delete-project/${project.id}`;
+
+        const response = await fetch(url, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: document.cookie.substring(6),
+            },
+        });
+
+        console.log(url, response.ok, response.status);
+    };
+
     return (
         <div className="card m-3 mx-auto" style={{ width: "300px" }}>
             <a
@@ -93,7 +107,7 @@ function ProjectCard({ project }: Props) {
 
                 {userInfo?.role === UserRole.MANAGER ? (
                     <div className="d-flex justify-content-end me-2">
-                        <Button style="danger" className="me-2" outline>
+                        <Button style="danger" className="me-2" outline onClick={deleteProject}>
                             <i className="bi bi-trash"></i>
                         </Button>
                         <Button style="secondary" outline>
