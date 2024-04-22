@@ -167,12 +167,6 @@ function ProjectCreation({ isEditing = false }: Props) {
                     <div>
                         <div>
                             <UserAssignment />
-                            <Button type="submit" style="primary" className="mt-3 me-3">
-                                Save Changes
-                            </Button>
-                            <Button style="secondary" className="mt-3">
-                                Cancel
-                            </Button>
                         </div>
                     </div>
                 </form>
