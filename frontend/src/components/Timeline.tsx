@@ -1,5 +1,8 @@
+import { useContext } from "react";
+import { UserContext } from "../UserContext";
 import { MilestoneObj } from "../interfaces/Milestone";
 import Button from "./Button";
+import { UserRole } from "../interfaces/UserObj";
 
 interface Props {
     milestones: MilestoneObj[];
@@ -8,6 +11,7 @@ interface Props {
 }
 
 function Timeline({ milestones, onlyShowOverview = false, style = {} }: Props) {
+    const userInfo = useContext(UserContext);
     let displayedMilestones: MilestoneObj[] = [];
     let isActiveIndex = -1;
     let indicateMoreAtBeginning = false;
@@ -61,14 +65,14 @@ function Timeline({ milestones, onlyShowOverview = false, style = {} }: Props) {
                     <Button outline className="ms-3">
                         {milestone.title}
                     </Button>
-                    {index == isActiveIndex - 1 ? (
+                    {index == isActiveIndex - 1 && userInfo?.role === UserRole.MANAGER ? (
                         <Button outline style="danger" className="ms-2 iconButton">
                             <i className="bi bi-skip-start-circle" style={{ fontSize: "1.2rem" }}></i>
                         </Button>
                     ) : (
                         <></>
                     )}
-                    {index == isActiveIndex ? (
+                    {index == isActiveIndex && userInfo?.role === UserRole.MANAGER ? (
                         <Button outline style="success" className="ms-2 iconButton">
                             <i className="bi bi-check2-circle" style={{ fontSize: "1.2rem" }}></i>
                         </Button>

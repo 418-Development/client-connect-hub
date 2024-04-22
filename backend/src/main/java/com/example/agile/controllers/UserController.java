@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.example.agile.objecs.ERole;
+import com.example.agile.objecs.Project;
 import com.example.agile.objecs.Role;
 import com.example.agile.objecs.User;
 import com.example.agile.payload.request.LoginRequest;
@@ -36,7 +37,7 @@ import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/users")
 public class UserController {
     @Autowired
     AuthenticationManager authenticationManager;
@@ -125,36 +126,6 @@ public class UserController {
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
 
-    //Bmi calculation api
-    @PostMapping("/test/calculate_bmi")
-    public ResponseEntity<MessageResponse> calculateBmi(@RequestBody User user) {
-        logger.info("/test/calculate_bmi");
-
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = "";
-
-        if (authentication != null && authentication.isAuthenticated() && authentication.getPrincipal() instanceof UserDetails) {
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            username = userDetails.getUsername();
-            logger.info("username: " + username);
-        }
-
-        Optional<User> userSelect = userRepository.findByUsername(username);
-        if (userSelect.isPresent()) {
-            userSelect.get().setAge(user.getAge());
-            userSelect.get().setHeight(user.getHeight());
-            userSelect.get().setWeight(user.getWeight());
-            double calculatedResult = calculateBMI(user.getWeight(), user.getHeight());
-            userRepository.save(userSelect.get());
-            String temp = calculatedResult < 18.5 ? "You are underweight." :
-                    calculatedResult < 25 ? "You have a normal weight." :
-                            calculatedResult < 30 ? "You are overweight." :
-                                    "You are obese.";
-            return ResponseEntity.ok(new MessageResponse(calculatedResult + ""));
-        }
-        return null;
-    }
 
     @GetMapping("/test/userinfo")
     public ResponseEntity<User> getUserinfo() {
@@ -178,14 +149,20 @@ public class UserController {
         return null;
     }
 
-    public static double calculateBMI(double weight, double height) {
-        // Convert height from centimeters to meters
-        double heightInMeters = height / 100.0;
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllUsers() {
+        List<User> users = userRepository.findAll();
+        return ResponseEntity.ok(users);
+    }
 
-        // Calculate BMI
-        double bmi = weight / (heightInMeters * heightInMeters);
-
-        return bmi;
+    @GetMapping("/get/{id}")
+    public ResponseEntity<?> getUserById(@PathVariable Long id) {
+        Optional<User> user = userRepository.findById(id);
+        if (user.isPresent()) {
+            return ResponseEntity.ok(user.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
 }

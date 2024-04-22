@@ -1,22 +1,28 @@
 import { useEffect, useState } from "react";
-import { User, UserRole } from "../interfaces/User";
+import { UserObj, UserRole } from "../interfaces/UserObj";
 
 function ManageUser() {
-    const [users, setUsers] = useState<User[]>([]);
+    const [users, setUsers] = useState<UserObj[]>([]);
 
     useEffect(() => {
         setUsers([
             {
+                id: 1,
+                email: "marc@gmail.com",
                 username: "Marc",
                 role: UserRole.MANAGER,
                 label: "Team Manager",
             },
             {
+                id: 2,
+                email: "robert@gmail.com",
                 username: "Robert",
                 role: UserRole.TEAM,
                 label: "Ui Designer",
             },
             {
+                id: 2,
+                email: "felix@gmail.com",
                 username: "Felix",
                 role: UserRole.CLIENT,
                 label: "CEO",
@@ -41,14 +47,14 @@ function ManageUser() {
 
     return (
         <div className="container">
-            {users.map((user: User, index: number) => (
+            {users.map((user: UserObj, index: number) => (
                 <div key={user.username} className="d-flex align-items-center">
                     <div className="col p-2">{user.username}</div>
                     <div className="col p-2">
                         <select className="form-control" value={user.role} onChange={(e) => handleRoleChange(e, index)}>
-                            <option value="0">Project Manager</option>
-                            <option value="1">Team Member</option>
-                            <option value="2">Client</option>
+                            <option value={UserRole.MANAGER}>Project Manager</option>
+                            <option value={UserRole.TEAM}>Team Member</option>
+                            <option value={UserRole.CLIENT}>Client</option>
                         </select>
                     </div>
                     <div className="col p-2">

@@ -1,6 +1,5 @@
 package com.example.agile.repositories;
 
-import com.example.agile.objecs.Test;
 import com.example.agile.objecs.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
