@@ -31,9 +31,8 @@ function UserAssignment() {
             },
         ]);
 
-        setRoleSearch(UserRole.CLIENT)
+        setRoleSearch(UserRole.CLIENT);
     }, []);
-
 
     const handleRoleSearch = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const value = Number(e.target.value);
@@ -52,34 +51,42 @@ function UserAssignment() {
             {/* Div for already added users */}
             <div>
                 <p>Current Participants</p>
-                {users.filter((user) => {return roleSearch === user.role || UserRole.MANAGER === user.role}).map((user: UserObj) => ( 
-                    <div key={user.username} className="d-flex align-items-center">
-                        <div className="col p-2">{user.username}</div>
-                        <div className="col p-2">{UserRole[user.role]}</div>
-                        <div className="col p-2">{user.label}</div>
-                        <Button outline style="danger" className="ms-2 iconButton">
-                            <i className="bi bi-caret-down" style={{ fontSize: "1.2rem" }}></i>
-                        </Button>
-                    </div>
-                ))}
+                {users
+                    .filter((user) => {
+                        return roleSearch === user.role || UserRole.MANAGER === user.role;
+                    })
+                    .map((user: UserObj) => (
+                        <div key={user.username} className="d-flex align-items-center">
+                            <div className="col p-2">{user.username}</div>
+                            <div className="col p-2">{UserRole[user.role]}</div>
+                            <div className="col p-2">{user.label}</div>
+                            <Button outline kind="danger" className="ms-2 iconButton">
+                                <i className="bi bi-caret-down" style={{ fontSize: "1.2rem" }}></i>
+                            </Button>
+                        </div>
+                    ))}
             </div>
-            <hr/>
+            <hr />
             {/* Div for addable users */}
             <div>
                 <p>Addable Participants</p>
-                {users.filter((user) => {return roleSearch === user.role}).map((user: UserObj) => (
-                    <div key={user.username} className="d-flex align-items-center">
-                        <div className="col p-2">{user.username}</div>
-                        <div className="col p-2">{UserRole[user.role]}</div>
-                        <div className="col p-2">{user.label}</div>
-                        <Button outline style="success" className="ms-2 iconButton">
-                            <i className="bi bi-caret-up" style={{ fontSize: "1.2rem" }}></i>
-                        </Button>
-                    </div>
-                ))}
+                {users
+                    .filter((user) => {
+                        return roleSearch === user.role;
+                    })
+                    .map((user: UserObj) => (
+                        <div key={user.username} className="d-flex align-items-center">
+                            <div className="col p-2">{user.username}</div>
+                            <div className="col p-2">{UserRole[user.role]}</div>
+                            <div className="col p-2">{user.label}</div>
+                            <Button outline kind="success" className="ms-2 iconButton">
+                                <i className="bi bi-caret-up" style={{ fontSize: "1.2rem" }}></i>
+                            </Button>
+                        </div>
+                    ))}
             </div>
         </div>
-    )
+    );
 }
 
 export default UserAssignment;

@@ -2,9 +2,10 @@ import { ReactNode, forwardRef } from "react";
 
 interface Props {
     children?: ReactNode;
-    style?: "primary" | "secondary" | "success" | "danger" | "warning" | "info" | "light" | "dark" | "link" | "close";
+    kind?: "primary" | "secondary" | "success" | "danger" | "warning" | "info" | "light" | "dark" | "link" | "close";
     outline?: boolean;
     type?: "button" | "submit";
+    style?: React.CSSProperties;
     className?: string;
     onClick?: () => void;
     modalTarget?: string;
@@ -18,12 +19,13 @@ const Button = forwardRef<HTMLButtonElement, Props>(
             children,
             onClick,
             className = "",
-            style = "primary",
+            kind = "primary",
             outline = false,
             type = "button",
             modalTarget,
             dismissModal = false,
             ariaLabel,
+            style,
         },
         ref
     ) => {
@@ -44,7 +46,8 @@ const Button = forwardRef<HTMLButtonElement, Props>(
             <button
                 ref={ref}
                 type={type}
-                className={`${style != "close" ? "btn " : ""}btn-${outline ? "outline-" : ""}${style} ${className}`}
+                style={style}
+                className={`${kind != "close" ? "btn " : ""}btn-${outline ? "outline-" : ""}${kind} ${className}`}
                 onClick={onClick}
                 {...additionalProps}
             >

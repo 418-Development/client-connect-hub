@@ -42,7 +42,7 @@ function DeleteProjectModal({ project, onDeletion }: Props) {
                 <div className="modal-content">
                     <div className="modal-header">
                         <h5>Delete {project?.title}</h5>
-                        <Button ref={closeButton} style="close" dismissModal={true} ariaLabel="Close"></Button>
+                        <Button ref={closeButton} kind="close" dismissModal={true} ariaLabel="Close"></Button>
                     </div>
 
                     <form
@@ -79,10 +79,10 @@ function DeleteProjectModal({ project, onDeletion }: Props) {
                             </div>
                         </div>
                         <div className="modal-footer">
-                            <Button style="secondary" dismissModal={true}>
+                            <Button kind="secondary" dismissModal={true}>
                                 Close
                             </Button>
-                            <Button type="submit" style="danger">
+                            <Button type="submit" kind="danger">
                                 Delete
                             </Button>
                         </div>

@@ -66,14 +66,14 @@ function Timeline({ milestones, onlyShowOverview = false, style = {} }: Props) {
                         {milestone.title}
                     </Button>
                     {index == isActiveIndex - 1 && userInfo?.role === UserRole.MANAGER ? (
-                        <Button outline style="danger" className="ms-2 iconButton">
+                        <Button outline kind="danger" className="ms-2 iconButton">
                             <i className="bi bi-skip-start-circle" style={{ fontSize: "1.2rem" }}></i>
                         </Button>
                     ) : (
                         <></>
                     )}
                     {index == isActiveIndex && userInfo?.role === UserRole.MANAGER ? (
-                        <Button outline style="success" className="ms-2 iconButton">
+                        <Button outline kind="success" className="ms-2 iconButton">
                             <i className="bi bi-check2-circle" style={{ fontSize: "1.2rem" }}></i>
                         </Button>
                     ) : (

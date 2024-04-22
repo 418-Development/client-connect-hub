@@ -101,3 +101,7 @@
 .iconButton {
     padding: 0.21rem 0.5rem !important;
 }
+
+.markdown img {
+    max-width: 100%;
+}

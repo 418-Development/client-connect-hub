@@ -8,6 +8,7 @@ import { UserContext } from "../UserContext";
 import { UserRole } from "../interfaces/UserObj";
 import { useNavigate, useParams } from "react-router-dom";
 import DeleteProjectModal from "../components/DeleteProjectModal";
+import ReactMarkdown from "react-markdown";
 
 function ProjectView() {
     const userInfo = useContext(UserContext);
@@ -135,7 +136,7 @@ function ProjectView() {
                         <h3>Description</h3>
                         <div
                             ref={contentRef}
-                            className="card p-1"
+                            className="card p-1 markdown"
                             style={{
                                 maxHeight: isExpanded ? "none" : "500px",
                                 minHeight: "300px",
@@ -144,8 +145,9 @@ function ProjectView() {
                                 cursor: "default",
                             }}
                         >
-                            {project.description}
+                            <ReactMarkdown>{project.description}</ReactMarkdown>
                         </div>
+
                         {hasOverflow && (
                             <div
                                 onClick={toggleExpand}
@@ -231,11 +233,11 @@ function ProjectView() {
 
                         {userInfo?.role === UserRole.MANAGER ? (
                             <div className="d-flex justify-content-end me-2">
-                                <Button style="danger" className="me-2" outline modalTarget="#deleteProjectModal">
+                                <Button kind="danger" className="me-2" outline modalTarget="#deleteProjectModal">
                                     <i className="bi bi-trash"></i>
                                 </Button>
                                 <Button
-                                    style="secondary"
+                                    kind="secondary"
                                     outline
                                     onClick={() => {
                                         navigate(`/edit-project/${project.id}`);

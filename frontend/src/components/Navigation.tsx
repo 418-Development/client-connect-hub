@@ -77,7 +77,7 @@ function Navigation() {
                 <div className="container-fluid justify-content-between">
                     <div className="d-flex align-items-center">
                         <img src={logo} alt="Logo" width="40" height="40" className="d-inline-block align-text-top me-3" />
-                        <Button onClick={() => navigate("/")} style="link" className="navbar-brand">
+                        <Button onClick={() => navigate("/")} kind="link" className="navbar-brand">
                             Client Connect Hub
                         </Button>
                     </div>
@@ -115,10 +115,10 @@ function Navigation() {
                                     style={{ height: "40px" }}
                                 />
                                 <div className="d-flex">
-                                    <Button onClick={login} style="success" outline={true} className="me-2 text-nowrap" type="submit">
+                                    <Button onClick={login} kind="success" outline={true} className="me-2 text-nowrap" type="submit">
                                         Login
                                     </Button>
-                                    <Button style="primary" outline={true} className="text-nowrap" modalTarget="#modalSignUpForm">
+                                    <Button kind="primary" outline={true} className="text-nowrap" modalTarget="#modalSignUpForm">
                                         Sign Up
                                     </Button>
                                 </div>
@@ -126,7 +126,7 @@ function Navigation() {
                         ) : (
                             <>
                                 <span className="me-3">{userInfo.username}</span>
-                                <Button onClick={signOut} style="primary" outline={true}>
+                                <Button onClick={signOut} kind="primary" outline={true}>
                                     Sign out
                                 </Button>
                             </>

@@ -7,6 +7,7 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import Button from "./Button";
 import { UserContext } from "../UserContext";
 import { UserRole } from "../interfaces/UserObj";
+import ReactMarkdown from "react-markdown";
 
 interface Props {
     project: ProjectObj;
@@ -62,7 +63,7 @@ function ProjectCard({ project, deleteProject }: Props) {
             <div className="card-body">
                 <div
                     ref={contentRef}
-                    className="card p-1"
+                    className="card p-1 markdown"
                     style={{
                         maxHeight: isExpanded ? "none" : "115px",
                         minHeight: "115px",
@@ -72,7 +73,7 @@ function ProjectCard({ project, deleteProject }: Props) {
                     }}
                     onClick={hasOverflow ? toggleExpand : undefined}
                 >
-                    {project.description}
+                    <ReactMarkdown>{project.description}</ReactMarkdown>
                 </div>
                 {hasOverflow && (
                     <div
@@ -94,11 +95,11 @@ function ProjectCard({ project, deleteProject }: Props) {
 
                 {userInfo?.role === UserRole.MANAGER ? (
                     <div className="d-flex justify-content-end me-2">
-                        <Button style="danger" className="me-2" outline onClick={deleteProject} modalTarget="#deleteProjectModal">
+                        <Button kind="danger" className="me-2" outline onClick={deleteProject} modalTarget="#deleteProjectModal">
                             <i className="bi bi-trash"></i>
                         </Button>
                         <Button
-                            style="secondary"
+                            kind="secondary"
                             outline
                             onClick={() => {
                                 navigate(`/edit-project/${project.id}`);

@@ -5,6 +5,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { UserContext } from "../UserContext";
 import UserAssignment from "../components/UserAssignment";
 import { ProjectObj, ProjectRespondsObj } from "../interfaces/Project";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 interface Props {
     isEditing?: boolean;
@@ -14,7 +16,9 @@ function ProjectCreation({ isEditing = false }: Props) {
     const userInfo = useContext(UserContext);
     const { id } = useParams<{ id: string }>();
     const [project, setProject] = useState<ProjectObj | null>(null);
+    const [showPreview, setShowPreview] = useState<boolean>(false);
     const descriptionTextArea = useRef<HTMLTextAreaElement>(null);
+    const preview = useRef<HTMLDivElement>(null);
 
     const [title, setTitle] = useState<string>("");
     const [description, setDescription] = useState<string>("");
@@ -51,12 +55,12 @@ function ProjectCreation({ isEditing = false }: Props) {
             };
             setProject(curProject);
 
-            console.log("Set project", project, json);
             if (curProject) {
                 setTitle(curProject.title);
                 setDescription(curProject.description);
                 setStartDate(curProject.startDate.split("T")[0]);
                 setEndDate(curProject.estimatedEnd.split("T")[0]);
+                updateTextArea();
             }
         } else {
             setProject(null);
@@ -87,14 +91,11 @@ function ProjectCreation({ isEditing = false }: Props) {
             }),
         });
 
-        console.log(url, response.ok, response.status);
-
         if (response.ok) {
             const json = await response.json();
 
             const project = json as ProjectRespondsObj;
 
-            console.log("json", json);
             navigate(`/edit-project/${project.projectId}`);
         }
     };
@@ -120,10 +121,15 @@ function ProjectCreation({ isEditing = false }: Props) {
             }),
         });
 
-        console.log(url, response.ok, response.status);
-
         if (response.ok) {
             navigate(`/edit-project/${id}`);
+        }
+    };
+
+    const updateTextArea = () => {
+        if (descriptionTextArea.current) {
+            descriptionTextArea.current.style.height = "auto";
+            descriptionTextArea.current.style.height = `${descriptionTextArea.current.scrollHeight + 2}px`;
         }
     };
 
@@ -147,7 +153,7 @@ function ProjectCreation({ isEditing = false }: Props) {
                         <input
                             type="text"
                             autoComplete="title"
-                            className="form-control"
+                            className="form-control mt-2"
                             id="projectTitle"
                             placeholder="Enter title"
                             onChange={(e) => {
@@ -162,6 +168,30 @@ function ProjectCreation({ isEditing = false }: Props) {
                 <div className="mt-3">
                     <div>
                         <label htmlFor="projectDescription">Project description</label>
+                        <div className="ms-2 mt-2">
+                            <Button
+                                type="button"
+                                kind={showPreview ? "secondary" : "primary"}
+                                style={{ borderRadius: 0 }}
+                                onClick={() => {
+                                    setShowPreview(false);
+                                }}
+                                outline={showPreview}
+                            >
+                                Write
+                            </Button>
+                            <Button
+                                type="button"
+                                kind={showPreview ? "primary" : "secondary"}
+                                style={{ borderRadius: 0 }}
+                                onClick={() => {
+                                    setShowPreview(true);
+                                }}
+                                outline={!showPreview}
+                            >
+                                Preview
+                            </Button>
+                        </div>
                         <textarea
                             ref={descriptionTextArea}
                             autoComplete="description"
@@ -172,15 +202,15 @@ function ProjectCreation({ isEditing = false }: Props) {
                                 setDescription(e.target.value);
                             }}
                             value={description}
-                            onInput={() => {
-                                if (descriptionTextArea.current) {
-                                    descriptionTextArea.current.style.height = "auto";
-                                    descriptionTextArea.current.style.height = `${descriptionTextArea.current.scrollHeight + 2}px`;
-                                }
-                            }}
+                            onInput={updateTextArea}
+                            hidden={showPreview}
+                            maxLength={15000}
                             required
                         />
                         <div className="invalid-feedback"></div>
+                        <div ref={preview} hidden={!showPreview}>
+                            <ReactMarkdown className="card p-1 markdown">{description}</ReactMarkdown>
+                        </div>
                     </div>
                 </div>
                 <div className="mt-3">
@@ -188,7 +218,7 @@ function ProjectCreation({ isEditing = false }: Props) {
                         <label htmlFor="startDate">Start Date</label>
                         <input
                             type="date"
-                            className="form-control"
+                            className="form-control mt-2"
                             id="startDate"
                             placeholder=""
                             onChange={(e) => {
@@ -205,7 +235,7 @@ function ProjectCreation({ isEditing = false }: Props) {
                         <label htmlFor="endDate">Estimated End Date</label>
                         <input
                             type="date"
-                            className="form-control"
+                            className="form-control mt-2"
                             id="endDate"
                             placeholder=""
                             onChange={(e) => {
@@ -217,37 +247,40 @@ function ProjectCreation({ isEditing = false }: Props) {
                         <div className="invalid-feedback"></div>
                     </div>
                 </div>
-                {isEditing ? (
-                    <div>
-                        <Button type="submit" style="primary" className="mt-3 me-3">
-                            Save Changes
-                        </Button>
-                        <Button style="secondary" className="mt-3">
-                            Cancel
-                        </Button>
-                    </div>
-                ) : (
-                    <div>
-                        <Button type="submit" style="primary" className="mt-3 me-3">
-                            Create Project
-                        </Button>
-                        <Button style="secondary" className="mt-3">
-                            Cancel
-                        </Button>
-                    </div>
-                )}
+                <div className="d-flex justify-content-end">
+                    {isEditing ? (
+                        <>
+                            <Button kind="link" className="mt-3">
+                                Cancel
+                            </Button>
+                            <Button type="submit" kind="primary" className="mt-3">
+                                Save Changes
+                            </Button>
+                        </>
+                    ) : (
+                        <>
+                            <Button kind="link" className="mt-3">
+                                Cancel
+                            </Button>
+                            <Button type="submit" kind="primary" className="mt-3">
+                                Create Project
+                            </Button>
+                        </>
+                    )}
+                </div>
             </form>
 
             {isEditing ? (
                 <form className="mt-3">
+                    <h2>Project Member</h2>
                     <div>
-                        <div>
-                            <UserAssignment />
-                            <Button type="submit" style="primary" className="mt-3 me-3">
-                                Save Changes
-                            </Button>
-                            <Button style="secondary" className="mt-3">
+                        <UserAssignment />
+                        <div className="d-flex justify-content-end">
+                            <Button kind="link" className="mt-3">
                                 Cancel
+                            </Button>
+                            <Button type="submit" kind="primary" className="mt-3">
+                                Save Changes
                             </Button>
                         </div>
                     </div>
@@ -257,50 +290,62 @@ function ProjectCreation({ isEditing = false }: Props) {
             )}
 
             {isEditing ? (
-                <form className="mt-3">
-                    <div>
+                <>
+                    <form className="mt-3">
                         <div>
-                            <p>PLaceholder for the milestone Adding/Editing UI</p>
-                            <Timeline
-                                milestones={[
-                                    {
-                                        id: "milestone0",
-                                        title: "Milestone 1",
-                                        estimatedEnd: "01.04.2024",
-                                        isDone: true,
-                                    },
-                                    {
-                                        id: "milestone1",
-                                        title: "Milestone 1",
-                                        estimatedEnd: "01.04.2024",
-                                        isDone: true,
-                                    },
-                                    {
-                                        id: "milestone2",
-                                        title: "Milestone 2",
-                                        estimatedEnd: "06.04.2024",
-                                        isDone: true,
-                                    },
-                                    {
-                                        id: "milestone3",
-                                        title: "Milestone 3",
-                                        estimatedEnd: "18.04.2024",
-                                        isDone: false,
-                                    },
-                                ]}
-                                onlyShowOverview
-                            />
+                            <div>
+                                <p>PLaceholder for the milestone Adding/Editing UI</p>
+                                <Timeline
+                                    milestones={[
+                                        {
+                                            id: "milestone0",
+                                            title: "Milestone 1",
+                                            estimatedEnd: "01.04.2024",
+                                            isDone: true,
+                                        },
+                                        {
+                                            id: "milestone1",
+                                            title: "Milestone 1",
+                                            estimatedEnd: "01.04.2024",
+                                            isDone: true,
+                                        },
+                                        {
+                                            id: "milestone2",
+                                            title: "Milestone 2",
+                                            estimatedEnd: "06.04.2024",
+                                            isDone: true,
+                                        },
+                                        {
+                                            id: "milestone3",
+                                            title: "Milestone 3",
+                                            estimatedEnd: "18.04.2024",
+                                            isDone: false,
+                                        },
+                                    ]}
+                                    onlyShowOverview
+                                />
+                            </div>
                         </div>
-                    </div>
-                    <div>
-                        <Button type="submit" style="primary" className="mt-3 me-3">
-                            Save Changes
+                        <div className="d-flex justify-content-end">
+                            <Button kind="link" className="mt-3">
+                                Cancel
+                            </Button>
+                            <Button type="submit" kind="primary" className="mt-3">
+                                Save Changes
+                            </Button>
+                        </div>
+                    </form>
+                    <div className="m-3 d-flex justify-content-center align-items-center">
+                        <Button
+                            onClick={() => {
+                                navigate(`/project/${id}`);
+                            }}
+                        >
+                            <i className="bi bi-arrow-left me-2"></i>
+                            back
                         </Button>
-                        <Button style="secondary" className="mt-3">
-                            Cancel
-                        </Button>
                     </div>
-                </form>
+                </>
             ) : (
                 <div />
             )}
