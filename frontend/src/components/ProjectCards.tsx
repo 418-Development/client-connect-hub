@@ -6,7 +6,7 @@ function ProjectCards() {
     const [projects, setProjects] = useState<ProjectObj[]>([]);
     const debugProjects: ProjectObj[] = [
         {
-            id: "Proj1",
+            id: 1,
             title: "Project 1",
             estimatedEnd: "2024-01-01",
             startDate: "2024-01-01",
@@ -40,7 +40,7 @@ function ProjectCards() {
             ],
         },
         {
-            id: "Proj2",
+            id: 2,
             title: "Project 2",
             estimatedEnd: "2024-01-01",
             startDate: "2024-01-01",
@@ -67,7 +67,7 @@ function ProjectCards() {
             ],
         },
         {
-            id: "Proj3",
+            id: 3,
             title: "Project 3",
             estimatedEnd: "2024-01-01",
             startDate: "2024-01-01",
@@ -76,7 +76,7 @@ function ProjectCards() {
             milestones: [],
         },
         {
-            id: "Proj4",
+            id: 4,
             title: "Project 4",
             estimatedEnd: "2024-01-01",
             startDate: "2024-01-01",

@@ -7,6 +7,7 @@ import { UserContext } from "./UserContext";
 import ManageUser from "./routes/ManageUser";
 import { UserRole } from "./interfaces/UserObj";
 import Dashboard from "./routes/Dashboard";
+import ProjectView from "./components/ProjectView";
 
 function App() {
     const userInfo = useContext(UserContext);
@@ -21,7 +22,7 @@ function App() {
                         <Route path="/debug/timeline" element={<DebugTimeline />} />
                         <Route path="/manage-user" element={<ManageUser />} />
                         <Route path="/create-project" element={<ProjectCreation />} />
-                        <Route path="/edit-project" element={<ProjectCreation isEditing/>} />
+                        <Route path="/edit-project" element={<ProjectCreation isEditing />} />
                     </>
                 ) : (
                     <></>
@@ -40,6 +41,7 @@ function App() {
                 <Route path="/" element={<Dashboard />} />
                 <Route path="*" element={<Navigate to="/" />} />
             </Routes>
+            <ProjectView></ProjectView>
         </div>
     );
 }
