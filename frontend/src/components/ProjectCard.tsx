@@ -53,7 +53,7 @@ function ProjectCard({ project, deleteProject }: Props) {
             <a
                 className="card-header project-card-header"
                 onClick={() => {
-                    navigate(`/projects/${project.id}`);
+                    navigate(`/edit-project/${project.id}`);
                 }}
                 style={{ textDecoration: "none", cursor: "pointer" }}
             >
@@ -97,7 +97,13 @@ function ProjectCard({ project, deleteProject }: Props) {
                         <Button style="danger" className="me-2" outline onClick={deleteProject} modalTarget="#deleteProjectModal">
                             <i className="bi bi-trash"></i>
                         </Button>
-                        <Button style="secondary" outline>
+                        <Button
+                            style="secondary"
+                            outline
+                            onClick={() => {
+                                navigate(`/edit-project/${project.id}`);
+                            }}
+                        >
                             <i className="bi bi-pencil"></i>
                         </Button>
                     </div>
