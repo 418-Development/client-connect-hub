@@ -34,9 +34,22 @@ public class Project {
 
     private Date estimateDate;
 
-    @ElementCollection
-    private List<Long> milestones;
 
+    @ManyToMany
+    @JoinTable(
+            name = "project_user",
+            joinColumns = @JoinColumn(name = "project_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private Set<User> users = new HashSet<>();
+
+    @OneToMany
+    @JoinTable(
+            name = "project_milestone",
+            joinColumns = @JoinColumn(name = "project_id"),
+            inverseJoinColumns = @JoinColumn(name = "milestoneId")
+    )
+    private Set<Milestone> milestones = new HashSet<>();
 
     public Project(String projectName){
         this.projectName = projectName;

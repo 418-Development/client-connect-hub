@@ -201,5 +201,58 @@ public class ProjectController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/{projectId}/addUser/{userId}")
+    public ResponseEntity<?> addUserToProject(@PathVariable Long projectId, @PathVariable Long userId) {
+        // Fetch project from the database
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated() || !(authentication.getPrincipal() instanceof UserDetails)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new MessageResponse("Unauthorized"));
+        }
+
+        Project project = projectRepository.findById(projectId).orElse(null);
+        if (project == null)
+        {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("Project not found"));
+        }
+        // Fetch user from the database
+        User user = userRepository.findById(userId).orElse(null);
+        if (user == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("User not found"));
+        }
+        // Add user to the project
+        project.getUsers().add(user);
+        projectRepository.save(project);
+
+        return ResponseEntity.ok(project);
+    }
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping("/{projectId}/removeUser/{userId}")
+    public ResponseEntity<?> removeUserFromProject(@PathVariable Long projectId, @PathVariable Long userId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated() || !(authentication.getPrincipal() instanceof UserDetails)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new MessageResponse("Unauthorized"));
+        }
+
+        Project project = projectRepository.findById(projectId).orElse(null);
+        if (project == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("Project not found"));
+        }
+
+        User user = userRepository.findById(userId).orElse(null);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("User not found"));
+        }
+
+        if (!project.getUsers().contains(user)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("User is not associated with this project"));
+        }
+
+        project.getUsers().remove(user);
+        projectRepository.save(project);
+
+        return ResponseEntity.ok(project);
+    }
+
 
 }
