@@ -1,8 +1,10 @@
-import { ProjectObj } from "../interfaces/Project";
+import { useEffect, useState } from "react";
+import { ProjectObj, ProjectRespondsObj } from "../interfaces/Project";
 import ProjectCard from "./ProjectCard";
 
 function ProjectCards() {
-    const projects: ProjectObj[] = [
+    const [projects, setProjects] = useState<ProjectObj[]>([]);
+    const debugProjects: ProjectObj[] = [
         {
             id: "Proj1",
             title: "Project 1",
@@ -96,6 +98,50 @@ function ProjectCards() {
             ],
         },
     ];
+
+    useEffect(() => {
+        fetchAllProjects();
+    }, []);
+
+    const fetchAllProjects = async () => {
+        const url = (import.meta.env.VITE_API_URL as string) + "projects/all";
+
+        const response = await fetch(url, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: document.cookie.substring(6),
+            },
+        });
+
+        console.log(url, response.ok, response.status);
+
+        if (response.ok) {
+            const json = await response.json();
+            const projectRespondsArray = json as ProjectRespondsObj[];
+            const projectArray: ProjectObj[] = [];
+            for (let index = 0; index < projectRespondsArray.length; index++) {
+                const project = projectRespondsArray[index];
+                projectArray.push({
+                    id: project.projectId,
+                    title: project.projectName,
+                    estimatedEnd: project.estimateDate,
+                    startDate: project.startDate,
+                    description: project.description,
+                    milestones: [],
+                });
+            }
+            console.log("json", json);
+            console.log("projectArray", projectArray);
+            setProjects(projectArray);
+        } else {
+            if (import.meta.env.VITE_DEBUG) {
+                setProjects(debugProjects);
+            } else {
+                setProjects([]);
+            }
+        }
+    };
 
     return (
         <div className="container p-3">
