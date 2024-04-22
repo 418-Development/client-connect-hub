@@ -1,9 +1,6 @@
 package com.example.agile.controllers;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import com.example.agile.objecs.ERole;
@@ -24,7 +21,9 @@ import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -163,6 +162,32 @@ public class UserController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/set/{user_id}")
+    public ResponseEntity<?> setUserRoles(@PathVariable Long user_id,@RequestBody List<Long> roleIds){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated() || !(authentication.getPrincipal() instanceof UserDetails)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new MessageResponse("Unauthorized"));
+        }
+        User user = userRepository.findById(user_id).orElse(null);
+        if (user == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("User not found"));
+        }
+        Set<Role> temp_roles = new HashSet<>();
+        for (Long role : roleIds){
+            if (role == 0){
+                temp_roles.add(new Role(ERole.ROLE_USER));
+            }
+            if (role == 1){
+                temp_roles.add(new Role(ERole.ROLE_MODERATOR));
+            }
+        }
+        user.setRoles(temp_roles);
+        userRepository.save(user);
+
+        return ResponseEntity.ok(user);
     }
 
 }
