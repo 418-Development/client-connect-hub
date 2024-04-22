@@ -11,16 +11,12 @@ function UserAssignment() {
     const { id } = useParams<{ id: string }>();
 
     useEffect(() => {
-        fetchUsers()
+        fetchProjectUser();
     }, []);
 
-    const fetchUsers = async () => {
-        await fetchProjectUser();
-
-        await fetchAllUsers();
-
-        setRoleSearch(UserRole.CLIENT)
-    }
+    useEffect(() => {
+        fetchAllUsers()
+    }, [projectUsers]);
 
     const fetchProjectUser = async () => {
         const url = (import.meta.env.VITE_API_URL as string) + "users/all";
@@ -96,13 +92,13 @@ function UserAssignment() {
         tempAllUsers.push(user)
         setAllUsers(tempAllUsers)
 
-        var tempProjectUsers = projectUsers
+        let tempProjectUsers = projectUsers
         tempProjectUsers = tempProjectUsers.filter((projectUser) => {return user.id != projectUser.id})
         setProjectUsers(tempProjectUsers)
     };
 
     const addUserToProject = (projectUser: UserObj) => {
-        var tempAllUsers = allUsers
+        let tempAllUsers = allUsers
         tempAllUsers = tempAllUsers.filter((user) => {return user.id != projectUser.id})
         setAllUsers(tempAllUsers)
 
@@ -112,7 +108,26 @@ function UserAssignment() {
     };
 
     const saveChanges = async () => {
-        
+        const url = (import.meta.env.VITE_API_URL as string) + "projects/" + id + "/update-clients";
+
+        const response = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: document.cookie.substring(6)
+            },
+            body: JSON.stringify({
+                projectId: id,
+                userIds: projectUsers.map((user) => user.id)
+            })
+        });
+
+        if (response.ok) {
+            console.log("It worked")
+        }
+        else {
+            console.log("It no work")
+        }
     }
 
     const handleRoleSearch = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -163,10 +178,10 @@ function UserAssignment() {
                 ))}
             </div>
             <div>
-            <Button style="primary" className="mt-3 me-3" onClick={() => console.log(allUsers)}>
+            <Button style="primary" className="mt-3 me-3" onClick={() => saveChanges()}>
                 Save Changes
             </Button>
-            <Button style="secondary" className="mt-3" onClick={() => console.log(projectUsers)}>
+            <Button style="secondary" className="mt-3" onClick={() => fetchProjectUser()}>
                 Cancel
             </Button>
             </div>
