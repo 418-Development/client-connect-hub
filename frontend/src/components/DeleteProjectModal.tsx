@@ -26,7 +26,7 @@ function DeleteProjectModal({ project, onDeletion }: Props) {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
-                Authorization: document.cookie.substring(6),
+                Authorization: localStorage.getItem("token") ?? "",
             },
         });
 

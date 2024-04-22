@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Navigation from "./components/Navigation";
 import DebugTimeline from "./routes/DebugTimeline";
 import ProjectCreation from "./routes/ProjectCreation";
@@ -7,7 +7,7 @@ import { UserContext } from "./UserContext";
 import ManageUser from "./routes/ManageUser";
 import { UserRole } from "./interfaces/UserObj";
 import Dashboard from "./routes/Dashboard";
-import ProjectView from "./components/ProjectView";
+import ProjectView from "./routes/ProjectView";
 
 function App() {
     const userInfo = useContext(UserContext);
@@ -31,7 +31,7 @@ function App() {
                 {/* Routes all logged in user can visit */}
                 {userInfo ? (
                     <>
-                        <Route path="/project/:id" element={<div>Test</div>} />
+                        <Route path="/project/:id" element={<ProjectView />} />
                     </>
                 ) : (
                     <></>
@@ -41,7 +41,6 @@ function App() {
                 <Route path="/" element={<Dashboard />} />
                 {/*<Route path="*" element={<Navigate to="/" />} /> */}
             </Routes>
-            <ProjectView></ProjectView>
         </div>
     );
 }

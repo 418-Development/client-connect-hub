@@ -112,7 +112,7 @@ function ProjectCards() {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
-                Authorization: document.cookie.substring(6),
+                Authorization: localStorage.getItem("token") ?? "",
             },
         });
 

@@ -34,7 +34,7 @@ function ProjectCreation({ isEditing = false }: Props) {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
-                Authorization: document.cookie.substring(6),
+                Authorization: localStorage.getItem("token") ?? "",
             },
         });
 
@@ -73,7 +73,7 @@ function ProjectCreation({ isEditing = false }: Props) {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                Authorization: document.cookie.substring(6),
+                Authorization: localStorage.getItem("token") ?? "",
             },
             body: JSON.stringify({
                 projectId: 0,
@@ -102,14 +102,13 @@ function ProjectCreation({ isEditing = false }: Props) {
     const updateProject = async () => {
         if (!userInfo) return;
 
-        const currentDate = new Date();
         const url = (import.meta.env.VITE_API_URL as string) + `projects/update-project/${id}`;
 
         const response = await fetch(url, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
-                Authorization: document.cookie.substring(6),
+                Authorization: localStorage.getItem("token") ?? "",
             },
             body: JSON.stringify({
                 projectId: id,

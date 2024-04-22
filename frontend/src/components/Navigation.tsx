@@ -32,7 +32,7 @@ function Navigation() {
     }, []);
 
     useEffect(() => {
-        if (document.cookie.startsWith("token=") && userInfo === null) {
+        if (localStorage.getItem("token") && userInfo === null) {
             updateUserInfo();
         }
     }, []);
@@ -54,9 +54,7 @@ function Navigation() {
         if (response.ok) {
             const json = await response.json();
 
-            const date = new Date();
-            date.setTime(date.getTime() + 15 * 60 * 1000);
-            document.cookie = `token=${json.tokenType} ${json.accessToken};expires="${date.toUTCString()};SameSite=Strict;path=/`;
+            localStorage.setItem("token", `${json.tokenType} ${json.accessToken}`);
 
             updateUserInfo();
         } else {
@@ -69,7 +67,7 @@ function Navigation() {
 
     const signOut = async () => {
         console.log("signOut");
-        document.cookie = "token=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+        localStorage.removeItem("token");
         updateUserInfo();
     };
 

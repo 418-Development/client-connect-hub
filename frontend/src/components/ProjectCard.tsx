@@ -53,7 +53,7 @@ function ProjectCard({ project, deleteProject }: Props) {
             <a
                 className="card-header project-card-header"
                 onClick={() => {
-                    navigate(`/edit-project/${project.id}`);
+                    navigate(`/project/${project.id}`);
                 }}
                 style={{ textDecoration: "none", cursor: "pointer" }}
             >

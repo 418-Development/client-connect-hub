@@ -26,7 +26,7 @@ export function UserProvider({ children }: Props) {
     }, []);
 
     async function updateUserInfo() {
-        if (document.cookie.startsWith("token=")) {
+        if (localStorage.getItem("token")) {
             const url = (import.meta.env.VITE_API_URL as string) + "users/test/userinfo";
 
             console.log("Request userinfo from", url);
@@ -34,7 +34,7 @@ export function UserProvider({ children }: Props) {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization: document.cookie.substring(6),
+                    Authorization: localStorage.getItem("token") ?? "",
                 },
             });
 
@@ -54,8 +54,8 @@ export function UserProvider({ children }: Props) {
                 });
             } else {
                 // Sign out user, because the token is most likely expired.
+                localStorage.removeItem("token");
                 setUser(null);
-                document.cookie = "token=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
             }
         } else {
             setUser(null);
