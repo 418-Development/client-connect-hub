@@ -38,7 +38,7 @@ function App() {
 
                 {/* Routes all user can visit */}
                 <Route path="/" element={<Dashboard />} />
-                <Route path="*" element={<Navigate to="/" />} />
+                {/*<Route path="*" element={<Navigate to="/" />} /> */}
             </Routes>
         </div>
     );

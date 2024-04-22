@@ -72,7 +72,8 @@ public class ProjectController {
             project.setCreatorId(currentUser.getId());
             // Save the project
             Project savedProject = projectRepository.save(project);
-            return ResponseEntity.ok(new MessageResponse("Project created successfully with id: " + savedProject.getProjectId()));
+            logger.info(savedProject.getProjectId().toString());
+            return ResponseEntity.ok(savedProject);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Failed to create project: " + e.getMessage()));
         }
