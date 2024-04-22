@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { UserObj, UserRole } from "../interfaces/UserObj";
+import { UserObj, UserResponseObj, UserRole } from "../interfaces/UserObj";
 import Button from "./Button";
 
 function UserAssignment() {
@@ -7,30 +7,6 @@ function UserAssignment() {
     const [roleSearch, setRoleSearch] = useState<UserRole>(UserRole.TEAM);
 
     useEffect(() => {
-        setUsers([
-            {
-                id: 1,
-                email: "marc@gmail.com",
-                username: "Marc",
-                role: UserRole.MANAGER,
-                label: "Team Manager",
-            },
-            {
-                id: 2,
-                email: "robert@gmail.com",
-                username: "Robert",
-                role: UserRole.TEAM,
-                label: "Ui Designer",
-            },
-            {
-                id: 2,
-                email: "felix@gmail.com",
-                username: "Felix",
-                role: UserRole.CLIENT,
-                label: "CEO",
-            },
-        ]);
-
         fetchAllUsers();
 
         setRoleSearch(UserRole.CLIENT)
@@ -51,7 +27,20 @@ function UserAssignment() {
 
         if (response.ok) {
             const json = await response.json();
-            console.log(json)
+            const userResponseArray = json as UserResponseObj[];
+            const userArray: UserObj[] = [];
+            for (let index = 0; index < userResponseArray.length; index++) {
+                const user = userResponseArray[index];
+                userArray.push({
+                    id: user.id,
+                    username: user.username,
+                    role: user.roles[0].id as UserRole,
+                    label: "M.I.A.",
+                    email: user.email,
+                });
+            }
+
+            setUsers(userArray)
         }
     }
 
