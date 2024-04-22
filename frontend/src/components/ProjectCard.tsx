@@ -56,7 +56,7 @@ function ProjectCard({ project }: Props) {
                 }}
                 style={{ textDecoration: "none", cursor: "pointer" }}
             >
-                <h2 className="m-0">{project.title}</h2>
+                <h2 className="m-0 text-truncate">{project.title}</h2>
             </a>
             <div className="card-body">
                 <div
