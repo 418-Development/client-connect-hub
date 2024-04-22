@@ -10,9 +10,10 @@ import { UserRole } from "../interfaces/UserObj";
 
 interface Props {
     project: ProjectObj;
+    deleteProject: () => void;
 }
 
-function ProjectCard({ project }: Props) {
+function ProjectCard({ project, deleteProject }: Props) {
     const navigate = useNavigate();
     const userInfo = useContext(UserContext);
     const [isExpanded, setIsExpanded] = useState(false);
@@ -93,7 +94,7 @@ function ProjectCard({ project }: Props) {
 
                 {userInfo?.role === UserRole.MANAGER ? (
                     <div className="d-flex justify-content-end me-2">
-                        <Button style="danger" className="me-2" outline>
+                        <Button style="danger" className="me-2" outline onClick={deleteProject} modalTarget="#deleteProjectModal">
                             <i className="bi bi-trash"></i>
                         </Button>
                         <Button style="secondary" outline>
