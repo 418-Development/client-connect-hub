@@ -142,7 +142,7 @@ public class MilestoneController {
         }
     }
 
-    @PutMapping("/milestone-status/{id}")
+    @PutMapping("/milestone-status/{id}/{action}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> updateMilestoneStatus(@PathVariable Long id, @PathVariable String action) {
         Optional<Milestone> optionalMilestone = milestoneRepo.findById(id);
