@@ -184,30 +184,32 @@ function ProjectCreation({ isEditing = false }: Props) {
                 </div>
                 <div className="mt-3">
                     <div>
-                        <label htmlFor="projectDescription">Project description</label>
-                        <div className="m-2">
-                            <Button
-                                type="button"
-                                kind={showPreview ? "secondary" : "primary"}
-                                style={{ borderRadius: 0 }}
-                                onClick={() => {
-                                    setShowPreview(false);
-                                }}
-                                outline={showPreview}
-                            >
-                                Write
-                            </Button>
-                            <Button
-                                type="button"
-                                kind={showPreview ? "primary" : "secondary"}
-                                style={{ borderRadius: 0 }}
-                                onClick={() => {
-                                    setShowPreview(true);
-                                }}
-                                outline={!showPreview}
-                            >
-                                Preview
-                            </Button>
+                        <div className="d-flex align-items-center">
+                            <label htmlFor="projectDescription">Project description</label>
+                            <div className="ms-5 m-2">
+                                <Button
+                                    type="button"
+                                    kind={showPreview ? "secondary" : "primary"}
+                                    style={{ borderRadius: 0 }}
+                                    onClick={() => {
+                                        setShowPreview(false);
+                                    }}
+                                    outline={showPreview}
+                                >
+                                    Write
+                                </Button>
+                                <Button
+                                    type="button"
+                                    kind={showPreview ? "primary" : "secondary"}
+                                    style={{ borderRadius: 0 }}
+                                    onClick={() => {
+                                        setShowPreview(true);
+                                    }}
+                                    outline={!showPreview}
+                                >
+                                    Preview
+                                </Button>
+                            </div>
                         </div>
                         <textarea
                             ref={descriptionTextArea}
