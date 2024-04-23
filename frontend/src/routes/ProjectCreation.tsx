@@ -167,7 +167,7 @@ function ProjectCreation({ isEditing = false }: Props) {
                 <div className="mt-3">
                     <div>
                         <label htmlFor="projectDescription">Project description</label>
-                        <div className="ms-2 mt-2">
+                        <div className="m-2">
                             <Button
                                 type="button"
                                 kind={showPreview ? "secondary" : "primary"}
