@@ -142,18 +142,26 @@ public class MilestoneController {
         }
     }
 
-    @PutMapping("/complete-milestone/{id}")
+    @PutMapping("/milestone-status/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<?> completeMilestone(@PathVariable Long id) {
+    public ResponseEntity<?> updateMilestoneStatus(@PathVariable Long id, @PathVariable String action) {
         Optional<Milestone> optionalMilestone = milestoneRepo.findById(id);
         if (optionalMilestone.isPresent()) {
             Milestone milestone = optionalMilestone.get();
-            milestone.setIsComplete(true);
-            milestoneRepo.save(milestone); // Save the updated milestone
-            return ResponseEntity.ok("Milestone marked as complete successfully");
+            if ("complete".equalsIgnoreCase(action)) {
+                milestone.setIsDone(true);
+                milestoneRepo.save(milestone);
+                return ResponseEntity.ok("Milestone marked as 'Complete'.");
+            } else if ("in-progress".equalsIgnoreCase(action)) {
+                milestone.setIsDone(false);
+                milestoneRepo.save(milestone);
+                return ResponseEntity.ok("Milestone status marked as 'In-Progress'");
+            } else {
+                return ResponseEntity.badRequest().body("Invalid action parameter. Use 'Complete' or 'In-Progress'.");
+            }
         } else {
             return ResponseEntity.notFound().build();
         }
-    }
+    }    
     
 }

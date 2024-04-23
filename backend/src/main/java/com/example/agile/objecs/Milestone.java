@@ -39,7 +39,7 @@ public class Milestone {
     private Long projectId;
 
     @Setter
-    private Boolean isComplete;
+    private Boolean isDone;
 
     public Milestone(String name, String description, Long creatorId, Date estimateDate, Boolean status) {
         setMilestoneName(name);
@@ -47,7 +47,7 @@ public class Milestone {
         setCreatorId(creatorId);
         setCreatedDate(Date.from(Instant.now()));
         setEstimateDate(estimateDate);
-        setIsComplete(status != null ? status : false);
+        setIsDone(status != null ? status : false);
     }
     public Milestone(){}
 
@@ -75,8 +75,8 @@ public class Milestone {
         return createdDate;
     }
 
-    public boolean getIsComplete() {
-        return isComplete;
+    public boolean getIsDone() {
+        return isDone;
     }
 
 }
