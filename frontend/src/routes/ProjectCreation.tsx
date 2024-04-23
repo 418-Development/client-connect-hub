@@ -6,6 +6,7 @@ import { UserContext } from "../UserContext";
 import UserAssignment from "../components/UserAssignment";
 import { ProjectObj, ProjectRespondsObj } from "../interfaces/Project";
 import Markdown from "../components/Markdown";
+import EditMilestones from "../components/EditMilestones";
 
 interface Props {
     isEditing?: boolean;
@@ -289,51 +290,7 @@ function ProjectCreation({ isEditing = false }: Props) {
 
             {isEditing ? (
                 <>
-                    <form className="mt-3">
-                        <h2>Milestones</h2>
-                        <div>
-                            <div>
-                                <p>PLaceholder for the milestone Adding/Editing UI</p>
-                                <Timeline
-                                    milestones={[
-                                        {
-                                            id: "milestone0",
-                                            title: "Milestone 1",
-                                            estimatedEnd: "01.04.2024",
-                                            isDone: true,
-                                        },
-                                        {
-                                            id: "milestone1",
-                                            title: "Milestone 1",
-                                            estimatedEnd: "01.04.2024",
-                                            isDone: true,
-                                        },
-                                        {
-                                            id: "milestone2",
-                                            title: "Milestone 2",
-                                            estimatedEnd: "06.04.2024",
-                                            isDone: true,
-                                        },
-                                        {
-                                            id: "milestone3",
-                                            title: "Milestone 3",
-                                            estimatedEnd: "18.04.2024",
-                                            isDone: false,
-                                        },
-                                    ]}
-                                    onlyShowOverview
-                                />
-                            </div>
-                        </div>
-                        <div className="d-flex justify-content-end">
-                            <Button kind="link" className="mt-3">
-                                Cancel
-                            </Button>
-                            <Button type="submit" kind="primary" className="mt-3">
-                                Save Changes
-                            </Button>
-                        </div>
-                    </form>
+                    <EditMilestones />
                     <div className="m-3 d-flex justify-content-center align-items-center">
                         <Button
                             onClick={() => {
