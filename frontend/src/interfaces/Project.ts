@@ -1,4 +1,5 @@
 import { MilestoneObj } from "./Milestone";
+import { UserObj, UserResponseObj } from "./UserObj";
 
 export interface ProjectObj {
     id: number;
@@ -7,6 +8,7 @@ export interface ProjectObj {
     startDate: string;
     description: string;
     milestones: MilestoneObj[];
+    users: UserObj[];
 }
 
 export interface ProjectRespondsObj {
@@ -15,6 +17,7 @@ export interface ProjectRespondsObj {
     description: string;
     estimateDate: string;
     milestones: [];
+    users: UserResponseObj[];
     projectId: number;
     projectName: string;
     startDate: string;
