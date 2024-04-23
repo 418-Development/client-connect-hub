@@ -8,7 +8,6 @@ import Markdown from "../components/Markdown";
 import EditMilestones from "../components/EditMilestones";
 import { UserObj, UserRole } from "../interfaces/UserObj";
 import { MilestoneObj, MilestoneResponseObj } from "../interfaces/Milestone";
-import Timeline from "../components/Timeline";
 
 interface Props {
     isEditing?: boolean;
@@ -328,22 +327,12 @@ function ProjectCreation({ isEditing = false }: Props) {
             {isEditing ? (
                 <>
                     {project && (
-                        <>
-                            <h2>Milestones</h2>
-                            <div className="d-flex justify-content-between">
-                                <div className="d-flex flex-column">
-                                    <Timeline milestones={project?.milestones ?? []} style={{ marginLeft: "10px" }} />
-                                </div>
-                                <div className="flex-fill ms-3">
-                                    <EditMilestones
-                                        project={project}
-                                        onMilestoneEvent={() => {
-                                            fetchProjects(project.id);
-                                        }}
-                                    />
-                                </div>
-                            </div>
-                        </>
+                        <EditMilestones
+                            project={project}
+                            onMilestoneEvent={() => {
+                                fetchProjects(project.id);
+                            }}
+                        />
                     )}
                     <div className="m-3 d-flex justify-content-center align-items-center">
                         <Button
