@@ -39,13 +39,23 @@ function ProjectView() {
         if (response.ok) {
             const json = await response.json();
             const projectResponse = json as ProjectRespondsObj;
+
+            const milestones: MilestoneObj[] = projectResponse.milestones.map((milestone) => {
+                return {
+                    id: milestone.milestoneId,
+                    title: milestone.milestoneName,
+                    estimatedEnd: milestone.estimateDate?.split("T")[0] ?? "",
+                    isDone: false,
+                };
+            });
+
             const curProject = {
                 id: projectResponse.projectId,
                 title: projectResponse.projectName,
                 estimatedEnd: projectResponse.estimateDate.split("T")[0],
                 startDate: projectResponse.startDate.split("T")[0],
                 description: projectResponse.description,
-                milestones: [],
+                milestones: milestones,
             };
             setProject(curProject);
         } else {

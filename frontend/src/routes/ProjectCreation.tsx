@@ -7,6 +7,8 @@ import { ProjectObj, ProjectRespondsObj } from "../interfaces/Project";
 import Markdown from "../components/Markdown";
 import EditMilestones from "../components/EditMilestones";
 import { UserObj, UserRole } from "../interfaces/UserObj";
+import { MilestoneObj, MilestoneResponseObj } from "../interfaces/Milestone";
+import Timeline from "../components/Timeline";
 
 interface Props {
     isEditing?: boolean;
@@ -45,6 +47,21 @@ function ProjectCreation({ isEditing = false }: Props) {
         if (response.ok) {
             const json = await response.json();
             const projectResponse = json as ProjectRespondsObj;
+
+            console.log(projectResponse);
+            const milestones: MilestoneObj[] = projectResponse.milestones
+                .map((milestone) => {
+                    return {
+                        id: milestone.milestoneId,
+                        title: milestone.milestoneName,
+                        estimatedEnd: milestone.estimateDate.split("T")[0],
+                        isDone: false,
+                    };
+                })
+                .sort((a, b) => {
+                    return b.estimatedEnd.localeCompare(a.estimatedEnd);
+                });
+
             // Generate UserObj Array from ProjectResponseObj
             const userArray: UserObj[] = [];
             for (let index = 0; index < projectResponse.users.length; index++) {
@@ -65,7 +82,7 @@ function ProjectCreation({ isEditing = false }: Props) {
                 startDate: projectResponse.startDate,
                 description: projectResponse.description,
                 users: userArray,
-                milestones: [],
+                milestones: milestones,
             };
             setProject(curProject);
 
@@ -102,9 +119,11 @@ function ProjectCreation({ isEditing = false }: Props) {
                 startDate: startDate,
                 estimateDate: endDate,
                 milestones: [],
-                users: [{
-                    id: userInfo.id
-                }]
+                users: [
+                    {
+                        id: userInfo.id,
+                    },
+                ],
             }),
         });
 
@@ -292,7 +311,14 @@ function ProjectCreation({ isEditing = false }: Props) {
                 <form className="mt-3">
                     <h2>Project Member</h2>
                     <div>
-                        {project && <UserAssignment project={project} onUserEvent={() => {fetchProjects(project.id)}} />}
+                        {project && (
+                            <UserAssignment
+                                project={project}
+                                onUserEvent={() => {
+                                    fetchProjects(project.id);
+                                }}
+                            />
+                        )}
                     </div>
                 </form>
             ) : (
@@ -301,7 +327,24 @@ function ProjectCreation({ isEditing = false }: Props) {
 
             {isEditing ? (
                 <>
-                    {project && <EditMilestones project={project} />}
+                    {project && (
+                        <>
+                            <h2>Milestones</h2>
+                            <div className="d-flex justify-content-between">
+                                <div className="d-flex flex-column">
+                                    <Timeline milestones={project?.milestones ?? []} style={{ marginLeft: "10px" }} />
+                                </div>
+                                <div className="flex-fill ms-3">
+                                    <EditMilestones
+                                        project={project}
+                                        onMilestoneEvent={() => {
+                                            fetchProjects(project.id);
+                                        }}
+                                    />
+                                </div>
+                            </div>
+                        </>
+                    )}
                     <div className="m-3 d-flex justify-content-center align-items-center">
                         <Button
                             kind="success"

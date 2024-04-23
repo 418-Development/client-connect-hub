@@ -129,13 +129,22 @@ function ProjectCards() {
             for (let index = 0; index < projectRespondsArray.length; index++) {
                 const project = projectRespondsArray[index];
 
+                const milestones: MilestoneObj[] = project.milestones.map((milestone) => {
+                    return {
+                        id: milestone.milestoneId,
+                        title: milestone.milestoneName,
+                        estimatedEnd: milestone.estimateDate?.split("T")[0] ?? "",
+                        isDone: false,
+                    };
+                });
+
                 projectArray.push({
                     id: project.projectId,
                     title: project.projectName,
                     estimatedEnd: project.estimateDate,
                     startDate: project.startDate,
                     description: project.description,
-                    milestones: [],
+                    milestones: milestones,
                     users: [],
                 });
             }

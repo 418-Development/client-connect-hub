@@ -8,9 +8,10 @@ import Markdown from "./Markdown";
 
 interface Props {
     project: ProjectObj;
+    onMilestoneEvent: () => void;
 }
 
-function EditMilestones({ project }: Props) {
+function EditMilestones({ project, onMilestoneEvent }: Props) {
     const userInfo = useContext(UserContext);
     const navigate = useNavigate();
 
@@ -46,7 +47,10 @@ function EditMilestones({ project }: Props) {
         if (response.ok) {
             const json = await response.json();
 
-            navigate(`/edit-project/${project.id}`);
+            setDescription("");
+            setMilestoneName("");
+            setEndDate("");
+            onMilestoneEvent();
         }
     };
 
@@ -59,15 +63,14 @@ function EditMilestones({ project }: Props) {
 
     return (
         <form
-            className="mt-3"
+            className=""
             onSubmit={(e) => {
                 e.preventDefault();
-                console.log("SSSSSSSSSSSSSSSSSSSSSS");
 
                 createMilestone();
             }}
         >
-            <h2>Milestones</h2>
+            <h3>Create new Milestone</h3>
             <div className="row g-3 mt-1">
                 <div className="col mt-2">
                     <label htmlFor="milestoneName">Name</label>

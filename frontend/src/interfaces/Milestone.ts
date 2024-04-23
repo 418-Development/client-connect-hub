@@ -1,16 +1,15 @@
 export interface MilestoneObj {
-    id: string;
+    id: number;
     title: string;
     estimatedEnd: string;
     isDone: boolean;
 }
 
 export interface MilestoneResponseObj {
+    createdDate: string;
+    description: string;
     milestoneId: number;
     milestoneName: string;
-    description: string;
     creatorId: number;
-    createdDate: string;
     estimateDate: string;
-    projectId: number;
 }
