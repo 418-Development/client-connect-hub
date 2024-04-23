@@ -1,10 +1,10 @@
 import { ProjectObj } from "../interfaces/Project";
 import { useContext } from "react";
 import { UserContext } from "../UserContext";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import Button from "./Button";
-import Markdown from "./Markdown";
 import Timeline from "./Timeline";
+import MarkdownEditor from "./MarkdownEditor";
 
 interface Props {
     project: ProjectObj;
@@ -17,10 +17,6 @@ function EditMilestones({ project, onMilestoneEvent }: Props) {
     const [description, setDescription] = useState<string>("");
     const [milestoneName, setMilestoneName] = useState<string>("");
     const [endDate, setEndDate] = useState<string>("");
-
-    const [showPreview, setShowPreview] = useState<boolean>(false);
-    const preview = useRef<HTMLDivElement>(null);
-    const descriptionTextArea = useRef<HTMLTextAreaElement>(null);
 
     const createMilestone = async () => {
         if (!userInfo) return;
@@ -48,13 +44,6 @@ function EditMilestones({ project, onMilestoneEvent }: Props) {
             setMilestoneName("");
             setEndDate("");
             onMilestoneEvent();
-        }
-    };
-
-    const updateTextArea = () => {
-        if (descriptionTextArea.current) {
-            descriptionTextArea.current.style.height = "auto";
-            descriptionTextArea.current.style.height = `${descriptionTextArea.current.scrollHeight + 2}px`;
         }
     };
 
@@ -118,54 +107,13 @@ function EditMilestones({ project, onMilestoneEvent }: Props) {
                         </div>
 
                         <div className="mt-3">
-                            <div>
-                                <div className="d-flex align-items-center">
-                                    <label htmlFor="milestoneDescription">Description</label>
-                                    <div className="ms-5 m-2">
-                                        <Button
-                                            type="button"
-                                            kind={showPreview ? "secondary" : "primary"}
-                                            style={{ borderRadius: 0 }}
-                                            onClick={() => {
-                                                setShowPreview(false);
-                                            }}
-                                            outline={showPreview}
-                                        >
-                                            Write
-                                        </Button>
-                                        <Button
-                                            type="button"
-                                            kind={showPreview ? "primary" : "secondary"}
-                                            style={{ borderRadius: 0 }}
-                                            onClick={() => {
-                                                setShowPreview(true);
-                                            }}
-                                            outline={!showPreview}
-                                        >
-                                            Preview
-                                        </Button>
-                                    </div>
-                                </div>
-                                <textarea
-                                    ref={descriptionTextArea}
-                                    autoComplete="description"
-                                    className="form-control"
-                                    id="projectDescription"
-                                    placeholder="Enter description"
-                                    onChange={(e) => {
-                                        setDescription(e.target.value);
-                                    }}
-                                    value={description}
-                                    onInput={updateTextArea}
-                                    hidden={showPreview}
-                                    maxLength={15000}
-                                    required
-                                />
-                                <div className="invalid-feedback"></div>
-                                <div ref={preview} hidden={!showPreview} className="card p-1 markdown">
-                                    <Markdown>{description}</Markdown>
-                                </div>
-                            </div>
+                            <MarkdownEditor
+                                value={description}
+                                onValueChanged={(value) => {
+                                    setDescription(value);
+                                }}
+                                label="Description"
+                            />
                         </div>
 
                         <div className="d-flex justify-content-end">

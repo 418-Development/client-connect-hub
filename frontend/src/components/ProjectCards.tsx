@@ -13,8 +13,7 @@ function ProjectCards() {
             title: "Project 1",
             estimatedEnd: "2024-01-01",
             startDate: "2024-01-01",
-            description:
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet magna sollicitudin, sodales libero quis, auctor leo. Mauris nec odio vitae urna volutpat varius. Ut vehicula, elit in condimentum cursus, metus ante pharetra magna, ac facilisis felis diam vel nisi. Aliquam erat volutpat. Curabitur eu ante massa. Fusce nec felis id libero pretium vehicula. Vivamus lacinia sem vitae enim dictum, in ullamcorper elit ornare. Praesent tristique velit vel eros congue, at pellentesque eros vehicula. Ut ac est nunc. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Phasellus id ligula sed turpis sollicitudin dapibus. Sed luctus, mauris sit amet auctor aliquet, mi libero laoreet metus, non accumsan metus massa non nunc. Morbi ut dolor sit amet velit auctor tincidunt. Curabitur hendrerit, massa at aliquam sagittis, sapien leo vehicula risus, vel gravida purus lacus vel nisl. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi.",
+            description: "Normal",
             milestones: [
                 {
                     id: 1,
@@ -48,7 +47,7 @@ function ProjectCards() {
             title: "Project 2",
             estimatedEnd: "2024-01-01",
             startDate: "2024-01-01",
-            description: "Lorem ipsum dolor sit amet.",
+            description: "Lorem ipsum",
             milestones: [
                 {
                     id: 1,
@@ -76,8 +75,7 @@ function ProjectCards() {
             title: "Project 3",
             estimatedEnd: "2024-01-01",
             startDate: "2024-01-01",
-            description:
-                "Lorem ipsum dolor sit amet. Aliquam erat volutpat. Curabitur eu ante massa. Fusce nec felis id libero pretium vehicula. Vivamus lacinia sem vitae enim dictum, in ullamcorper elit ornare. Praesent tristique velit vel eros congue, at pellentesque eros vehicula. Ut ac est nunc. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Phasellus id ligula sed turpis sollicitudin dapibus. Sed luctus, mauris sit amet auctor aliquet, mi libero laoreet metus, non accumsan metus massa non nunc.",
+            description: "Normal",
             milestones: [],
             users: [],
         },
@@ -86,8 +84,7 @@ function ProjectCards() {
             title: "Project 4",
             estimatedEnd: "2024-01-01",
             startDate: "2024-01-01",
-            description:
-                "Lorem ipsum dolor sit amet.Aliquam erat volutpat. Curabitur eu ante massa.Praesent tristique velit vel eros congue, at pellentesque eros vehicula. Ut ac est nunc. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. ",
+            description: "Normal",
             milestones: [
                 {
                     id: 1,
