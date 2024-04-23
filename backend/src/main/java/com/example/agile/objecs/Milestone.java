@@ -38,12 +38,16 @@ public class Milestone {
     @Setter
     private Long projectId;
 
-    public Milestone(String name, String description, Long creatorId, Date estimateDate) {
+    @Setter
+    private Boolean isComplete;
+
+    public Milestone(String name, String description, Long creatorId, Date estimateDate, Boolean status) {
         setMilestoneName(name);
         setDescription(description);
         setCreatorId(creatorId);
         setCreatedDate(Date.from(Instant.now()));
         setEstimateDate(estimateDate);
+        setIsComplete(status != null ? status : false);
     }
     public Milestone(){}
 
@@ -69,6 +73,10 @@ public class Milestone {
 
     public Date getCreatedDate() {
         return createdDate;
+    }
+
+    public boolean getIsComplete() {
+        return isComplete;
     }
 
 }

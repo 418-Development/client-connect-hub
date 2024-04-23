@@ -141,4 +141,19 @@ public class MilestoneController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @PutMapping("/complete-milestone/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<?> completeMilestone(@PathVariable Long id) {
+        Optional<Milestone> optionalMilestone = milestoneRepo.findById(id);
+        if (optionalMilestone.isPresent()) {
+            Milestone milestone = optionalMilestone.get();
+            milestone.setIsComplete(true);
+            milestoneRepo.save(milestone); // Save the updated milestone
+            return ResponseEntity.ok("Milestone marked as complete successfully");
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    
 }
