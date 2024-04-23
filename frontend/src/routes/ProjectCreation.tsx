@@ -6,6 +6,7 @@ import UserAssignment from "../components/UserAssignment";
 import { ProjectObj, ProjectRespondsObj } from "../interfaces/Project";
 import Markdown from "../components/Markdown";
 import EditMilestones from "../components/EditMilestones";
+import { UserObj, UserRole } from "../interfaces/UserObj";
 
 interface Props {
     isEditing?: boolean;
@@ -44,12 +45,26 @@ function ProjectCreation({ isEditing = false }: Props) {
         if (response.ok) {
             const json = await response.json();
             const projectResponse = json as ProjectRespondsObj;
+            // Generate UserObj Array from ProjectResponseObj
+            const userArray: UserObj[] = [];
+            for (let index = 0; index < projectResponse.users.length; index++) {
+                const user = projectResponse.users[index];
+                userArray.push({
+                    id: user.id,
+                    username: user.username,
+                    role: user.roles[0].id as UserRole,
+                    label: "M.I.A.",
+                    email: user.email,
+                });
+            }
+            // Create current Project with data from the ProjectResponseObj
             const curProject = {
                 id: projectResponse.projectId,
                 title: projectResponse.projectName,
                 estimatedEnd: projectResponse.estimateDate,
                 startDate: projectResponse.startDate,
                 description: projectResponse.description,
+                users: userArray,
                 milestones: [],
             };
             setProject(curProject);
@@ -87,6 +102,9 @@ function ProjectCreation({ isEditing = false }: Props) {
                 startDate: startDate,
                 estimateDate: endDate,
                 milestones: [],
+                users: [{
+                    id: userInfo.id
+                }]
             }),
         });
 
@@ -274,7 +292,7 @@ function ProjectCreation({ isEditing = false }: Props) {
                 <form className="mt-3">
                     <h2>Project Member</h2>
                     <div>
-                        <UserAssignment />
+                        {project && <UserAssignment project={project} onUserEvent={() => {fetchProjects(project.id)}} />}
                     </div>
                 </form>
             ) : (

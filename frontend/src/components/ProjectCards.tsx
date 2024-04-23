@@ -40,6 +40,7 @@ function ProjectCards() {
                     isDone: false,
                 },
             ],
+            users: [],
         },
         {
             id: 2,
@@ -67,6 +68,7 @@ function ProjectCards() {
                     isDone: false,
                 },
             ],
+            users: [],
         },
         {
             id: 3,
@@ -76,6 +78,7 @@ function ProjectCards() {
             description:
                 "Lorem ipsum dolor sit amet. Aliquam erat volutpat. Curabitur eu ante massa. Fusce nec felis id libero pretium vehicula. Vivamus lacinia sem vitae enim dictum, in ullamcorper elit ornare. Praesent tristique velit vel eros congue, at pellentesque eros vehicula. Ut ac est nunc. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Phasellus id ligula sed turpis sollicitudin dapibus. Sed luctus, mauris sit amet auctor aliquet, mi libero laoreet metus, non accumsan metus massa non nunc.",
             milestones: [],
+            users: [],
         },
         {
             id: 4,
@@ -98,6 +101,7 @@ function ProjectCards() {
                     isDone: true,
                 },
             ],
+            users: [],
         },
     ];
 
@@ -124,6 +128,7 @@ function ProjectCards() {
             const projectArray: ProjectObj[] = [];
             for (let index = 0; index < projectRespondsArray.length; index++) {
                 const project = projectRespondsArray[index];
+
                 projectArray.push({
                     id: project.projectId,
                     title: project.projectName,
@@ -131,6 +136,7 @@ function ProjectCards() {
                     startDate: project.startDate,
                     description: project.description,
                     milestones: [],
+                    users: [],
                 });
             }
             console.log("json", json);
