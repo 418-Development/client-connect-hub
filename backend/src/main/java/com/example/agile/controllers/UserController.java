@@ -1,13 +1,10 @@
 package com.example.agile.controllers;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
-import com.example.agile.objecs.ELabel;
 import com.example.agile.objecs.ERole;
+import com.example.agile.objecs.Project;
 import com.example.agile.objecs.Role;
 import com.example.agile.objecs.User;
 import com.example.agile.payload.request.LoginRequest;
@@ -19,7 +16,6 @@ import com.example.agile.repositories.UserRepo;
 import com.example.agile.security.AuthEntryPointJwt;
 import com.example.agile.security.JwtUtils;
 import com.example.agile.security.UserDetailsImpl;
-import com.example.agile.services.UserService;
 import jakarta.validation.Valid;
 
 import org.slf4j.Logger;
@@ -27,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -43,9 +40,6 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     @Autowired
     AuthenticationManager authenticationManager;
-
-    @Autowired
-    private UserService userService;
 
     @Autowired
     UserRepo userRepository;
@@ -170,15 +164,30 @@ public class UserController {
         }
     }
 
-    @PostMapping("/{userId}/addLabel/{labelName}")
-    public ResponseEntity<User> addUserLabel(@PathVariable Long userId, @PathVariable ELabel labelName) {
-        User updatedUser = userService.addUserLabel(userId, labelName);
-
-        if (updatedUser != null) {
-            return new ResponseEntity<>(updatedUser, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/set/{user_id}")
+    public ResponseEntity<?> setUserRoles(@PathVariable Long user_id,@RequestBody List<Long> roleIds){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated() || !(authentication.getPrincipal() instanceof UserDetails)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new MessageResponse("Unauthorized"));
         }
+        User user = userRepository.findById(user_id).orElse(null);
+        if (user == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("User not found"));
+        }
+        Set<Role> temp_roles = new HashSet<>();
+        for (Long role : roleIds){
+            if (role == 0){
+                temp_roles.add(new Role(ERole.ROLE_USER));
+            }
+            if (role == 1){
+                temp_roles.add(new Role(ERole.ROLE_MODERATOR));
+            }
+        }
+        user.setRoles(temp_roles);
+        userRepository.save(user);
+
+        return ResponseEntity.ok(user);
     }
 
 }

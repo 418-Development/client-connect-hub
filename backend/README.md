@@ -10,38 +10,9 @@ Sql server running on AWS server (!!For learning purpose please create local dat
 
 Run program and then it will be ready for accept requests.
 
-## Sign Up 
+For API documentation
 
-For sign-in uri : 
-
-http://localhost:8080/api/auth/signup
-
-{
-"name" : "name",
-"password" : "pass",
-"email" : "email@gm.com" 
-}
-
-## Sign In
-
-http://localhost:8080/api/auth/signin 
-
-{
-"name" : "name",
-"password" : "pass",
-}
-
-## Calculate Bmi
-
-http://localhost:8080/api/bmi/calculate_bmi
-
-{
-    "username" :"zxczxc",
-    "age" : 23,
-    "height" : 1.534,
-    "weight" : 50
-}
-Important : For height need to pass value as above.
+http://localhost:8080/swagger-ui/index.html
 
 ****************************************************************************************************************
 

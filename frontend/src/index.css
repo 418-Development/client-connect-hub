@@ -1,50 +1,103 @@
+:root {
+    box-sizing: border-box;
+}
+
 .input-group-text {
     width: 150px !important;
 }
 
-.bmi-scale-container {
-    display: flex;
-    flex-direction: row;
+.timeline {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.timeline li {
     position: relative;
+    list-style: none;
+
+    padding: 0;
+    margin: 0 0 0 16px;
 }
 
-.bmi-scale {
-    flex: 1;
-    height: 50px;
+.timeline li::after {
+    content: "";
+    display: block;
+    background-color: var(--bs-body-bg);
+    border: 2px solid white;
+    border-radius: 100%;
+    width: 16px;
+    height: 16px;
+    padding: 0;
+    margin: 0;
 
-    position: relative;
-}
-
-#bmi-indicator {
-    height: 50px;
-    width: 50px;
     position: absolute;
-    top: 0;
-    left: 0;
-    transform: translate(-50%, -60%);
+    left: 0%;
+    top: 50%;
+    transform: translate(calc(-50% - 2px), -50%);
 }
 
-#underweight {
-    flex: calc(18.5 - 15);
-}
-#healthy {
-    flex: calc(25 - 18.5);
-}
-#overweight {
-    flex: calc(30 - 25);
-}
-#obese {
-    flex: calc(45 - 30);
+.timeline li.is-done::after {
+    background-color: white;
 }
 
-.description {
+.timeline li.is-active::after {
+    background-color: #198754;
+    border: 3px solid white;
+    width: 18px;
+    height: 18px;
+}
+
+.timeline li::before {
+    content: "";
+    display: block;
+    background-color: white;
+    width: 4px;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+
     position: absolute;
-    right: 0;
-    bottom: 0;
+    left: 0%;
+    top: 50%;
+    transform: translate(calc(-50% - 2px), -50%);
+}
 
-    transform: translate(50%, 100%);
+.timeline li:first-of-type::before {
+    height: 50%;
+    top: 75%;
+}
+.timeline li:last-of-type::before {
+    height: 50%;
+    top: 25%;
+}
 
-    height: 50px;
+.timeline li.indicate-more:first-of-type::before {
+    height: 100%;
+    top: 50%;
+    background: linear-gradient(#ffffff00, #ffffff, #ffffff);
+}
 
-    font-weight: bold;
+.timeline li.indicate-more:last-of-type::before {
+    height: 100%;
+    top: 50%;
+    background: linear-gradient(#ffffffff, #ffffff, #ffffff00);
+}
+
+.timeline li:last-of-type:first-of-type::before {
+    height: 0;
+}
+
+.project-card-header:hover + div {
+    transition: background-color 0.3s, text-decoration 0.3s;
+    background-color: #292c35;
+}
+
+.project-card-header:hover {
+    transition: background-color 0.3s, text-decoration 0.3s;
+    background-color: #313641;
+}
+
+.iconButton {
+    padding: 0.21rem 0.5rem !important;
 }
