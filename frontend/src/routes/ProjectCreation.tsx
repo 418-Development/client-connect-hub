@@ -5,8 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { UserContext } from "../UserContext";
 import UserAssignment from "../components/UserAssignment";
 import { ProjectObj, ProjectRespondsObj } from "../interfaces/Project";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
+import Markdown from "../components/Markdown";
 
 interface Props {
     isEditing?: boolean;
@@ -208,8 +207,8 @@ function ProjectCreation({ isEditing = false }: Props) {
                             required
                         />
                         <div className="invalid-feedback"></div>
-                        <div ref={preview} hidden={!showPreview}>
-                            <ReactMarkdown className="card p-1 markdown">{description}</ReactMarkdown>
+                        <div ref={preview} hidden={!showPreview} className="card p-1 markdown">
+                            <Markdown>{description}</Markdown>
                         </div>
                     </div>
                 </div>

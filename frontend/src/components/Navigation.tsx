@@ -76,7 +76,7 @@ function Navigation() {
             <nav className="navbar navbar-expand-lg bg-body-tertiary">
                 <div className="container-fluid justify-content-between">
                     <div className="d-flex align-items-center">
-                        <img src={logo} alt="Logo" width="40" height="40" className="d-inline-block align-text-top me-3" />
+                        <img src={logo} alt="Logo" width="40" height="40" className="d-inline-block align-text-top logo" />
                         <Button onClick={() => navigate("/")} kind="link" className="navbar-brand">
                             Client Connect Hub
                         </Button>

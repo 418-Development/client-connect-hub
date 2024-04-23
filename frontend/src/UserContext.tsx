@@ -12,8 +12,6 @@ export function UserProvider({ children }: Props) {
     const [user, setUser] = useState<UserObj | null>(null);
 
     useEffect(() => {
-        console.log("import.meta.env.VITE_DEBUG || ", import.meta.env.VITE_DEBUG);
-
         if (import.meta.env.VITE_DEBUG) {
             setUser({
                 id: 0,
@@ -29,7 +27,6 @@ export function UserProvider({ children }: Props) {
         if (localStorage.getItem("token")) {
             const url = (import.meta.env.VITE_API_URL as string) + "users/test/userinfo";
 
-            console.log("Request userinfo from", url);
             const response = await fetch(url, {
                 method: "GET",
                 headers: {
@@ -40,7 +37,6 @@ export function UserProvider({ children }: Props) {
 
             if (response.ok) {
                 const data = await response.json();
-                console.log("data", data);
 
                 const userinfo = data as UserResponseObj;
                 const role = userinfo.roles[0].id as UserRole;

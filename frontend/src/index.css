@@ -1,5 +1,29 @@
 :root {
     box-sizing: border-box;
+
+    --cch-timeline-color: #0d6efd;
+    --cch-timeline-color-active: #8ebcff;
+    --cch-timeline-color-bg: #ffffff;
+    --cch-card-hover: #ececec;
+    --cch-card-hover-2: #dbdbdb;
+}
+
+.logo {
+    filter: invert(100%);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --cch-timeline-color: white;
+        --cch-timeline-color-active: #007728;
+        --cch-timeline-color-bg: #ffffff;
+        --cch-card-hover: #292c35;
+        --cch-card-hover-2: #313641;
+    }
+
+    .logo {
+        filter: none;
+    }
 }
 
 .input-group-text {
@@ -24,7 +48,7 @@
     content: "";
     display: block;
     background-color: var(--bs-body-bg);
-    border: 2px solid white;
+    border: 2px solid var(--cch-timeline-color);
     border-radius: 100%;
     width: 16px;
     height: 16px;
@@ -38,12 +62,12 @@
 }
 
 .timeline li.is-done::after {
-    background-color: white;
+    background-color: var(--cch-timeline-color);
 }
 
 .timeline li.is-active::after {
-    background-color: #198754;
-    border: 3px solid white;
+    background-color: var(--cch-timeline-color-active);
+    border: 3px solid var(--cch-timeline-color);
     width: 18px;
     height: 18px;
 }
@@ -51,9 +75,9 @@
 .timeline li::before {
     content: "";
     display: block;
-    background-color: white;
+    background-color: var(--cch-timeline-color);
     width: 4px;
-    height: 100%;
+    height: 105%;
     padding: 0;
     margin: 0;
 
@@ -75,13 +99,13 @@
 .timeline li.indicate-more:first-of-type::before {
     height: 100%;
     top: 50%;
-    background: linear-gradient(#ffffff00, #ffffff, #ffffff);
+    background: linear-gradient(#ffffff00, var(--cch-timeline-color), var(--cch-timeline-color));
 }
 
 .timeline li.indicate-more:last-of-type::before {
     height: 100%;
     top: 50%;
-    background: linear-gradient(#ffffffff, #ffffff, #ffffff00);
+    background: linear-gradient(var(--cch-timeline-color), var(--cch-timeline-color), #ffffff00);
 }
 
 .timeline li:last-of-type:first-of-type::before {
@@ -90,12 +114,12 @@
 
 .project-card-header:hover + div {
     transition: background-color 0.3s, text-decoration 0.3s;
-    background-color: #292c35;
+    background-color: var(--cch-card-hover);
 }
 
 .project-card-header:hover {
     transition: background-color 0.3s, text-decoration 0.3s;
-    background-color: #313641;
+    background-color: var(--cch-card-hover-2);
 }
 
 .iconButton {

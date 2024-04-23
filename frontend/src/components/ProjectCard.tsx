@@ -7,7 +7,7 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import Button from "./Button";
 import { UserContext } from "../UserContext";
 import { UserRole } from "../interfaces/UserObj";
-import ReactMarkdown from "react-markdown";
+import Markdown from "./Markdown";
 
 interface Props {
     project: ProjectObj;
@@ -73,7 +73,7 @@ function ProjectCard({ project, deleteProject }: Props) {
                     }}
                     onClick={hasOverflow ? toggleExpand : undefined}
                 >
-                    <ReactMarkdown>{project.description}</ReactMarkdown>
+                    <Markdown>{project.description}</Markdown>
                 </div>
                 {hasOverflow && (
                     <div
