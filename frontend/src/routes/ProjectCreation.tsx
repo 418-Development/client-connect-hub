@@ -289,7 +289,7 @@ function ProjectCreation({ isEditing = false }: Props) {
 
             {isEditing ? (
                 <>
-                    <EditMilestones />
+                    {project && <EditMilestones project={project} />}
                     <div className="m-3 d-flex justify-content-center align-items-center">
                         <Button
                             kind="success"
