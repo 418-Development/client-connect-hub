@@ -73,7 +73,7 @@ function ProjectCard({ project, deleteProject }: Props) {
                     }}
                     onClick={hasOverflow ? toggleExpand : undefined}
                 >
-                    <Markdown>{project.description}</Markdown>
+                    <Markdown small>{project.description}</Markdown>
                 </div>
                 {hasOverflow && (
                     <div

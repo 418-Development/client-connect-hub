@@ -212,8 +212,8 @@ function ProjectCreation({ isEditing = false }: Props) {
                         </div>
                     </div>
                 </div>
-                <div className="mt-3">
-                    <div>
+                <div className="row g-3 mt-1">
+                    <div className="col mt-2">
                         <label htmlFor="startDate">Start Date</label>
                         <input
                             type="date"
@@ -228,9 +228,7 @@ function ProjectCreation({ isEditing = false }: Props) {
                         />
                         <div className="invalid-feedback"></div>
                     </div>
-                </div>
-                <div className="mt-3">
-                    <div>
+                    <div className="col mt-2">
                         <label htmlFor="endDate">Estimated End Date</label>
                         <input
                             type="date"
@@ -246,6 +244,7 @@ function ProjectCreation({ isEditing = false }: Props) {
                         <div className="invalid-feedback"></div>
                     </div>
                 </div>
+
                 <div className="d-flex justify-content-end">
                     {isEditing ? (
                         <>
@@ -291,6 +290,7 @@ function ProjectCreation({ isEditing = false }: Props) {
             {isEditing ? (
                 <>
                     <form className="mt-3">
+                        <h2>Milestones</h2>
                         <div>
                             <div>
                                 <p>PLaceholder for the milestone Adding/Editing UI</p>
