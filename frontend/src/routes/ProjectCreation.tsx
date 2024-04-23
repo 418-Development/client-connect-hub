@@ -1,6 +1,5 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import Button from "../components/Button";
-import Timeline from "../components/Timeline";
 import { useNavigate, useParams } from "react-router-dom";
 import { UserContext } from "../UserContext";
 import UserAssignment from "../components/UserAssignment";
@@ -252,7 +251,7 @@ function ProjectCreation({ isEditing = false }: Props) {
                             <Button kind="link" className="mt-3">
                                 Cancel
                             </Button>
-                            <Button type="submit" kind="primary" className="mt-3">
+                            <Button type="submit" kind="success" className="mt-3">
                                 Save Changes
                             </Button>
                         </>
@@ -261,7 +260,7 @@ function ProjectCreation({ isEditing = false }: Props) {
                             <Button kind="link" className="mt-3">
                                 Cancel
                             </Button>
-                            <Button type="submit" kind="primary" className="mt-3">
+                            <Button type="submit" kind="success" className="mt-3">
                                 Create Project
                             </Button>
                         </>
@@ -278,7 +277,7 @@ function ProjectCreation({ isEditing = false }: Props) {
                             <Button kind="link" className="mt-3">
                                 Cancel
                             </Button>
-                            <Button type="submit" kind="primary" className="mt-3">
+                            <Button type="submit" kind="success" className="mt-3">
                                 Save Changes
                             </Button>
                         </div>
@@ -293,6 +292,7 @@ function ProjectCreation({ isEditing = false }: Props) {
                     <EditMilestones />
                     <div className="m-3 d-flex justify-content-center align-items-center">
                         <Button
+                            kind="success"
                             onClick={() => {
                                 navigate(`/project/${id}`);
                             }}
