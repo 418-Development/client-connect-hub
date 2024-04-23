@@ -273,14 +273,6 @@ function ProjectCreation({ isEditing = false }: Props) {
                     <h2>Project Member</h2>
                     <div>
                         <UserAssignment />
-                        <div className="d-flex justify-content-end">
-                            <Button kind="link" className="mt-3">
-                                Cancel
-                            </Button>
-                            <Button type="submit" kind="success" className="mt-3">
-                                Save Changes
-                            </Button>
-                        </div>
                     </div>
                 </form>
             ) : (

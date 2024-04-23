@@ -3,6 +3,7 @@ package com.example.agile.controllers;
 
 import com.example.agile.objecs.ERole;
 import com.example.agile.objecs.Milestone;
+import com.example.agile.objecs.Project;
 import com.example.agile.objecs.User;
 import com.example.agile.payload.response.MessageResponse;
 import com.example.agile.repositories.MilestoneRepo;
@@ -69,14 +70,16 @@ public class MilestoneController {
             if (!currentUser.getRoles().stream().anyMatch(role -> role.getName() == ERole.ROLE_ADMIN)) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new MessageResponse("User does not have permission to create projects"));
             }
-
-            if (projectRepository.findById(project_id).isEmpty()){
+            Project project = projectRepository.findById(project_id).orElse(null);
+            if (project == null){
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("Project Not Available"));
             }
             milestone.setProjectId(project_id);
             milestone.setCreatorId(currentUser.getId());
-            // Save the milestone
+
             Milestone savedMilestone = milestoneRepo.save(milestone);
+            project.getMilestones().add(milestone);
+            projectRepository.save(project);
             return ResponseEntity.ok(new MessageResponse("Milestone created successfully with id: " + savedMilestone.getMilestoneId()));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Failed to create project: " + e.getMessage()));
