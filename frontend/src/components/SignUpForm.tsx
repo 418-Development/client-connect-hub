@@ -2,14 +2,14 @@ import { useRef, useState } from "react";
 import Button from "./Button";
 
 interface Props {
-    signin: (username: string, password: string) => void;
+    login: () => void;
     username?: string;
     password?: string;
     setUsername: React.Dispatch<React.SetStateAction<string>>;
     setPassword: React.Dispatch<React.SetStateAction<string>>;
 }
 
-function SignUpForm({ signin, setUsername, setPassword, username = "", password = "" }: Props) {
+function SignUpForm({ login, setUsername, setPassword, username = "", password = "" }: Props) {
     const [email, setEmail] = useState<string>("");
     const [verifyPassword, setVerifyPassword] = useState<string>("");
 
@@ -25,9 +25,9 @@ function SignUpForm({ signin, setUsername, setPassword, username = "", password 
 
     const checkPassword = async () => {
         if (password == verifyPassword) {
-            const success = await signup();
+            const success = await signUp();
             if (success) {
-                await signin(username, password);
+                await login();
                 closeButton.current?.click();
             }
         } else if (passwordValidation.current != null) {
@@ -36,8 +36,8 @@ function SignUpForm({ signin, setUsername, setPassword, username = "", password 
         }
     };
 
-    const signup = async () => {
-        const url = (import.meta.env.VITE_API_URL as string) + "api/auth/signup";
+    const signUp = async () => {
+        const url = (import.meta.env.VITE_API_URL as string) + "users/auth/signup";
 
         const response = await fetch(url, {
             method: "POST",
@@ -51,7 +51,7 @@ function SignUpForm({ signin, setUsername, setPassword, username = "", password 
             }),
         });
 
-        console.log("http://localhost:8080/api/auth/signup", response.ok, response.status);
+        console.log(url, response.ok, response.status);
 
         if (!response.ok) {
             const json = await response.json();
@@ -102,6 +102,7 @@ function SignUpForm({ signin, setUsername, setPassword, username = "", password 
                                     id="userEmail"
                                     aria-describedby="emailHelp"
                                     placeholder="Enter email"
+                                    required
                                 />
                                 <div className="invalid-feedback" ref={emailValidation}></div>
                                 <small id="emailHelp" className="form-text text-muted">
