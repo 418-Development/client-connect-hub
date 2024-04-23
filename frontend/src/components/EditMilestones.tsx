@@ -14,10 +14,13 @@ function EditMilestones({ project }: Props) {
     const userInfo = useContext(UserContext);
     const navigate = useNavigate();
 
-    const [showPreview, setShowPreview] = useState<boolean>(false);
-    const descriptionTextArea = useRef<HTMLTextAreaElement>(null);
     const [description, setDescription] = useState<string>("");
     const [milestoneName, setMilestoneName] = useState<string>("");
+    const [endDate, setEndDate] = useState<string>("");
+
+    const [showPreview, setShowPreview] = useState<boolean>(false);
+    const preview = useRef<HTMLDivElement>(null);
+    const descriptionTextArea = useRef<HTMLTextAreaElement>(null);
 
     const createMilestone = async () => {
         if (!userInfo) return;
@@ -32,9 +35,9 @@ function EditMilestones({ project }: Props) {
                 Authorization: localStorage.getItem("token") ?? "",
             },
             body: JSON.stringify({
-                milestoneName: "Milestone Name",
-                description: "Milestone Description",
-                estimateDate: currentDate.toISOString(),
+                milestoneName: milestoneName,
+                description: description,
+                estimateDate: endDate,
                 createdDate: currentDate.toISOString(),
                 creatorId: userInfo.id,
             }),
@@ -54,14 +57,13 @@ function EditMilestones({ project }: Props) {
         }
     };
 
-    const preview = useRef<HTMLDivElement>(null);
-    const [endDate, setEndDate] = useState<string>("");
-
     return (
         <form
             className="mt-3"
-            onClick={(e) => {
+            onSubmit={(e) => {
                 e.preventDefault();
+                console.log("SSSSSSSSSSSSSSSSSSSSSS");
+
                 createMilestone();
             }}
         >
@@ -83,11 +85,11 @@ function EditMilestones({ project }: Props) {
                     <div className="invalid-feedback"></div>
                 </div>
                 <div className="col mt-2">
-                    <label htmlFor="endDate">Estimated End Date</label>
+                    <label htmlFor="endDateMilestone">Estimated End Date</label>
                     <input
                         type="date"
                         className="form-control mt-2"
-                        id="endDate"
+                        id="endDateMilestone"
                         placeholder=""
                         onChange={(e) => {
                             setEndDate(e.target.value);
@@ -150,7 +152,14 @@ function EditMilestones({ project }: Props) {
                 </div>
             </div>
 
-            <Button>Add</Button>
+            <div className="d-flex justify-content-end">
+                <Button kind="link" className="mt-3">
+                    Cancel
+                </Button>
+                <Button type="submit" kind="success" className="mt-3">
+                    Save Changes
+                </Button>
+            </div>
         </form>
     );
 }
