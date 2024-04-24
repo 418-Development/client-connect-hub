@@ -20,6 +20,36 @@ function EditMilestones({ project, onMilestoneEvent }: Props) {
     const [milestoneName, setMilestoneName] = useState<string>("");
     const [endDate, setEndDate] = useState<string>("");
     const [selectedMilestone, setSelectedMilestone] = useState<MilestoneObj | null>(null);
+    const [inEditMode, setInEditMode] = useState<boolean>(false);
+
+    const updateMilestone = async () => {
+        if (!userInfo || !selectedMilestone) return;
+
+        const currentDate = new Date();
+        const url = (import.meta.env.VITE_API_URL as string) + `milestones/update-milestone/${selectedMilestone.id}`;
+
+        const response = await fetch(url, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: localStorage.getItem("token") ?? "",
+            },
+            body: JSON.stringify({
+                milestoneName: milestoneName,
+                description: description,
+                estimateDate: endDate,
+                createdDate: currentDate.toISOString(),
+                creatorId: userInfo.id,
+            }),
+        });
+
+        if (response.ok) {
+            setDescription("");
+            setMilestoneName("");
+            setEndDate("");
+            onMilestoneEvent();
+        }
+    };
 
     const createMilestone = async () => {
         if (!userInfo) return;
@@ -62,6 +92,11 @@ function EditMilestones({ project, onMilestoneEvent }: Props) {
                         }}
                         editMilestone={(milestone) => {
                             setSelectedMilestone(milestone);
+
+                            setInEditMode(true);
+                            setDescription(milestone.description);
+                            setMilestoneName(milestone.title);
+                            setEndDate(milestone.estimatedEnd);
                         }}
                     />
                 </div>
@@ -71,10 +106,14 @@ function EditMilestones({ project, onMilestoneEvent }: Props) {
                         onSubmit={(e) => {
                             e.preventDefault();
 
-                            createMilestone();
+                            if (inEditMode) {
+                                updateMilestone();
+                            } else {
+                                createMilestone();
+                            }
                         }}
                     >
-                        <h3>Create new Milestone</h3>
+                        <h3>{inEditMode ? "Edit" : "Create new"} Milestone</h3>
                         <div className="row g-3 mt-1">
                             <div className="col mt-2">
                                 <label htmlFor="milestoneName">Name</label>
@@ -120,11 +159,21 @@ function EditMilestones({ project, onMilestoneEvent }: Props) {
                         </div>
 
                         <div className="d-flex justify-content-end">
-                            <Button kind="link" className="mt-3">
+                            <Button
+                                kind="link"
+                                className="mt-3"
+                                onClick={() => {
+                                    setInEditMode(false);
+                                    setDescription("");
+                                    setEndDate("");
+                                    setMilestoneName("");
+                                    setSelectedMilestone(null);
+                                }}
+                            >
                                 Cancel
                             </Button>
                             <Button type="submit" kind="success" className="mt-3">
-                                Add Milestone
+                                {inEditMode ? "Edit Milestone" : "Add Milestone"}
                             </Button>
                         </div>
                     </form>

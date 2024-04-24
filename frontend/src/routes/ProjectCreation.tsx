@@ -51,6 +51,7 @@ function ProjectCreation({ isEditing = false }: Props) {
                         id: milestone.milestoneId,
                         title: milestone.milestoneName,
                         estimatedEnd: milestone.estimateDate.split("T")[0],
+                        description: milestone.description,
                         isDone: false,
                     };
                 })

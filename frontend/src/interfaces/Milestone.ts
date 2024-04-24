@@ -1,6 +1,7 @@
 export interface MilestoneObj {
     id: number;
     title: string;
+    description: string;
     estimatedEnd: string;
     isDone: boolean;
 }
