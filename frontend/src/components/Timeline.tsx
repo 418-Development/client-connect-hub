@@ -8,9 +8,11 @@ interface Props {
     milestones: MilestoneObj[];
     onlyShowOverview?: boolean;
     style?: React.CSSProperties;
+    deleteMilestone?: (milestone: MilestoneObj) => void;
+    editMilestone?: (milestone: MilestoneObj) => void;
 }
 
-function Timeline({ milestones, onlyShowOverview = false, style = {} }: Props) {
+function Timeline({ milestones, onlyShowOverview = false, style = {}, deleteMilestone = undefined, editMilestone = undefined }: Props) {
     const userInfo = useContext(UserContext);
     let displayedMilestones: MilestoneObj[] = [];
     let isActiveIndex = -1;
@@ -55,7 +57,7 @@ function Timeline({ milestones, onlyShowOverview = false, style = {} }: Props) {
                 <li
                     key={milestone.id}
                     className={
-                        "pt-2 pb-2" +
+                        "pt-2 pb-2 d-flex " +
                         (milestone.isDone ? " is-done" : "") +
                         (index == isActiveIndex ? " is-active" : "") +
                         (indicateMoreAtBeginning && index == 0 ? " indicate-more" : "") +
@@ -65,19 +67,41 @@ function Timeline({ milestones, onlyShowOverview = false, style = {} }: Props) {
                     <Button outline className="ms-3">
                         {milestone.title}
                     </Button>
-                    {index == isActiveIndex - 1 && userInfo?.role === UserRole.MANAGER ? (
+                    <div className="fill-flex flex-fill"></div>
+                    {deleteMilestone && (
+                        <Button
+                            outline
+                            kind="danger"
+                            className="ms-2 iconButton"
+                            onClick={() => {
+                                deleteMilestone(milestone);
+                            }}
+                        >
+                            <i className="bi bi-trash" style={{ fontSize: "1.2rem" }}></i>
+                        </Button>
+                    )}
+                    {editMilestone && (
+                        <Button
+                            outline
+                            kind="success"
+                            className="ms-2 iconButton"
+                            onClick={() => {
+                                editMilestone(milestone);
+                            }}
+                        >
+                            <i className="bi bi-pencil" style={{ fontSize: "1.2rem" }}></i>
+                        </Button>
+                    )}
+
+                    {!editMilestone && !deleteMilestone && index == isActiveIndex - 1 && userInfo?.role === UserRole.MANAGER && (
                         <Button outline kind="danger" className="ms-2 iconButton">
                             <i className="bi bi-skip-start-circle" style={{ fontSize: "1.2rem" }}></i>
                         </Button>
-                    ) : (
-                        <></>
                     )}
-                    {index == isActiveIndex && userInfo?.role === UserRole.MANAGER ? (
+                    {!editMilestone && !deleteMilestone && index == isActiveIndex && userInfo?.role === UserRole.MANAGER && (
                         <Button outline kind="success" className="ms-2 iconButton">
                             <i className="bi bi-check2-circle" style={{ fontSize: "1.2rem" }}></i>
                         </Button>
-                    ) : (
-                        <></>
                     )}
                 </li>
             ))}

@@ -1,12 +1,13 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Button from "../components/Button";
 import { useNavigate, useParams } from "react-router-dom";
 import { UserContext } from "../UserContext";
 import UserAssignment from "../components/UserAssignment";
 import { ProjectObj, ProjectRespondsObj } from "../interfaces/Project";
-import Markdown from "../components/Markdown";
 import EditMilestones from "../components/EditMilestones";
 import { UserObj, UserRole } from "../interfaces/UserObj";
+import { MilestoneObj } from "../interfaces/Milestone";
+import MarkdownEditor from "../components/MarkdownEditor";
 
 interface Props {
     isEditing?: boolean;
@@ -16,9 +17,6 @@ function ProjectCreation({ isEditing = false }: Props) {
     const userInfo = useContext(UserContext);
     const { id } = useParams<{ id: string }>();
     const [project, setProject] = useState<ProjectObj | null>(null);
-    const [showPreview, setShowPreview] = useState<boolean>(false);
-    const descriptionTextArea = useRef<HTMLTextAreaElement>(null);
-    const preview = useRef<HTMLDivElement>(null);
 
     const [title, setTitle] = useState<string>("");
     const [description, setDescription] = useState<string>("");
@@ -45,6 +43,21 @@ function ProjectCreation({ isEditing = false }: Props) {
         if (response.ok) {
             const json = await response.json();
             const projectResponse = json as ProjectRespondsObj;
+
+            console.log(projectResponse);
+            const milestones: MilestoneObj[] = projectResponse.milestones
+                .map((milestone) => {
+                    return {
+                        id: milestone.milestoneId,
+                        title: milestone.milestoneName,
+                        estimatedEnd: milestone.estimateDate.split("T")[0],
+                        isDone: false,
+                    };
+                })
+                .sort((a, b) => {
+                    return b.estimatedEnd.localeCompare(a.estimatedEnd);
+                });
+
             // Generate UserObj Array from ProjectResponseObj
             const userArray: UserObj[] = [];
             for (let index = 0; index < projectResponse.users.length; index++) {
@@ -65,7 +78,7 @@ function ProjectCreation({ isEditing = false }: Props) {
                 startDate: projectResponse.startDate,
                 description: projectResponse.description,
                 users: userArray,
-                milestones: [],
+                milestones: milestones,
             };
             setProject(curProject);
 
@@ -74,7 +87,6 @@ function ProjectCreation({ isEditing = false }: Props) {
                 setDescription(curProject.description);
                 setStartDate(curProject.startDate.split("T")[0]);
                 setEndDate(curProject.estimatedEnd.split("T")[0]);
-                updateTextArea();
             }
         } else {
             setProject(null);
@@ -102,9 +114,11 @@ function ProjectCreation({ isEditing = false }: Props) {
                 startDate: startDate,
                 estimateDate: endDate,
                 milestones: [],
-                users: [{
-                    id: userInfo.id
-                }]
+                users: [
+                    {
+                        id: userInfo.id,
+                    },
+                ],
             }),
         });
 
@@ -143,13 +157,6 @@ function ProjectCreation({ isEditing = false }: Props) {
         }
     };
 
-    const updateTextArea = () => {
-        if (descriptionTextArea.current) {
-            descriptionTextArea.current.style.height = "auto";
-            descriptionTextArea.current.style.height = `${descriptionTextArea.current.scrollHeight + 2}px`;
-        }
-    };
-
     return (
         <div className="container">
             <form
@@ -183,54 +190,13 @@ function ProjectCreation({ isEditing = false }: Props) {
                     </div>
                 </div>
                 <div className="mt-3">
-                    <div>
-                        <div className="d-flex align-items-center">
-                            <label htmlFor="projectDescription">Project description</label>
-                            <div className="ms-5 m-2">
-                                <Button
-                                    type="button"
-                                    kind={showPreview ? "secondary" : "primary"}
-                                    style={{ borderRadius: 0 }}
-                                    onClick={() => {
-                                        setShowPreview(false);
-                                    }}
-                                    outline={showPreview}
-                                >
-                                    Write
-                                </Button>
-                                <Button
-                                    type="button"
-                                    kind={showPreview ? "primary" : "secondary"}
-                                    style={{ borderRadius: 0 }}
-                                    onClick={() => {
-                                        setShowPreview(true);
-                                    }}
-                                    outline={!showPreview}
-                                >
-                                    Preview
-                                </Button>
-                            </div>
-                        </div>
-                        <textarea
-                            ref={descriptionTextArea}
-                            autoComplete="description"
-                            className="form-control"
-                            id="projectDescription"
-                            placeholder="Enter description"
-                            onChange={(e) => {
-                                setDescription(e.target.value);
-                            }}
-                            value={description}
-                            onInput={updateTextArea}
-                            hidden={showPreview}
-                            maxLength={15000}
-                            required
-                        />
-                        <div className="invalid-feedback"></div>
-                        <div ref={preview} hidden={!showPreview} className="card p-1 markdown">
-                            <Markdown>{description}</Markdown>
-                        </div>
-                    </div>
+                    <MarkdownEditor
+                        value={description}
+                        onValueChanged={(value) => {
+                            setDescription(value);
+                        }}
+                        label="Description"
+                    />
                 </div>
                 <div className="row g-3 mt-1">
                     <div className="col mt-2">
@@ -292,7 +258,14 @@ function ProjectCreation({ isEditing = false }: Props) {
                 <form className="mt-3">
                     <h2>Project Member</h2>
                     <div>
-                        {project && <UserAssignment project={project} onUserEvent={() => {fetchProjects(project.id)}} />}
+                        {project && (
+                            <UserAssignment
+                                project={project}
+                                onUserEvent={() => {
+                                    fetchProjects(project.id);
+                                }}
+                            />
+                        )}
                     </div>
                 </form>
             ) : (
@@ -301,7 +274,14 @@ function ProjectCreation({ isEditing = false }: Props) {
 
             {isEditing ? (
                 <>
-                    {project && <EditMilestones project={project} />}
+                    {project && (
+                        <EditMilestones
+                            project={project}
+                            onMilestoneEvent={() => {
+                                fetchProjects(project.id);
+                            }}
+                        />
+                    )}
                     <div className="m-3 d-flex justify-content-center align-items-center">
                         <Button
                             kind="success"
