@@ -52,7 +52,6 @@ function EditMilestones({ project, onMilestoneEvent }: Props) {
 
     return (
         <>
-            <h2>Milestones</h2>
             <div className="d-flex justify-content-between">
                 <div className="d-flex flex-column">
                     <Timeline
