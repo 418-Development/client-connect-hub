@@ -159,129 +159,160 @@ function ProjectCreation({ isEditing = false }: Props) {
 
     return (
         <div className="container">
-            <form
-                action=""
-                onSubmit={(e) => {
-                    e.preventDefault();
-                    if (isEditing) {
-                        updateProject();
-                    } else {
-                        createProject();
-                    }
-                }}
-                className="mt-3"
-            >
-                <div className="mt-3">
-                    <div>
-                        <label htmlFor="projectTitle">Project title</label>
-                        <input
-                            type="text"
-                            autoComplete="title"
-                            className="form-control mt-2"
-                            id="projectTitle"
-                            placeholder="Enter title"
-                            onChange={(e) => {
-                                setTitle(e.target.value);
-                            }}
-                            value={title}
-                            required
-                        />
-                        <div className="invalid-feedback"></div>
-                    </div>
-                </div>
-                <div className="mt-3">
-                    <MarkdownEditor
-                        value={description}
-                        onValueChanged={(value) => {
-                            setDescription(value);
-                        }}
-                        label="Description"
-                    />
-                </div>
-                <div className="row g-3 mt-1">
-                    <div className="col mt-2">
-                        <label htmlFor="startDate">Start Date</label>
-                        <input
-                            type="date"
-                            className="form-control mt-2"
-                            id="startDate"
-                            placeholder=""
-                            onChange={(e) => {
-                                setStartDate(e.target.value);
-                            }}
-                            value={startDate}
-                            required
-                        />
-                        <div className="invalid-feedback"></div>
-                    </div>
-                    <div className="col mt-2">
-                        <label htmlFor="endDate">Estimated End Date</label>
-                        <input
-                            type="date"
-                            className="form-control mt-2"
-                            id="endDate"
-                            placeholder=""
-                            onChange={(e) => {
-                                setEndDate(e.target.value);
-                            }}
-                            value={endDate}
-                            required
-                        />
-                        <div className="invalid-feedback"></div>
-                    </div>
-                </div>
+            {isEditing ? (
+                <>
+                    <h1 className="mt-3">Edit "{title}"</h1>
+                </>
+            ) : (
+                <>
+                    <h1 className="mt-3">Create a new Project</h1>
+                </>
+            )}
 
-                <div className="d-flex justify-content-end">
-                    {isEditing ? (
-                        <>
-                            <Button kind="link" className="mt-3">
-                                Cancel
-                            </Button>
-                            <Button type="submit" kind="success" className="mt-3">
-                                Save Changes
-                            </Button>
-                        </>
-                    ) : (
-                        <>
-                            <Button kind="link" className="mt-3">
-                                Cancel
-                            </Button>
-                            <Button type="submit" kind="success" className="mt-3">
-                                Create Project
-                            </Button>
-                        </>
-                    )}
+            <div className="card mt-3">
+                <div className="card-header">
+                    <h2 className="mb-0">General Information</h2>
                 </div>
-            </form>
+                <div className="card-body">
+                    <form
+                        action=""
+                        onSubmit={(e) => {
+                            e.preventDefault();
+                            if (isEditing) {
+                                updateProject();
+                            } else {
+                                createProject();
+                            }
+                        }}
+                        className="mt-3"
+                    >
+                        <div className="mt-3">
+                            <div>
+                                <label htmlFor="projectTitle">Project title</label>
+                                <input
+                                    type="text"
+                                    autoComplete="title"
+                                    className="form-control mt-2"
+                                    id="projectTitle"
+                                    placeholder="Enter title"
+                                    onChange={(e) => {
+                                        setTitle(e.target.value);
+                                    }}
+                                    value={title}
+                                    required
+                                />
+                                <div className="invalid-feedback"></div>
+                            </div>
+                        </div>
+                        <div className="mt-3">
+                            <MarkdownEditor
+                                value={description}
+                                onValueChanged={(value) => {
+                                    setDescription(value);
+                                }}
+                                label="Description"
+                            />
+                        </div>
+                        <div className="row g-3 mt-1">
+                            <div className="col mt-2">
+                                <label htmlFor="startDate">Start Date</label>
+                                <input
+                                    type="date"
+                                    className="form-control mt-2"
+                                    id="startDate"
+                                    placeholder=""
+                                    onChange={(e) => {
+                                        setStartDate(e.target.value);
+                                    }}
+                                    value={startDate}
+                                    required
+                                />
+                                <div className="invalid-feedback"></div>
+                            </div>
+                            <div className="col mt-2">
+                                <label htmlFor="endDate">Estimated End Date</label>
+                                <input
+                                    type="date"
+                                    className="form-control mt-2"
+                                    id="endDate"
+                                    placeholder=""
+                                    onChange={(e) => {
+                                        setEndDate(e.target.value);
+                                    }}
+                                    value={endDate}
+                                    required
+                                />
+                                <div className="invalid-feedback"></div>
+                            </div>
+                        </div>
+
+                        <div className="d-flex justify-content-end">
+                            {isEditing ? (
+                                <>
+                                    <Button kind="link" className="mt-3">
+                                        Cancel
+                                    </Button>
+                                    <Button type="submit" kind="success" className="mt-3">
+                                        Save Changes
+                                    </Button>
+                                </>
+                            ) : (
+                                <>
+                                    <Button kind="link" className="mt-3">
+                                        Cancel
+                                    </Button>
+                                    <Button type="submit" kind="success" className="mt-3">
+                                        Create Project
+                                    </Button>
+                                </>
+                            )}
+                        </div>
+                    </form>
+                </div>
+            </div>
 
             {isEditing ? (
-                <form className="mt-3">
-                    <h2>Project Member</h2>
-                    <div>
-                        {project && (
-                            <UserAssignment
-                                project={project}
-                                onUserEvent={() => {
-                                    fetchProjects(project.id);
-                                }}
-                            />
-                        )}
+                <div className="card mt-3">
+                    <div className="card-header">
+                        <h2 className="mb-0">Project Member</h2>
                     </div>
-                </form>
+                    <div className="card-body">
+                        <form className="mt-3">
+                            <div>
+                                {project && (
+                                    <UserAssignment
+                                        project={project}
+                                        onUserEvent={() => {
+                                            fetchProjects(project.id);
+                                        }}
+                                    />
+                                )}
+                            </div>
+                        </form>
+                    </div>
+                </div>
             ) : (
                 <div />
             )}
 
             {isEditing ? (
                 <>
-                    {project && (
-                        <EditMilestones
-                            project={project}
-                            onMilestoneEvent={() => {
-                                fetchProjects(project.id);
-                            }}
-                        />
-                    )}
+                    <div className="card mt-3">
+                        <div className="card-header">
+                            {" "}
+                            <h2 className="mb-0">Milestones</h2>
+                        </div>
+                        <div className="card-body">
+                            {project && (
+                                <EditMilestones
+                                    project={project}
+                                    onMilestoneEvent={() => {
+                                        fetchProjects(project.id);
+                                    }}
+                                />
+                            )}
+                        </div>
+                    </div>
                     <div className="m-3 d-flex justify-content-center align-items-center">
                         <Button
                             kind="success"
@@ -290,7 +321,7 @@ function ProjectCreation({ isEditing = false }: Props) {
                             }}
                         >
                             <i className="bi bi-arrow-left me-2"></i>
-                            back
+                            Back
                         </Button>
                     </div>
                 </>
