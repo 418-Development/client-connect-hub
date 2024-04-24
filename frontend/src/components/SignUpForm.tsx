@@ -76,7 +76,7 @@ function SignUpForm({ login, setUsername, setPassword, username = "", password =
                 <div className="modal-content">
                     <div className="modal-header">
                         <h5>Sign Up Form</h5>
-                        <Button ref={closeButton} style="close" dismissModal={true} ariaLabel="Close"></Button>
+                        <Button ref={closeButton} kind="close" dismissModal={true} ariaLabel="Close"></Button>
                     </div>
 
                     <form
@@ -159,10 +159,10 @@ function SignUpForm({ login, setUsername, setPassword, username = "", password =
                             </div>
                         </div>
                         <div className="modal-footer">
-                            <Button style="secondary" dismissModal={true}>
+                            <Button kind="secondary" dismissModal={true}>
                                 Close
                             </Button>
-                            <Button type="submit" style="primary">
+                            <Button type="submit" kind="primary">
                                 Submit
                             </Button>
                         </div>

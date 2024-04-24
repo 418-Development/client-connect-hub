@@ -2,6 +2,7 @@ package com.example.agile.objecs;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Setter;
 
@@ -21,11 +22,11 @@ public class Milestone {
     private String milestoneName;
 
     @Setter
-    @Size(max = 150)
+    @Size(max = 1500)
     private String description;
 
     @Setter
-    @NotBlank
+    @NotNull
     private Long creatorId;
 
     @Setter
@@ -37,12 +38,16 @@ public class Milestone {
     @Setter
     private Long projectId;
 
-    public Milestone(String name, String description, Long creatorId, Date estimateDate) {
+    @Setter
+    private Boolean isDone;
+
+    public Milestone(String name, String description, Long creatorId, Date estimateDate, Boolean status) {
         setMilestoneName(name);
         setDescription(description);
         setCreatorId(creatorId);
         setCreatedDate(Date.from(Instant.now()));
         setEstimateDate(estimateDate);
+        setIsDone(status != null ? status : false);
     }
     public Milestone(){}
 
@@ -68,6 +73,10 @@ public class Milestone {
 
     public Date getCreatedDate() {
         return createdDate;
+    }
+
+    public boolean getIsDone() {
+        return isDone;
     }
 
 }

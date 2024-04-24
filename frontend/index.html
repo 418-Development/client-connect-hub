@@ -12,6 +12,10 @@
 
 <body>
     <div id="root"></div>
+    <script>
+        document.querySelector("html")
+            .setAttribute("data-bs-theme", window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+    </script>
     <script type="module" src="/src/main.tsx"></script>
 </body>
 
