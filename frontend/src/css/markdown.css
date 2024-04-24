@@ -1,0 +1,19 @@
+.markdown img {
+    max-width: 100%;
+}
+
+.markdown blockquote {
+    padding: 0.5rem;
+    border-left-width: 0.4rem;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.markdown blockquote p {
+    margin: 0;
+}
+
+.markdown .code-container {
+    background-color: rgb(24, 24, 24);
+    width: fit-content;
+}

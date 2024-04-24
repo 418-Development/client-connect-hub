@@ -23,7 +23,7 @@ public class Project {
     @Size(max = 50)
     private String projectName;
 
-    @Size(max = 150)
+    @Size(max = 15000)
     private String description;
 
     private Long creatorId;

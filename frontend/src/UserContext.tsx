@@ -12,8 +12,6 @@ export function UserProvider({ children }: Props) {
     const [user, setUser] = useState<UserObj | null>(null);
 
     useEffect(() => {
-        console.log("import.meta.env.VITE_DEBUG || ", import.meta.env.VITE_DEBUG);
-
         if (import.meta.env.VITE_DEBUG) {
             setUser({
                 id: 0,
@@ -26,21 +24,19 @@ export function UserProvider({ children }: Props) {
     }, []);
 
     async function updateUserInfo() {
-        if (document.cookie.startsWith("token=")) {
+        if (localStorage.getItem("token")) {
             const url = (import.meta.env.VITE_API_URL as string) + "users/test/userinfo";
 
-            console.log("Request userinfo from", url);
             const response = await fetch(url, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization: document.cookie.substring(6),
+                    Authorization: localStorage.getItem("token") ?? "",
                 },
             });
 
             if (response.ok) {
                 const data = await response.json();
-                console.log("data", data);
 
                 const userinfo = data as UserResponseObj;
                 const role = userinfo.roles[0].id as UserRole;
@@ -54,8 +50,8 @@ export function UserProvider({ children }: Props) {
                 });
             } else {
                 // Sign out user, because the token is most likely expired.
+                localStorage.removeItem("token");
                 setUser(null);
-                document.cookie = "token=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
             }
         } else {
             setUser(null);

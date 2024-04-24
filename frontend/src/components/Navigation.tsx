@@ -32,7 +32,7 @@ function Navigation() {
     }, []);
 
     useEffect(() => {
-        if (document.cookie.startsWith("token=") && userInfo === null) {
+        if (localStorage.getItem("token") && userInfo === null) {
             updateUserInfo();
         }
     }, []);
@@ -54,9 +54,7 @@ function Navigation() {
         if (response.ok) {
             const json = await response.json();
 
-            const date = new Date();
-            date.setTime(date.getTime() + 15 * 60 * 1000);
-            document.cookie = `token=${json.tokenType} ${json.accessToken};expires="${date.toUTCString()};SameSite=Strict;path=/`;
+            localStorage.setItem("token", `${json.tokenType} ${json.accessToken}`);
 
             updateUserInfo();
         } else {
@@ -69,7 +67,7 @@ function Navigation() {
 
     const signOut = async () => {
         console.log("signOut");
-        document.cookie = "token=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+        localStorage.removeItem("token");
         updateUserInfo();
     };
 
@@ -78,8 +76,8 @@ function Navigation() {
             <nav className="navbar navbar-expand-lg bg-body-tertiary">
                 <div className="container-fluid justify-content-between">
                     <div className="d-flex align-items-center">
-                        <img src={logo} alt="Logo" width="40" height="40" className="d-inline-block align-text-top me-3" />
-                        <Button onClick={() => navigate("/")} style="link" className="navbar-brand">
+                        <img src={logo} alt="Logo" width="40" height="40" className="d-inline-block align-text-top logo" />
+                        <Button onClick={() => navigate("/")} kind="link" className="navbar-brand">
                             Client Connect Hub
                         </Button>
                     </div>
@@ -117,10 +115,10 @@ function Navigation() {
                                     style={{ height: "40px" }}
                                 />
                                 <div className="d-flex">
-                                    <Button onClick={login} style="success" outline={true} className="me-2 text-nowrap" type="submit">
+                                    <Button onClick={login} kind="success" outline={true} className="me-2 text-nowrap" type="submit">
                                         Login
                                     </Button>
-                                    <Button style="primary" outline={true} className="text-nowrap" modalTarget="#modalSignUpForm">
+                                    <Button kind="primary" outline={true} className="text-nowrap" modalTarget="#modalSignUpForm">
                                         Sign Up
                                     </Button>
                                 </div>
@@ -128,7 +126,7 @@ function Navigation() {
                         ) : (
                             <>
                                 <span className="me-3">{userInfo.username}</span>
-                                <Button onClick={signOut} style="primary" outline={true}>
+                                <Button onClick={signOut} kind="primary" outline={true}>
                                     Sign out
                                 </Button>
                             </>

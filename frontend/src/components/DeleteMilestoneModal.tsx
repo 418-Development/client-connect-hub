@@ -1,26 +1,26 @@
 import { useRef, useState } from "react";
 import Button from "./Button";
-import { ProjectObj } from "../interfaces/Project";
+import { MilestoneObj } from "../interfaces/Milestone";
 
 interface Props {
-    project: ProjectObj;
+    milestone: MilestoneObj | null;
     onDeletion: () => void;
 }
 
-function DeleteProjectModal({ project, onDeletion }: Props) {
+function DeleteMilestoneModal({ milestone, onDeletion }: Props) {
     const [verifyDelete, setVerifyDelete] = useState<string>("");
 
     const closeButton = useRef<HTMLButtonElement>(null);
     const deleteValidation = useRef<HTMLInputElement>(null);
 
-    const deleteProject = async () => {
-        if (verifyDelete !== project.title) {
+    const deleteMilestone = async () => {
+        if (milestone == null || verifyDelete !== milestone.title) {
             deleteValidation.current?.classList.add("is-invalid");
             console.log("NOT VALID");
             return;
         }
 
-        const url = (import.meta.env.VITE_API_URL as string) + `projects/delete-project/${project.id}`;
+        const url = (import.meta.env.VITE_API_URL as string) + `milestones/delete-milestone/${milestone.id}`;
 
         const response = await fetch(url, {
             method: "DELETE",
@@ -37,11 +37,11 @@ function DeleteProjectModal({ project, onDeletion }: Props) {
     };
 
     return (
-        <div id="deleteProjectModal" className="modal fade">
+        <div id="deleteMilestoneModal" className="modal fade">
             <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                 <div className="modal-content">
                     <div className="modal-header">
-                        <h5>Delete {project?.title}</h5>
+                        <h5>Delete {milestone?.title}</h5>
                         <Button ref={closeButton} kind="close" dismissModal={true} ariaLabel="Close"></Button>
                     </div>
 
@@ -50,14 +50,14 @@ function DeleteProjectModal({ project, onDeletion }: Props) {
                         onSubmit={(e) => {
                             e.preventDefault();
 
-                            deleteProject();
+                            deleteMilestone();
                         }}
                     >
                         <div className="modal-body">
                             <div className="form-group">
                                 <label htmlFor="verifyDeleteInput">
-                                    To confirm the deletion of the project please enter the the project title:
-                                    <strong> "{project?.title}"</strong>
+                                    To confirm the deletion of the milestone please enter the the milestone title:
+                                    <strong> "{milestone?.title}"</strong>
                                 </label>
                                 <input
                                     ref={deleteValidation}
@@ -74,7 +74,7 @@ function DeleteProjectModal({ project, onDeletion }: Props) {
                                     required
                                 />
                                 <div className="invalid-feedback">
-                                    Enter <strong>"{project?.title}"</strong> to confirm the deletion of the project!
+                                    Enter <strong>"{milestone?.title}"</strong> to confirm the deletion of the milestone!
                                 </div>
                             </div>
                         </div>
@@ -93,4 +93,4 @@ function DeleteProjectModal({ project, onDeletion }: Props) {
     );
 }
 
-export default DeleteProjectModal;
+export default DeleteMilestoneModal;

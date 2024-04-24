@@ -2,6 +2,7 @@ package com.example.agile.objecs;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Setter;
 
@@ -21,11 +22,11 @@ public class Milestone {
     private String milestoneName;
 
     @Setter
-    @Size(max = 150)
+    @Size(max = 1500)
     private String description;
 
     @Setter
-    @NotBlank
+    @NotNull
     private Long creatorId;
 
     @Setter
