@@ -3,10 +3,12 @@ import { ProjectObj, ProjectRespondsObj } from "../interfaces/Project";
 import ProjectCard from "./ProjectCard";
 import DeleteProjectModal from "./DeleteProjectModal";
 import { MilestoneObj } from "../interfaces/Milestone";
+import MilestoneModal from "./MilestoneModal";
 
 function ProjectCards() {
     const [projects, setProjects] = useState<ProjectObj[]>([]);
     const [selectedProjectIndex, setSelectedProjectIndex] = useState(0);
+    const [selectedMilestone, setSelectedMilestone] = useState<MilestoneObj | null>(null);
     const debugProjects: ProjectObj[] = [
         {
             id: 1,
@@ -179,6 +181,9 @@ function ProjectCards() {
                                 deleteProject={() => {
                                     setSelectedProjectIndex(index);
                                 }}
+                                showMilestone={(milestone) => {
+                                    setSelectedMilestone(milestone);
+                                }}
                             />
                         </div>
                     ))}
@@ -190,6 +195,7 @@ function ProjectCards() {
                     fetchAllProjects();
                 }}
             />
+            <MilestoneModal milestone={selectedMilestone} />
         </>
     );
 }

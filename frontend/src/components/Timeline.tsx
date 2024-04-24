@@ -10,9 +10,17 @@ interface Props {
     style?: React.CSSProperties;
     deleteMilestone?: (milestone: MilestoneObj) => void;
     editMilestone?: (milestone: MilestoneObj) => void;
+    showMilestone: (milestone: MilestoneObj) => void;
 }
 
-function Timeline({ milestones, onlyShowOverview = false, style = {}, deleteMilestone = undefined, editMilestone = undefined }: Props) {
+function Timeline({
+    milestones,
+    onlyShowOverview = false,
+    style = {},
+    deleteMilestone = undefined,
+    editMilestone = undefined,
+    showMilestone,
+}: Props) {
     const userInfo = useContext(UserContext);
     let displayedMilestones: MilestoneObj[] = [];
     let isActiveIndex = -1;
@@ -64,7 +72,14 @@ function Timeline({ milestones, onlyShowOverview = false, style = {}, deleteMile
                         (indicateMoreAtEnd && index == displayedMilestones.length - 1 ? " indicate-more" : "")
                     }
                 >
-                    <Button outline className="ms-3">
+                    <Button
+                        outline
+                        className="ms-3"
+                        modalTarget="#milestoneModal"
+                        onClick={() => {
+                            showMilestone(milestone);
+                        }}
+                    >
                         {milestone.title}
                     </Button>
                     <div className="fill-flex flex-fill"></div>

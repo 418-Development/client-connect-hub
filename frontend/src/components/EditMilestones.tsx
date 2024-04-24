@@ -7,6 +7,7 @@ import Timeline from "./Timeline";
 import MarkdownEditor from "./MarkdownEditor";
 import DeleteMilestoneModal from "./DeleteMilestoneModal";
 import { MilestoneObj } from "../interfaces/Milestone";
+import MilestoneModal from "./MilestoneModal";
 
 interface Props {
     project: ProjectObj;
@@ -98,6 +99,9 @@ function EditMilestones({ project, onMilestoneEvent }: Props) {
                             setMilestoneName(milestone.title);
                             setEndDate(milestone.estimatedEnd);
                         }}
+                        showMilestone={(milestone) => {
+                            setSelectedMilestone(milestone);
+                        }}
                     />
                 </div>
                 <div className="flex-fill ms-5">
@@ -179,6 +183,7 @@ function EditMilestones({ project, onMilestoneEvent }: Props) {
                     </form>
                 </div>
             </div>
+            <MilestoneModal milestone={selectedMilestone} />
             <DeleteMilestoneModal
                 milestone={selectedMilestone}
                 onDeletion={() => {

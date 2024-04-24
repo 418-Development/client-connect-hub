@@ -8,13 +8,15 @@ import Button from "./Button";
 import { UserContext } from "../UserContext";
 import { UserRole } from "../interfaces/UserObj";
 import Markdown from "./Markdown";
+import { MilestoneObj } from "../interfaces/Milestone";
 
 interface Props {
     project: ProjectObj;
     deleteProject: () => void;
+    showMilestone: (milestone: MilestoneObj) => void;
 }
 
-function ProjectCard({ project, deleteProject }: Props) {
+function ProjectCard({ project, deleteProject, showMilestone }: Props) {
     const navigate = useNavigate();
     const userInfo = useContext(UserContext);
     const [isExpanded, setIsExpanded] = useState(false);
@@ -88,7 +90,7 @@ function ProjectCard({ project, deleteProject }: Props) {
                         {isExpanded ? "collapse" : "expand"}
                     </div>
                 )}
-                <Timeline style={{ height: "160px" }} milestones={project.milestones} onlyShowOverview />
+                <Timeline style={{ height: "160px" }} milestones={project.milestones} onlyShowOverview showMilestone={showMilestone} />
                 <div className="container mt-3 mb-3">
                     <ProgressBar progress={progress} />
                 </div>

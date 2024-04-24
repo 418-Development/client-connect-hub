@@ -10,6 +10,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import DeleteProjectModal from "../components/DeleteProjectModal";
 import Markdown from "../components/Markdown";
 import { MilestoneObj } from "../interfaces/Milestone";
+import MilestoneModal from "../components/MilestoneModal";
 
 function ProjectView() {
     const userInfo = useContext(UserContext);
@@ -21,6 +22,8 @@ function ProjectView() {
     const [hasOverflow, setHasOverflow] = useState(false);
     const [progress, setProgress] = useState(0);
     const contentRef = useRef<HTMLDivElement>(null);
+
+    const [selectedMilestone, setSelectedMilestone] = useState<MilestoneObj | null>(null);
 
     useEffect(() => {
         if (id !== undefined) fetchProjects(id);
@@ -189,7 +192,13 @@ function ProjectView() {
                                         <ProgressBar progress={progress} vertical />
                                     </div>
                                     <div className="d-flex flex-column">
-                                        <Timeline milestones={project?.milestones ?? []} style={{ marginLeft: "10px" }} />
+                                        <Timeline
+                                            milestones={project?.milestones ?? []}
+                                            style={{ marginLeft: "10px" }}
+                                            showMilestone={(milestone) => {
+                                                setSelectedMilestone(milestone);
+                                            }}
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -274,6 +283,7 @@ function ProjectView() {
                     }}
                 />
             )}
+            <MilestoneModal milestone={selectedMilestone} />
         </>
     );
 }
