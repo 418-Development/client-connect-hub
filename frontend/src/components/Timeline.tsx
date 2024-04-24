@@ -58,6 +58,7 @@ function Timeline({
         }
     } else {
         displayedMilestones = milestones;
+        if (isActiveIndex > displayedMilestones.length || isActiveIndex < 0) isActiveIndex = displayedMilestones.length;
     }
 
     const setMilestoneStatus = async (milestone: MilestoneObj, isDone: boolean) => {
@@ -130,7 +131,7 @@ function Timeline({
                         </Button>
                     )}
 
-                    {!editMilestone && !deleteMilestone && index == isActiveIndex - 1 && userInfo?.role === UserRole.MANAGER && (
+                    {!editMilestone && !deleteMilestone && index === isActiveIndex - 1 && userInfo?.role === UserRole.MANAGER && (
                         <Button
                             outline
                             kind="danger"
@@ -142,7 +143,7 @@ function Timeline({
                             <i className="bi bi-skip-start-circle" style={{ fontSize: "1.2rem" }}></i>
                         </Button>
                     )}
-                    {!editMilestone && !deleteMilestone && index == isActiveIndex && userInfo?.role === UserRole.MANAGER && (
+                    {!editMilestone && !deleteMilestone && index === isActiveIndex && userInfo?.role === UserRole.MANAGER && (
                         <Button
                             outline
                             kind="success"
