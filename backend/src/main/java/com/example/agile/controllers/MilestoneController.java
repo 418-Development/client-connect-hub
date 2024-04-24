@@ -23,6 +23,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -89,12 +91,15 @@ public class MilestoneController {
     @GetMapping("/all")
     public ResponseEntity<?> getAllMilestones() {
         List<Milestone> milestones = milestoneRepo.findAll();
+        Collections.sort(milestones, Comparator.comparing(Milestone::getEstimateDate));
         return ResponseEntity.ok(milestones);
     }
+
     @GetMapping("/get-by-project/{project_id}")
     public ResponseEntity<?> getMilestoneByProjectId(@PathVariable Long project_id) {
         List<Milestone> milestones = milestoneRepo.findByProjectId(project_id);
         if (!milestones.isEmpty()) {
+            Collections.sort(milestones, Comparator.comparing(Milestone::getEstimateDate));
             return ResponseEntity.ok(milestones);
         } else {
             return ResponseEntity.notFound().build();
@@ -141,4 +146,19 @@ public class MilestoneController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @PutMapping("/milestone-status/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<?> updateMilestoneStatus(@PathVariable Long id, @RequestBody Boolean isComplete) {
+        Optional<Milestone> optionalMilestone = milestoneRepo.findById(id);
+        if (optionalMilestone.isPresent()) {
+            Milestone milestone = optionalMilestone.get();
+            milestone.setIsDone(isComplete);
+            milestoneRepo.save(milestone);
+            return ResponseEntity.ok(isComplete ? "Milestone marked as 'Complete'." : "Milestone status marked as 'In-Progress'");
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }    
+    
 }

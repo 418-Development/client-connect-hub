@@ -41,6 +41,7 @@ function EditMilestones({ project, onMilestoneEvent }: Props) {
                 estimateDate: endDate,
                 createdDate: currentDate.toISOString(),
                 creatorId: userInfo.id,
+                isDone: selectedMilestone.isDone,
             }),
         });
 
@@ -70,6 +71,7 @@ function EditMilestones({ project, onMilestoneEvent }: Props) {
                 estimateDate: endDate,
                 createdDate: currentDate.toISOString(),
                 creatorId: userInfo.id,
+                isDone: false,
             }),
         });
 
