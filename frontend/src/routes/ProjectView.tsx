@@ -195,7 +195,7 @@ function ProjectView() {
                                     <div className="d-flex flex-column">
                                         <ProgressBar progress={progress} vertical />
                                     </div>
-                                    <div className="d-flex flex-column">
+                                    <div className="d-flex flex-column" style={{ overflow: "hidden" }}>
                                         <Timeline
                                             milestones={project?.milestones ?? []}
                                             style={{ marginLeft: "10px" }}
