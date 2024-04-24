@@ -85,8 +85,8 @@ function EditMilestones({ project, onMilestoneEvent }: Props) {
 
     return (
         <>
-            <div className="d-flex justify-content-between">
-                <div className="d-flex flex-column">
+            <div className="d-flex justify-content-between edit-milestone-container">
+                <div className="d-flex flex-column edit-milestone-timeline">
                     <Timeline
                         milestones={project?.milestones ?? []}
                         style={{ marginLeft: "10px" }}
@@ -106,7 +106,7 @@ function EditMilestones({ project, onMilestoneEvent }: Props) {
                         }}
                     />
                 </div>
-                <div className="flex-fill ms-5">
+                <div className="flex-fill ms-5 edit-milestone">
                     <form
                         className=""
                         onSubmit={(e) => {
@@ -132,6 +132,7 @@ function EditMilestones({ project, onMilestoneEvent }: Props) {
                                         setMilestoneName(e.target.value);
                                     }}
                                     value={milestoneName}
+                                    maxLength={50}
                                     required
                                 />
                                 <div className="invalid-feedback"></div>

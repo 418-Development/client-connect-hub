@@ -16,7 +16,10 @@ function MilestoneModal({ milestone }: Props) {
                 <div className="modal-content">
                     <div className="modal-header">
                         <div>
-                            <h5>{milestone?.title}</h5>
+                            <h5>
+                                {milestone?.title}
+                                {milestone?.isDone && <i className="bi bi-check2-circle ms-2"></i>}
+                            </h5>
                             <figcaption className="blockquote-footer m-0">{milestone?.estimatedEnd}</figcaption>
                         </div>
                         <Button ref={closeButton} kind="close" dismissModal={true} ariaLabel="Close"></Button>

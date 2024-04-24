@@ -96,7 +96,7 @@ function Timeline({
                 >
                     <Button
                         outline
-                        className="ms-3"
+                        className="ms-3 text-truncate"
                         modalTarget="#milestoneModal"
                         onClick={() => {
                             showMilestone(milestone);
