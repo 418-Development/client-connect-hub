@@ -14,9 +14,10 @@ interface Props {
     project: ProjectObj;
     deleteProject: () => void;
     showMilestone: (milestone: MilestoneObj) => void;
+    onMilestoneEvent: () => void;
 }
 
-function ProjectCard({ project, deleteProject, showMilestone }: Props) {
+function ProjectCard({ project, deleteProject, showMilestone, onMilestoneEvent }: Props) {
     const navigate = useNavigate();
     const userInfo = useContext(UserContext);
     const [isExpanded, setIsExpanded] = useState(false);
@@ -90,7 +91,13 @@ function ProjectCard({ project, deleteProject, showMilestone }: Props) {
                         {isExpanded ? "collapse" : "expand"}
                     </div>
                 )}
-                <Timeline style={{ height: "160px" }} milestones={project.milestones} onlyShowOverview showMilestone={showMilestone} />
+                <Timeline
+                    style={{ height: "160px" }}
+                    milestones={project.milestones}
+                    onlyShowOverview
+                    showMilestone={showMilestone}
+                    onMilestoneEvent={onMilestoneEvent}
+                />
                 <div className="container mt-3 mb-3">
                     <ProgressBar progress={progress} />
                 </div>

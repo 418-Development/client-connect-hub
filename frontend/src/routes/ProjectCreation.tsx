@@ -52,7 +52,7 @@ function ProjectCreation({ isEditing = false }: Props) {
                         title: milestone.milestoneName,
                         estimatedEnd: milestone.estimateDate.split("T")[0],
                         description: milestone.description,
-                        isDone: false,
+                        isDone: milestone.isDone,
                     };
                 })
                 .sort((a, b) => {

@@ -11,6 +11,7 @@ interface Props {
     deleteMilestone?: (milestone: MilestoneObj) => void;
     editMilestone?: (milestone: MilestoneObj) => void;
     showMilestone: (milestone: MilestoneObj) => void;
+    onMilestoneEvent?: () => void;
 }
 
 function Timeline({
@@ -20,6 +21,7 @@ function Timeline({
     deleteMilestone = undefined,
     editMilestone = undefined,
     showMilestone,
+    onMilestoneEvent,
 }: Props) {
     const userInfo = useContext(UserContext);
     let displayedMilestones: MilestoneObj[] = [];
@@ -57,6 +59,25 @@ function Timeline({
     } else {
         displayedMilestones = milestones;
     }
+
+    const setMilestoneStatus = async (milestone: MilestoneObj, isDone: boolean) => {
+        if (!userInfo) return;
+
+        const url = (import.meta.env.VITE_API_URL as string) + `milestones/milestone-status/${milestone.id}`;
+
+        const response = await fetch(url, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: localStorage.getItem("token") ?? "",
+            },
+            body: JSON.stringify(isDone),
+        });
+
+        if (response.ok) {
+            if (onMilestoneEvent) onMilestoneEvent();
+        }
+    };
 
     return (
         <ul className="timeline" style={style}>
@@ -110,12 +131,26 @@ function Timeline({
                     )}
 
                     {!editMilestone && !deleteMilestone && index == isActiveIndex - 1 && userInfo?.role === UserRole.MANAGER && (
-                        <Button outline kind="danger" className="ms-2 iconButton">
+                        <Button
+                            outline
+                            kind="danger"
+                            className="ms-2 iconButton"
+                            onClick={() => {
+                                setMilestoneStatus(milestone, false);
+                            }}
+                        >
                             <i className="bi bi-skip-start-circle" style={{ fontSize: "1.2rem" }}></i>
                         </Button>
                     )}
                     {!editMilestone && !deleteMilestone && index == isActiveIndex && userInfo?.role === UserRole.MANAGER && (
-                        <Button outline kind="success" className="ms-2 iconButton">
+                        <Button
+                            outline
+                            kind="success"
+                            className="ms-2 iconButton"
+                            onClick={() => {
+                                setMilestoneStatus(milestone, true);
+                            }}
+                        >
                             <i className="bi bi-check2-circle" style={{ fontSize: "1.2rem" }}></i>
                         </Button>
                     )}

@@ -144,7 +144,7 @@ function ProjectCards() {
                         title: milestone.milestoneName,
                         estimatedEnd: milestone.estimateDate?.split("T")[0] ?? "",
                         description: milestone.description,
-                        isDone: false,
+                        isDone: milestone.isDone,
                     };
                 });
 
@@ -183,6 +183,9 @@ function ProjectCards() {
                                 }}
                                 showMilestone={(milestone) => {
                                     setSelectedMilestone(milestone);
+                                }}
+                                onMilestoneEvent={() => {
+                                    fetchAllProjects();
                                 }}
                             />
                         </div>

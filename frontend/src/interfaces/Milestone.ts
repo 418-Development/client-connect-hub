@@ -13,4 +13,5 @@ export interface MilestoneResponseObj {
     milestoneName: string;
     creatorId: number;
     estimateDate: string;
+    isDone: boolean;
 }

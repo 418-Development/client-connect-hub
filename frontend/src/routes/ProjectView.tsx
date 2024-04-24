@@ -26,10 +26,10 @@ function ProjectView() {
     const [selectedMilestone, setSelectedMilestone] = useState<MilestoneObj | null>(null);
 
     useEffect(() => {
-        if (id !== undefined) fetchProjects(id);
+        if (id !== undefined) fetchProject(id);
     }, [id]);
 
-    const fetchProjects = async (projectId: number | string) => {
+    const fetchProject = async (projectId: number | string) => {
         const url = (import.meta.env.VITE_API_URL as string) + `projects/get/${projectId}`;
 
         const response = await fetch(url, {
@@ -50,7 +50,7 @@ function ProjectView() {
                     title: milestone.milestoneName,
                     estimatedEnd: milestone.estimateDate?.split("T")[0] ?? "",
                     description: milestone.description,
-                    isDone: false,
+                    isDone: milestone.isDone,
                 };
             });
 
@@ -197,6 +197,9 @@ function ProjectView() {
                                             style={{ marginLeft: "10px" }}
                                             showMilestone={(milestone) => {
                                                 setSelectedMilestone(milestone);
+                                            }}
+                                            onMilestoneEvent={() => {
+                                                if (id) fetchProject(id);
                                             }}
                                         />
                                     </div>
