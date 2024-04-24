@@ -11,6 +11,9 @@ interface Props {
     modalTarget?: string;
     dismissModal?: boolean;
     ariaLabel?: string;
+    id?: string;
+    dataBsToggle?: string;
+    ariaExpanded?: boolean;
 }
 
 const Button = forwardRef<HTMLButtonElement, Props>(
@@ -26,6 +29,9 @@ const Button = forwardRef<HTMLButtonElement, Props>(
             dismissModal = false,
             ariaLabel,
             style,
+            id,
+            dataBsToggle,
+            ariaExpanded,
         },
         ref
     ) => {
@@ -47,6 +53,9 @@ const Button = forwardRef<HTMLButtonElement, Props>(
                 ref={ref}
                 type={type}
                 style={style}
+                id={id}
+                aria-expanded={ariaExpanded}
+                data-bs-toggle={dataBsToggle}
                 className={`${kind != "close" ? "btn " : ""}btn-${outline ? "outline-" : ""}${kind} ${className}`}
                 onClick={onClick}
                 {...additionalProps}

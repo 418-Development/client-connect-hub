@@ -79,7 +79,7 @@ function UserAssignment({ project, onUserEvent }: Props) {
         });
 
         if (response.ok) {
-            onUserEvent()
+            onUserEvent();
         }
     };
 
@@ -95,25 +95,52 @@ function UserAssignment({ project, onUserEvent }: Props) {
         });
 
         if (response.ok) {
-            onUserEvent()
+            onUserEvent();
         }
-    };
-
-    const handleRoleSearch = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        const value = Number(e.target.value);
-        const roleSelect = value as UserRole;
-        setRoleSearch(roleSelect);
     };
 
     return (
         <div>
-            <div className="col p-2">
-                <select className="form-control" value={roleSearch} onChange={(e) => handleRoleSearch(e)}>
-                    <option value={UserRole.TEAM}>Team Member</option>
-                    <option value={UserRole.CLIENT}>Client</option>
-                    <option value={UserRole.MANAGER}>Show All</option>
-                </select>
+            <div className="dropdown-wrapper mt-0 mb-3">
+                <div className="btn-group dropend">
+                    <Button
+                        className="btn btn-secondary dropdown-toggle"
+                        type="button"
+                        id="roleSelect"
+                        dataBsToggle="dropdown"
+                        ariaExpanded={false}
+                    >
+                        Filter by Role
+                    </Button>
+                    <ul className="dropdown-menu" aria-labelledby="roleSelect">
+                        <li>
+                            <Button className="dropdown-item" type="button" onClick={() => setRoleSearch(UserRole.MANAGER)}>
+                                Show All
+                            </Button>
+                        </li>
+                        <li>
+                            <Button className="dropdown-item" type="button" onClick={() => setRoleSearch(UserRole.TEAM)}>
+                                Team Member
+                            </Button>
+                        </li>
+                        <li>
+                            <Button className="dropdown-item" type="button" onClick={() => setRoleSearch(UserRole.CLIENT)}>
+                                Client
+                            </Button>
+                        </li>
+                    </ul>
+                </div>
+                <label htmlFor="roleSelect" className="form-label ms-3 mb-0 mt-0">
+                    {roleSearch == UserRole.MANAGER
+                        ? "All"
+                        : roleSearch == UserRole.CLIENT
+                        ? "Client"
+                        : roleSearch == UserRole.TEAM
+                        ? "Team Member"
+                        : ""}
+                </label>
             </div>
+
             {/* Div for already added users */}
             <div>
                 <p>Current Participants</p>
