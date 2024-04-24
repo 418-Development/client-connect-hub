@@ -151,6 +151,13 @@ public class UserController {
     @GetMapping("/all")
     public ResponseEntity<?> getAllUsers() {
         List<User> users = userRepository.findAll();
+
+        users.sort(Comparator.<User, ERole>comparing(user -> user.getRoles().stream()
+                        .map(Role::getName)
+                        .min(Comparator.naturalOrder())
+                        .orElse(ERole.ROLE_USER))
+                .thenComparing(User::getUsername));
+
         return ResponseEntity.ok(users);
     }
 
