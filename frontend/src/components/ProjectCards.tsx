@@ -138,15 +138,19 @@ function ProjectCards() {
             for (let index = 0; index < projectRespondsArray.length; index++) {
                 const project = projectRespondsArray[index];
 
-                const milestones: MilestoneObj[] = project.milestones.map((milestone) => {
-                    return {
-                        id: milestone.milestoneId,
-                        title: milestone.milestoneName,
-                        estimatedEnd: milestone.estimateDate?.split("T")[0] ?? "",
-                        description: milestone.description,
-                        isDone: milestone.isDone,
-                    };
-                });
+                const milestones: MilestoneObj[] = project.milestones
+                    .map((milestone) => {
+                        return {
+                            id: milestone.milestoneId,
+                            title: milestone.milestoneName,
+                            estimatedEnd: milestone.estimateDate?.split("T")[0] ?? "",
+                            description: milestone.description,
+                            isDone: milestone.isDone,
+                        };
+                    })
+                    .sort((a, b) => {
+                        return a.estimatedEnd.localeCompare(b.estimatedEnd);
+                    });
 
                 projectArray.push({
                     id: project.projectId,

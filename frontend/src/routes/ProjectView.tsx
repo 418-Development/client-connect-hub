@@ -44,15 +44,19 @@ function ProjectView() {
             const json = await response.json();
             const projectResponse = json as ProjectRespondsObj;
 
-            const milestones: MilestoneObj[] = projectResponse.milestones.map((milestone) => {
-                return {
-                    id: milestone.milestoneId,
-                    title: milestone.milestoneName,
-                    estimatedEnd: milestone.estimateDate?.split("T")[0] ?? "",
-                    description: milestone.description,
-                    isDone: milestone.isDone,
-                };
-            });
+            const milestones: MilestoneObj[] = projectResponse.milestones
+                .map((milestone) => {
+                    return {
+                        id: milestone.milestoneId,
+                        title: milestone.milestoneName,
+                        estimatedEnd: milestone.estimateDate?.split("T")[0] ?? "",
+                        description: milestone.description,
+                        isDone: milestone.isDone,
+                    };
+                })
+                .sort((a, b) => {
+                    return a.estimatedEnd.localeCompare(b.estimatedEnd);
+                });
 
             const curProject = {
                 id: projectResponse.projectId,

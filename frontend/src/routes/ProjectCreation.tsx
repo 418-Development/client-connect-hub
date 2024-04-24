@@ -56,7 +56,7 @@ function ProjectCreation({ isEditing = false }: Props) {
                     };
                 })
                 .sort((a, b) => {
-                    return b.estimatedEnd.localeCompare(a.estimatedEnd);
+                    return a.estimatedEnd.localeCompare(b.estimatedEnd);
                 });
 
             // Generate UserObj Array from ProjectResponseObj
