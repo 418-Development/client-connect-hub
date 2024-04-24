@@ -130,11 +130,18 @@ public class MilestoneController {
         }
     }
 
-    @DeleteMapping("/delete-milestone/{id}")
+    @DeleteMapping("/delete-milestone/{project_id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<?> deleteMilestone(@PathVariable Long id) {
+    public ResponseEntity<?> deleteMilestone(@PathVariable Long project_id,@RequestBody Long id) {
         Optional<Milestone> optionalMilestone = milestoneRepo.findById(id);
+        Optional<Project> tempProject = projectRepository.findById(project_id);
+        if (tempProject.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
         if (optionalMilestone.isPresent()) {
+            Project project = tempProject.get();
+            project.getMilestones().remove(optionalMilestone.get());
+            projectRepository.save(project);
             milestoneRepo.deleteById(id);
             return ResponseEntity.ok("Milestone deleted successfully");
         } else {

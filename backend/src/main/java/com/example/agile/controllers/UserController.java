@@ -47,6 +47,7 @@ public class UserController {
     @Autowired
     RoleRepo roleRepository;
 
+
     @Autowired
     PasswordEncoder encoder;
 
@@ -166,7 +167,7 @@ public class UserController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/set/{user_id}")
-    public ResponseEntity<?> setUserRoles(@PathVariable Long user_id,@RequestBody List<Long> roleIds){
+    public ResponseEntity<?> setUserRoles(@PathVariable Long user_id,@RequestBody Long roleId){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated() || !(authentication.getPrincipal() instanceof UserDetails)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new MessageResponse("Unauthorized"));
@@ -175,19 +176,19 @@ public class UserController {
         if (user == null){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("User not found"));
         }
-        Set<Role> temp_roles = new HashSet<>();
-        for (Long role : roleIds){
-            if (role == 0){
-                temp_roles.add(new Role(ERole.ROLE_USER));
-            }
-            if (role == 1){
-                temp_roles.add(new Role(ERole.ROLE_MODERATOR));
-            }
+        Set<Role> listOfCurrentRole = user.getRoles();
+        if (roleId == 0){
+            listOfCurrentRole.add(new Role(ERole.ROLE_USER));
         }
-        user.setRoles(temp_roles);
+        else if (roleId == 1){
+            listOfCurrentRole.add(new Role(ERole.ROLE_MODERATOR));
+        }
+        user.setRoles(listOfCurrentRole);
         userRepository.save(user);
 
-        return ResponseEntity.ok(user);
+        return ResponseEntity.ok(user.getProjects());
     }
+
+
 
 }

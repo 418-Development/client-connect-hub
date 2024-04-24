@@ -1,5 +1,7 @@
 package com.example.agile.objecs;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -35,6 +37,7 @@ public class Project {
     private Date estimateDate;
 
 
+    @JsonBackReference
     @ManyToMany
     @JoinTable(
             name = "project_user",
@@ -47,7 +50,7 @@ public class Project {
     @JoinTable(
             name = "project_milestone",
             joinColumns = @JoinColumn(name = "project_id"),
-            inverseJoinColumns = @JoinColumn(name = "milestoneId")
+            inverseJoinColumns = @JoinColumn(name = "milestone_id")
     )
     private Set<Milestone> milestones = new HashSet<>();
 
