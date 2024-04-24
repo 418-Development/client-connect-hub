@@ -37,7 +37,7 @@ function UserAssignment({ project, onUserEvent }: Props) {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
-                Authorization: document.cookie.substring(6),
+                Authorization: localStorage.getItem("token") ?? "",
             },
         });
 
@@ -141,7 +141,7 @@ function UserAssignment({ project, onUserEvent }: Props) {
                 <p>Addable Participants</p>
                 {allUsers
                     .filter((user) => {
-                        return roleSearch === user.role;
+                        return roleSearch === user.role || UserRole.MANAGER === user.role;
                     })
                     .map((user: UserObj) => (
                         <div key={user.username} className="d-flex align-items-center">
