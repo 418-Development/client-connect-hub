@@ -22,7 +22,7 @@ function UserAssignment({ project, onUserEvent }: Props) {
 
     useEffect(() => {
         fetchAllUsers();
-    }, [projectUsers, project]);
+    }, [projectUsers]);
 
     const fetchProjectUser = async () => {
         const userArray = project.users;
