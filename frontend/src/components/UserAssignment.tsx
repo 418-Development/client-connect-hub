@@ -37,7 +37,7 @@ function UserAssignment({ project, onUserEvent }: Props) {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
-                Authorization: document.cookie.substring(6),
+                Authorization: localStorage.getItem("token") ?? "",
             },
         });
 
@@ -79,7 +79,7 @@ function UserAssignment({ project, onUserEvent }: Props) {
         });
 
         if (response.ok) {
-            onUserEvent()
+            onUserEvent();
         }
     };
 
@@ -95,7 +95,7 @@ function UserAssignment({ project, onUserEvent }: Props) {
         });
 
         if (response.ok) {
-            onUserEvent()
+            onUserEvent();
         }
     };
 
