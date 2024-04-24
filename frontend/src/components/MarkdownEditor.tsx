@@ -1,14 +1,15 @@
-import Markdown from "react-markdown";
 import Button from "./Button";
 import { useEffect, useRef, useState } from "react";
+import Markdown from "./Markdown";
 
 interface Props {
     value: string;
     onValueChanged: (value: string) => void;
     label?: string;
+    maxLength?: number;
 }
 
-function MarkdownEditor({ value, onValueChanged, label }: Props) {
+function MarkdownEditor({ value, onValueChanged, label, maxLength = 15000 }: Props) {
     const [showPreview, setShowPreview] = useState<boolean>(false);
 
     const preview = useRef<HTMLDivElement>(null);
@@ -64,7 +65,7 @@ function MarkdownEditor({ value, onValueChanged, label }: Props) {
                 }}
                 value={value}
                 hidden={showPreview}
-                maxLength={15000}
+                maxLength={maxLength}
                 required
             />
             <div className="invalid-feedback"></div>

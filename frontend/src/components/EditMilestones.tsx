@@ -113,6 +113,7 @@ function EditMilestones({ project, onMilestoneEvent }: Props) {
                                     setDescription(value);
                                 }}
                                 label="Description"
+                                maxLength={1500}
                             />
                         </div>
 
