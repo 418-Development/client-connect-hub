@@ -111,6 +111,7 @@ function UserAssignment({ project, onUserEvent }: Props) {
                 <select className="form-control" value={roleSearch} onChange={(e) => handleRoleSearch(e)}>
                     <option value={UserRole.TEAM}>Team Member</option>
                     <option value={UserRole.CLIENT}>Client</option>
+                    <option value={UserRole.MANAGER}>Show All</option>
                 </select>
             </div>
             {/* Div for already added users */}
@@ -118,6 +119,7 @@ function UserAssignment({ project, onUserEvent }: Props) {
                 <p>Current Participants</p>
                 {projectUsers
                     .filter((user) => {
+                        if (roleSearch === UserRole.MANAGER) return true;
                         return roleSearch === user.role || UserRole.MANAGER === user.role;
                     })
                     .map((user: UserObj) => (
@@ -141,6 +143,7 @@ function UserAssignment({ project, onUserEvent }: Props) {
                 <p>Addable Participants</p>
                 {allUsers
                     .filter((user) => {
+                        if (roleSearch === UserRole.MANAGER) return true;
                         return roleSearch === user.role || UserRole.MANAGER === user.role;
                     })
                     .map((user: UserObj) => (
