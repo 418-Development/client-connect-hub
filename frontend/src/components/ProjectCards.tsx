@@ -3,10 +3,12 @@ import { ProjectObj, ProjectRespondsObj } from "../interfaces/Project";
 import ProjectCard from "./ProjectCard";
 import DeleteProjectModal from "./DeleteProjectModal";
 import { MilestoneObj } from "../interfaces/Milestone";
+import MilestoneModal from "./MilestoneModal";
 
 function ProjectCards() {
     const [projects, setProjects] = useState<ProjectObj[]>([]);
     const [selectedProjectIndex, setSelectedProjectIndex] = useState(0);
+    const [selectedMilestone, setSelectedMilestone] = useState<MilestoneObj | null>(null);
     const debugProjects: ProjectObj[] = [
         {
             id: 1,
@@ -19,24 +21,28 @@ function ProjectCards() {
                     id: 1,
                     title: "Milestone 1",
                     estimatedEnd: "01.04.2024",
+                    description: "description",
                     isDone: true,
                 },
                 {
                     id: 2,
                     title: "Milestone 2",
                     estimatedEnd: "06.04.2024",
+                    description: "description",
                     isDone: true,
                 },
                 {
                     id: 3,
                     title: "Milestone 3",
                     estimatedEnd: "18.04.2024",
+                    description: "description",
                     isDone: false,
                 },
                 {
                     id: 4,
                     title: "Milestone 4",
                     estimatedEnd: "22.04.2024",
+                    description: "description",
                     isDone: false,
                 },
             ],
@@ -53,18 +59,21 @@ function ProjectCards() {
                     id: 1,
                     title: "Milestone 1",
                     estimatedEnd: "01.04.2024",
+                    description: "description",
                     isDone: true,
                 },
                 {
                     id: 2,
                     title: "Milestone 2",
                     estimatedEnd: "06.04.2024",
+                    description: "description",
                     isDone: true,
                 },
                 {
                     id: 3,
                     title: "Milestone 3",
                     estimatedEnd: "18.04.2024",
+                    description: "description",
                     isDone: false,
                 },
             ],
@@ -90,12 +99,14 @@ function ProjectCards() {
                     id: 1,
                     title: "Milestone 1",
                     estimatedEnd: "01.04.2024",
+                    description: "description",
                     isDone: true,
                 },
                 {
                     id: 2,
                     title: "Milestone 2",
                     estimatedEnd: "06.04.2024",
+                    description: "description",
                     isDone: true,
                 },
             ],
@@ -132,6 +143,7 @@ function ProjectCards() {
                         id: milestone.milestoneId,
                         title: milestone.milestoneName,
                         estimatedEnd: milestone.estimateDate?.split("T")[0] ?? "",
+                        description: milestone.description,
                         isDone: false,
                     };
                 });
@@ -169,6 +181,9 @@ function ProjectCards() {
                                 deleteProject={() => {
                                     setSelectedProjectIndex(index);
                                 }}
+                                showMilestone={(milestone) => {
+                                    setSelectedMilestone(milestone);
+                                }}
                             />
                         </div>
                     ))}
@@ -180,6 +195,7 @@ function ProjectCards() {
                     fetchAllProjects();
                 }}
             />
+            <MilestoneModal milestone={selectedMilestone} />
         </>
     );
 }
