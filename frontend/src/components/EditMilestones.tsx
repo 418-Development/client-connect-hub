@@ -5,6 +5,8 @@ import { useState } from "react";
 import Button from "./Button";
 import Timeline from "./Timeline";
 import MarkdownEditor from "./MarkdownEditor";
+import DeleteMilestoneModal from "./DeleteMilestoneModal";
+import { MilestoneObj } from "../interfaces/Milestone";
 
 interface Props {
     project: ProjectObj;
@@ -17,6 +19,7 @@ function EditMilestones({ project, onMilestoneEvent }: Props) {
     const [description, setDescription] = useState<string>("");
     const [milestoneName, setMilestoneName] = useState<string>("");
     const [endDate, setEndDate] = useState<string>("");
+    const [selectedMilestone, setSelectedMilestone] = useState<MilestoneObj | null>(null);
 
     const createMilestone = async () => {
         if (!userInfo) return;
@@ -55,10 +58,10 @@ function EditMilestones({ project, onMilestoneEvent }: Props) {
                         milestones={project?.milestones ?? []}
                         style={{ marginLeft: "10px" }}
                         deleteMilestone={(milestone) => {
-                            console.log(milestone, "del");
+                            setSelectedMilestone(milestone);
                         }}
                         editMilestone={(milestone) => {
-                            console.log(milestone, "edit");
+                            setSelectedMilestone(milestone);
                         }}
                     />
                 </div>
@@ -127,6 +130,12 @@ function EditMilestones({ project, onMilestoneEvent }: Props) {
                     </form>
                 </div>
             </div>
+            <DeleteMilestoneModal
+                milestone={selectedMilestone}
+                onDeletion={() => {
+                    onMilestoneEvent();
+                }}
+            />
         </>
     );
 }

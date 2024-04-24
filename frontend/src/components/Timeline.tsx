@@ -76,6 +76,7 @@ function Timeline({ milestones, onlyShowOverview = false, style = {}, deleteMile
                             onClick={() => {
                                 deleteMilestone(milestone);
                             }}
+                            modalTarget="#deleteMilestoneModal"
                         >
                             <i className="bi bi-trash" style={{ fontSize: "1.2rem" }}></i>
                         </Button>

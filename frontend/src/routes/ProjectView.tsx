@@ -9,6 +9,7 @@ import { UserRole } from "../interfaces/UserObj";
 import { useNavigate, useParams } from "react-router-dom";
 import DeleteProjectModal from "../components/DeleteProjectModal";
 import Markdown from "../components/Markdown";
+import { MilestoneObj } from "../interfaces/Milestone";
 
 function ProjectView() {
     const userInfo = useContext(UserContext);
@@ -56,6 +57,7 @@ function ProjectView() {
                 startDate: projectResponse.startDate.split("T")[0],
                 description: projectResponse.description,
                 milestones: milestones,
+                users: [],
             };
             setProject(curProject);
         } else {
