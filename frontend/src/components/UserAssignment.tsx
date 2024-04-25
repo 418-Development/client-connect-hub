@@ -110,7 +110,7 @@ function UserAssignment({ project, onUserEvent }: Props) {
             <div className="dropdown-wrapper mt-0 mb-3 d-flex align-items-center">
                 <div className="btn-group dropend">
                     <Button
-                        className="btn secondary-btn-text dropdown-toggle"
+                        className="btn white-btn-text dropdown-toggle"
                         type="button"
                         id="roleSelect"
                         dataBsToggle="dropdown"
