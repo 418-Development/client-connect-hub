@@ -36,10 +36,10 @@ public class User {
     @NotBlank
     @Size(max = 120)
     private String password;
-    @JsonBackReference
-    @ManyToMany(mappedBy = "users")
-    private Set<Project> projects;
 
+    @ManyToMany(mappedBy = "users")
+    @JsonIgnore
+    private Set<Project> projects;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
