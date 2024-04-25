@@ -8,7 +8,9 @@ interface Props {
 }
 
 function MilestoneModal({ milestone }: Props) {
-    const closeButton = useRef<HTMLButtonElement>(null);
+    {
+        /*  const closeButton = useRef<HTMLButtonElement>(null); */
+    }
 
     return (
         <div id="milestoneModal" className="modal fade">
