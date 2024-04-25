@@ -129,8 +129,11 @@ function ProjectCreation({ isEditing = false }: Props) {
             }),
         });
 
+        console.log(url, response.ok, response.status);
+
         if (response.ok) {
             const json = await response.json();
+            console.log("json", json);
 
             const project = json as ProjectRespondsObj;
 
