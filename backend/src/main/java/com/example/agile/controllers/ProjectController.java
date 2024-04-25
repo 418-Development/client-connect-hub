@@ -206,9 +206,28 @@ public class ProjectController {
 
     @GetMapping("/get/{id}")
     public ResponseEntity<?> getProjectById(@PathVariable Long id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated() || !(authentication.getPrincipal() instanceof UserDetails userDetails)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new MessageResponse("Unauthorized"));
+        }
+
+        User currentUser = userRepository.findByUsername(userDetails.getUsername()).orElse(null);
+        if (currentUser == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new MessageResponse("User not found"));
+        }
+
         Optional<Project> project = projectRepository.findById(id);
         if (project.isPresent()) {
-            return ResponseEntity.ok(project.get());
+            Project p = project.get();
+            if(
+                    currentUser.getRoles().stream().anyMatch(role -> role.getName() == ERole.ROLE_ADMIN ||
+                            role.getName() == ERole.ROLE_MODERATOR) ||
+                            p.getUsers().stream().anyMatch( user -> Objects.equals(user.getId(), currentUser.getId()))
+            ){
+                return ResponseEntity.ok(p);
+            }
+            return ResponseEntity.notFound().build();
+
         } else {
             return ResponseEntity.notFound().build();
         }
