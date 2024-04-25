@@ -180,7 +180,7 @@ function EditMilestones({ project, onMilestoneEvent }: Props) {
                                 Cancel
                             </Button>
                             <Button type="submit" kind="success" className="mt-3">
-                                {inEditMode ? "Edit Milestone" : "Add Milestone"}
+                                {inEditMode ? "Save edited Milestone" : "Add Milestone"}
                             </Button>
                         </div>
                     </form>

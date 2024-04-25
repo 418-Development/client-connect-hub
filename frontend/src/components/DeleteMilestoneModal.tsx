@@ -28,6 +28,7 @@ function DeleteMilestoneModal({ milestone, onDeletion }: Props) {
                 "Content-Type": "application/json",
                 Authorization: localStorage.getItem("token") ?? "",
             },
+            body: JSON.stringify(milestone.id),
         });
 
         console.log(url, response.ok, response.status);

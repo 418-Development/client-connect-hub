@@ -121,7 +121,7 @@ function Timeline({
                     {editMilestone && (
                         <Button
                             outline
-                            kind="success"
+                            kind="secondary"
                             className="ms-2 iconButton"
                             onClick={() => {
                                 editMilestone(milestone);
