@@ -10,6 +10,7 @@
     --cch-card-hover: #ececec;
     --cch-card-hover-2: #dbdbdb;
     --ch-secondary-btn-text: #292c35;
+    --ch-modal-header: #f8f9fa;
 }
 
 .logo {
@@ -24,6 +25,7 @@
         --cch-card-hover: #292c35;
         --cch-card-hover-2: #313641;
         --ch-secondary-btn-text: #ececec;
+        --ch-modal-header: #343a40;
     }
 
     .logo {
@@ -74,4 +76,8 @@
 
 .secondary-btn-text {
     color: var(--ch-secondary-btn-text) !important;
+}
+
+.modal-header {
+    background-color: var(--ch-modal-header) !important;
 }
