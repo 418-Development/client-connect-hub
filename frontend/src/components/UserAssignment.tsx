@@ -12,7 +12,7 @@ interface Props {
 function UserAssignment({ project, onUserEvent }: Props) {
     const [allUsers, setAllUsers] = useState<UserObj[]>([]);
     const [projectUsers, setProjectUsers] = useState<UserObj[]>([]);
-    const [roleSearch, setRoleSearch] = useState<UserRole>(UserRole.CLIENT);
+    const [roleSearch, setRoleSearch] = useState<UserRole>(UserRole.MANAGER);
     // Project ID for updates
     const { id } = useParams<{ id: string }>();
 
@@ -60,7 +60,13 @@ function UserAssignment({ project, onUserEvent }: Props) {
                 }
             }
 
-            setAllUsers(userArray);
+            setAllUsers(
+                userArray.sort((a, b) => {
+                    if (a.role === b.role) return a.username.localeCompare(b.username);
+                    if (a.role < b.role) return 1;
+                    return -1;
+                })
+            );
         }
     };
 
@@ -151,16 +157,18 @@ function UserAssignment({ project, onUserEvent }: Props) {
                     })
                     .map((user: UserObj) => (
                         <div key={user.username} className="d-flex align-items-center">
-                            <div className="col p-2">{user.username}</div>
-                            <div className="col p-2">{UserRole[user.role]}</div>
-                            <div className="col p-2">{user.label}</div>
-                            {user.role !== UserRole.MANAGER ? (
-                                <Button outline kind="danger" className="ms-2 iconButton" onClick={() => removeUserFromProject(user)}>
-                                    <i className="bi bi-caret-down" style={{ fontSize: "1.2rem" }}></i>
-                                </Button>
-                            ) : (
-                                <div />
-                            )}
+                            <div className="d-flex align-items-center" style={{ flex: 6 }}>
+                                <div className="col p-2">{user.username}</div>
+                                <div className="col p-2">{UserRole[user.role]}</div>
+                                <div className="col p-2">{user.label}</div>
+                            </div>
+                            <div className="d-flex justify-content-end" style={{ flex: 1 }}>
+                                {user.role !== UserRole.MANAGER && (
+                                    <Button outline kind="danger" className="ms-2 iconButton" onClick={() => removeUserFromProject(user)}>
+                                        <i className="bi bi-caret-down" style={{ fontSize: "1.2rem" }}></i>
+                                    </Button>
+                                )}
+                            </div>
                         </div>
                     ))}
             </div>
@@ -175,12 +183,16 @@ function UserAssignment({ project, onUserEvent }: Props) {
                     })
                     .map((user: UserObj) => (
                         <div key={user.username} className="d-flex align-items-center">
-                            <div className="col p-2">{user.username}</div>
-                            <div className="col p-2">{UserRole[user.role]}</div>
-                            <div className="col p-2">{user.label}</div>
-                            <Button outline kind="success" className="ms-2 iconButton" onClick={() => addUserToProject(user)}>
-                                <i className="bi bi-caret-up" style={{ fontSize: "1.2rem" }}></i>
-                            </Button>
+                            <div className="d-flex align-items-center" style={{ flex: 6 }}>
+                                <div className="col p-2">{user.username}</div>
+                                <div className="col p-2">{UserRole[user.role]}</div>
+                                <div className="col p-2">{user.label}</div>
+                            </div>
+                            <div className="d-flex justify-content-end" style={{ flex: 1 }}>
+                                <Button outline kind="success" className="ms-2 iconButton" onClick={() => addUserToProject(user)}>
+                                    <i className="bi bi-caret-up" style={{ fontSize: "1.2rem" }}></i>
+                                </Button>
+                            </div>
                         </div>
                     ))}
             </div>

@@ -60,17 +60,22 @@ function ProjectCreation({ isEditing = false }: Props) {
                 });
 
             // Generate UserObj Array from ProjectResponseObj
-            const userArray: UserObj[] = [];
-            for (let index = 0; index < projectResponse.users.length; index++) {
-                const user = projectResponse.users[index];
-                userArray.push({
-                    id: user.id,
-                    username: user.username,
-                    role: user.roles[0].id as UserRole,
-                    label: "M.I.A.",
-                    email: user.email,
+            const userArray: UserObj[] = projectResponse.users
+                .map((user) => {
+                    return {
+                        id: user.id,
+                        username: user.username,
+                        role: user.roles[0].id as UserRole,
+                        label: "M.I.A.",
+                        email: user.email,
+                    };
+                })
+                .sort((a, b) => {
+                    if (a.role === b.role) return a.username.localeCompare(b.username);
+                    if (a.role < b.role) return 1;
+                    return -1;
                 });
-            }
+
             // Create current Project with data from the ProjectResponseObj
             const curProject = {
                 id: projectResponse.projectId,
