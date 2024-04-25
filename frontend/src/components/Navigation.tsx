@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import logo from "../assets/LogoWhitePulseOnly.png";
+import logo from "/LogoPulseWhite.svg";
 import Button from "./Button"; // Adjust the import path as necessary
 import { UserContext, UserUpdateContext } from "../UserContext";
 import SignUpForm from "./SignUpForm";
