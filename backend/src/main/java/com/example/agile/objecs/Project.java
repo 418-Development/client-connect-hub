@@ -36,8 +36,7 @@ public class Project {
 
     private Date estimateDate;
 
-
-    @JsonBackReference
+    @JsonManagedReference
     @ManyToMany
     @JoinTable(
             name = "project_user",
