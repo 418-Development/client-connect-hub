@@ -46,3 +46,22 @@
 .iconButton {
     padding: 0.21rem 0.5rem !important;
 }
+
+.edit-milestone-timeline {
+    max-width: 50%;
+}
+
+@media only screen and (max-width: 995px) {
+    .edit-milestone-container {
+        flex-direction: column;
+    }
+
+    .edit-milestone.ms-5 {
+        margin-left: 0 !important;
+        margin-top: 1rem !important;
+    }
+
+    .edit-milestone-timeline {
+        max-width: 100%;
+    }
+}

@@ -22,7 +22,7 @@ public class Milestone {
     private String milestoneName;
 
     @Setter
-    @Size(max = 150)
+    @Size(max = 1500)
     private String description;
 
     @Setter

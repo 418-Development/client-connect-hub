@@ -263,5 +263,16 @@ public class ProjectController {
         return ResponseEntity.ok(project);
     }
 
+    @GetMapping("/get_projects_by_user/{user_id}")
+    public ResponseEntity<?> getProjectsByCurrentUser(@PathVariable Long user_id) {
+            User user = userRepository.findById(user_id).orElse(null);
+            if (user == null)
+            {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("User not found"));
+            }
+
+            return ResponseEntity.ok(user);
+    }
+
 
 }

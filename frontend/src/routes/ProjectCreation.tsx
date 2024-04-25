@@ -1,11 +1,13 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Button from "../components/Button";
 import { useNavigate, useParams } from "react-router-dom";
 import { UserContext } from "../UserContext";
 import UserAssignment from "../components/UserAssignment";
 import { ProjectObj, ProjectRespondsObj } from "../interfaces/Project";
-import Markdown from "../components/Markdown";
 import EditMilestones from "../components/EditMilestones";
+import { UserObj, UserRole } from "../interfaces/UserObj";
+import { MilestoneObj } from "../interfaces/Milestone";
+import MarkdownEditor from "../components/MarkdownEditor";
 
 interface Props {
     isEditing?: boolean;
@@ -15,9 +17,6 @@ function ProjectCreation({ isEditing = false }: Props) {
     const userInfo = useContext(UserContext);
     const { id } = useParams<{ id: string }>();
     const [project, setProject] = useState<ProjectObj | null>(null);
-    const [showPreview, setShowPreview] = useState<boolean>(false);
-    const descriptionTextArea = useRef<HTMLTextAreaElement>(null);
-    const preview = useRef<HTMLDivElement>(null);
 
     const [title, setTitle] = useState<string>("");
     const [description, setDescription] = useState<string>("");
@@ -44,13 +43,43 @@ function ProjectCreation({ isEditing = false }: Props) {
         if (response.ok) {
             const json = await response.json();
             const projectResponse = json as ProjectRespondsObj;
+
+            console.log(projectResponse);
+            const milestones: MilestoneObj[] = projectResponse.milestones
+                .map((milestone) => {
+                    return {
+                        id: milestone.milestoneId,
+                        title: milestone.milestoneName,
+                        estimatedEnd: milestone.estimateDate.split("T")[0],
+                        description: milestone.description,
+                        isDone: milestone.isDone,
+                    };
+                })
+                .sort((a, b) => {
+                    return a.estimatedEnd.localeCompare(b.estimatedEnd);
+                });
+
+            // Generate UserObj Array from ProjectResponseObj
+            const userArray: UserObj[] = [];
+            for (let index = 0; index < projectResponse.users.length; index++) {
+                const user = projectResponse.users[index];
+                userArray.push({
+                    id: user.id,
+                    username: user.username,
+                    role: user.roles[0].id as UserRole,
+                    label: "M.I.A.",
+                    email: user.email,
+                });
+            }
+            // Create current Project with data from the ProjectResponseObj
             const curProject = {
                 id: projectResponse.projectId,
                 title: projectResponse.projectName,
                 estimatedEnd: projectResponse.estimateDate,
                 startDate: projectResponse.startDate,
                 description: projectResponse.description,
-                milestones: [],
+                users: userArray,
+                milestones: milestones,
             };
             setProject(curProject);
 
@@ -59,7 +88,6 @@ function ProjectCreation({ isEditing = false }: Props) {
                 setDescription(curProject.description);
                 setStartDate(curProject.startDate.split("T")[0]);
                 setEndDate(curProject.estimatedEnd.split("T")[0]);
-                updateTextArea();
             }
         } else {
             setProject(null);
@@ -87,6 +115,11 @@ function ProjectCreation({ isEditing = false }: Props) {
                 startDate: startDate,
                 estimateDate: endDate,
                 milestones: [],
+                users: [
+                    {
+                        id: userInfo.id,
+                    },
+                ],
             }),
         });
 
@@ -125,165 +158,162 @@ function ProjectCreation({ isEditing = false }: Props) {
         }
     };
 
-    const updateTextArea = () => {
-        if (descriptionTextArea.current) {
-            descriptionTextArea.current.style.height = "auto";
-            descriptionTextArea.current.style.height = `${descriptionTextArea.current.scrollHeight + 2}px`;
-        }
-    };
-
     return (
         <div className="container">
-            <form
-                action=""
-                onSubmit={(e) => {
-                    e.preventDefault();
-                    if (isEditing) {
-                        updateProject();
-                    } else {
-                        createProject();
-                    }
-                }}
-                className="mt-3"
-            >
-                <div className="mt-3">
-                    <div>
-                        <label htmlFor="projectTitle">Project title</label>
-                        <input
-                            type="text"
-                            autoComplete="title"
-                            className="form-control mt-2"
-                            id="projectTitle"
-                            placeholder="Enter title"
-                            onChange={(e) => {
-                                setTitle(e.target.value);
-                            }}
-                            value={title}
-                            required
-                        />
-                        <div className="invalid-feedback"></div>
-                    </div>
+            {isEditing ? (
+                <>
+                    <h1 className="mt-3">Edit "{title}"</h1>
+                </>
+            ) : (
+                <>
+                    <h1 className="mt-3">Create a new Project</h1>
+                </>
+            )}
+
+            <div className="card mt-3">
+                <div className="card-header">
+                    <h2 className="mb-0">General Information</h2>
                 </div>
-                <div className="mt-3">
-                    <div>
-                        <div className="d-flex align-items-center">
-                            <label htmlFor="projectDescription">Project description</label>
-                            <div className="ms-5 m-2">
-                                <Button
-                                    type="button"
-                                    kind={showPreview ? "secondary" : "primary"}
-                                    style={{ borderRadius: 0 }}
-                                    onClick={() => {
-                                        setShowPreview(false);
+                <div className="card-body">
+                    <form
+                        action=""
+                        onSubmit={(e) => {
+                            e.preventDefault();
+                            if (isEditing) {
+                                updateProject();
+                            } else {
+                                createProject();
+                            }
+                        }}
+                        className="mt-3"
+                    >
+                        <div className="mt-3">
+                            <div>
+                                <label htmlFor="projectTitle">Project title</label>
+                                <input
+                                    type="text"
+                                    autoComplete="title"
+                                    className="form-control mt-2"
+                                    id="projectTitle"
+                                    placeholder="Enter title"
+                                    onChange={(e) => {
+                                        setTitle(e.target.value);
                                     }}
-                                    outline={showPreview}
-                                >
-                                    Write
-                                </Button>
-                                <Button
-                                    type="button"
-                                    kind={showPreview ? "primary" : "secondary"}
-                                    style={{ borderRadius: 0 }}
-                                    onClick={() => {
-                                        setShowPreview(true);
-                                    }}
-                                    outline={!showPreview}
-                                >
-                                    Preview
-                                </Button>
+                                    value={title}
+                                    required
+                                />
+                                <div className="invalid-feedback"></div>
                             </div>
                         </div>
-                        <textarea
-                            ref={descriptionTextArea}
-                            autoComplete="description"
-                            className="form-control"
-                            id="projectDescription"
-                            placeholder="Enter description"
-                            onChange={(e) => {
-                                setDescription(e.target.value);
-                            }}
-                            value={description}
-                            onInput={updateTextArea}
-                            hidden={showPreview}
-                            maxLength={15000}
-                            required
-                        />
-                        <div className="invalid-feedback"></div>
-                        <div ref={preview} hidden={!showPreview} className="card p-1 markdown">
-                            <Markdown>{description}</Markdown>
+                        <div className="mt-3">
+                            <MarkdownEditor
+                                value={description}
+                                onValueChanged={(value) => {
+                                    setDescription(value);
+                                }}
+                                label="Description"
+                            />
                         </div>
-                    </div>
-                </div>
-                <div className="row g-3 mt-1">
-                    <div className="col mt-2">
-                        <label htmlFor="startDate">Start Date</label>
-                        <input
-                            type="date"
-                            className="form-control mt-2"
-                            id="startDate"
-                            placeholder=""
-                            onChange={(e) => {
-                                setStartDate(e.target.value);
-                            }}
-                            value={startDate}
-                            required
-                        />
-                        <div className="invalid-feedback"></div>
-                    </div>
-                    <div className="col mt-2">
-                        <label htmlFor="endDate">Estimated End Date</label>
-                        <input
-                            type="date"
-                            className="form-control mt-2"
-                            id="endDate"
-                            placeholder=""
-                            onChange={(e) => {
-                                setEndDate(e.target.value);
-                            }}
-                            value={endDate}
-                            required
-                        />
-                        <div className="invalid-feedback"></div>
-                    </div>
-                </div>
+                        <div className="row g-3 mt-1">
+                            <div className="col mt-2">
+                                <label htmlFor="startDate">Start Date</label>
+                                <input
+                                    type="date"
+                                    className="form-control mt-2"
+                                    id="startDate"
+                                    placeholder=""
+                                    onChange={(e) => {
+                                        setStartDate(e.target.value);
+                                    }}
+                                    value={startDate}
+                                    required
+                                />
+                                <div className="invalid-feedback"></div>
+                            </div>
+                            <div className="col mt-2">
+                                <label htmlFor="endDate">Estimated End Date</label>
+                                <input
+                                    type="date"
+                                    className="form-control mt-2"
+                                    id="endDate"
+                                    placeholder=""
+                                    onChange={(e) => {
+                                        setEndDate(e.target.value);
+                                    }}
+                                    value={endDate}
+                                    required
+                                />
+                                <div className="invalid-feedback"></div>
+                            </div>
+                        </div>
 
-                <div className="d-flex justify-content-end">
-                    {isEditing ? (
-                        <>
-                            <Button kind="link" className="mt-3">
-                                Cancel
-                            </Button>
-                            <Button type="submit" kind="success" className="mt-3">
-                                Save Changes
-                            </Button>
-                        </>
-                    ) : (
-                        <>
-                            <Button kind="link" className="mt-3">
-                                Cancel
-                            </Button>
-                            <Button type="submit" kind="success" className="mt-3">
-                                Create Project
-                            </Button>
-                        </>
-                    )}
+                        <div className="d-flex justify-content-end">
+                            {isEditing ? (
+                                <>
+                                    <Button kind="link" className="mt-3">
+                                        Cancel
+                                    </Button>
+                                    <Button type="submit" kind="success" className="mt-3">
+                                        Save Changes
+                                    </Button>
+                                </>
+                            ) : (
+                                <>
+                                    <Button kind="link" className="mt-3">
+                                        Cancel
+                                    </Button>
+                                    <Button type="submit" kind="success" className="mt-3">
+                                        Create Project
+                                    </Button>
+                                </>
+                            )}
+                        </div>
+                    </form>
                 </div>
-            </form>
+            </div>
 
             {isEditing ? (
-                <form className="mt-3">
-                    <h2>Project Member</h2>
-                    <div>
-                        <UserAssignment />
+                <div className="card mt-3">
+                    <div className="card-header">
+                        <h2 className="mb-0">Project Member</h2>
                     </div>
-                </form>
+                    <div className="card-body">
+                        <form className="mt-3">
+                            <div>
+                                {project && (
+                                    <UserAssignment
+                                        project={project}
+                                        onUserEvent={() => {
+                                            fetchProjects(project.id);
+                                        }}
+                                    />
+                                )}
+                            </div>
+                        </form>
+                    </div>
+                </div>
             ) : (
                 <div />
             )}
 
             {isEditing ? (
                 <>
-                    {project && <EditMilestones project={project} />}
+                    <div className="card mt-3">
+                        <div className="card-header">
+                            {" "}
+                            <h2 className="mb-0">Milestones</h2>
+                        </div>
+                        <div className="card-body">
+                            {project && (
+                                <EditMilestones
+                                    project={project}
+                                    onMilestoneEvent={() => {
+                                        fetchProjects(project.id);
+                                    }}
+                                />
+                            )}
+                        </div>
+                    </div>
                     <div className="m-3 d-flex justify-content-center align-items-center">
                         <Button
                             kind="success"
@@ -292,7 +322,7 @@ function ProjectCreation({ isEditing = false }: Props) {
                             }}
                         >
                             <i className="bi bi-arrow-left me-2"></i>
-                            back
+                            Back
                         </Button>
                     </div>
                 </>

@@ -9,6 +9,8 @@ import { UserRole } from "../interfaces/UserObj";
 import { useNavigate, useParams } from "react-router-dom";
 import DeleteProjectModal from "../components/DeleteProjectModal";
 import Markdown from "../components/Markdown";
+import { MilestoneObj } from "../interfaces/Milestone";
+import MilestoneModal from "../components/MilestoneModal";
 
 function ProjectView() {
     const userInfo = useContext(UserContext);
@@ -21,11 +23,13 @@ function ProjectView() {
     const [progress, setProgress] = useState(0);
     const contentRef = useRef<HTMLDivElement>(null);
 
+    const [selectedMilestone, setSelectedMilestone] = useState<MilestoneObj | null>(null);
+
     useEffect(() => {
-        if (id !== undefined) fetchProjects(id);
+        if (id !== undefined) fetchProject(id);
     }, [id]);
 
-    const fetchProjects = async (projectId: number | string) => {
+    const fetchProject = async (projectId: number | string) => {
         const url = (import.meta.env.VITE_API_URL as string) + `projects/get/${projectId}`;
 
         const response = await fetch(url, {
@@ -39,13 +43,29 @@ function ProjectView() {
         if (response.ok) {
             const json = await response.json();
             const projectResponse = json as ProjectRespondsObj;
+
+            const milestones: MilestoneObj[] = projectResponse.milestones
+                .map((milestone) => {
+                    return {
+                        id: milestone.milestoneId,
+                        title: milestone.milestoneName,
+                        estimatedEnd: milestone.estimateDate?.split("T")[0] ?? "",
+                        description: milestone.description,
+                        isDone: milestone.isDone,
+                    };
+                })
+                .sort((a, b) => {
+                    return a.estimatedEnd.localeCompare(b.estimatedEnd);
+                });
+
             const curProject = {
                 id: projectResponse.projectId,
                 title: projectResponse.projectName,
                 estimatedEnd: projectResponse.estimateDate.split("T")[0],
                 startDate: projectResponse.startDate.split("T")[0],
                 description: projectResponse.description,
-                milestones: [],
+                milestones: milestones,
+                users: [],
             };
             setProject(curProject);
         } else {
@@ -175,8 +195,17 @@ function ProjectView() {
                                     <div className="d-flex flex-column">
                                         <ProgressBar progress={progress} vertical />
                                     </div>
-                                    <div className="d-flex flex-column">
-                                        <Timeline milestones={project?.milestones ?? []} style={{ marginLeft: "10px" }} />
+                                    <div className="d-flex flex-column" style={{ overflow: "hidden" }}>
+                                        <Timeline
+                                            milestones={project?.milestones ?? []}
+                                            style={{ marginLeft: "10px" }}
+                                            showMilestone={(milestone) => {
+                                                setSelectedMilestone(milestone);
+                                            }}
+                                            onMilestoneEvent={() => {
+                                                if (id) fetchProject(id);
+                                            }}
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -261,6 +290,7 @@ function ProjectView() {
                     }}
                 />
             )}
+            <MilestoneModal milestone={selectedMilestone} />
         </>
     );
 }

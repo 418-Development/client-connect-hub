@@ -2,102 +2,115 @@ import { useEffect, useState } from "react";
 import { ProjectObj, ProjectRespondsObj } from "../interfaces/Project";
 import ProjectCard from "./ProjectCard";
 import DeleteProjectModal from "./DeleteProjectModal";
+import { MilestoneObj } from "../interfaces/Milestone";
+import MilestoneModal from "./MilestoneModal";
 
 function ProjectCards() {
     const [projects, setProjects] = useState<ProjectObj[]>([]);
     const [selectedProjectIndex, setSelectedProjectIndex] = useState(0);
+    const [selectedMilestone, setSelectedMilestone] = useState<MilestoneObj | null>(null);
     const debugProjects: ProjectObj[] = [
         {
             id: 1,
             title: "Project 1",
             estimatedEnd: "2024-01-01",
             startDate: "2024-01-01",
-            description:
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet magna sollicitudin, sodales libero quis, auctor leo. Mauris nec odio vitae urna volutpat varius. Ut vehicula, elit in condimentum cursus, metus ante pharetra magna, ac facilisis felis diam vel nisi. Aliquam erat volutpat. Curabitur eu ante massa. Fusce nec felis id libero pretium vehicula. Vivamus lacinia sem vitae enim dictum, in ullamcorper elit ornare. Praesent tristique velit vel eros congue, at pellentesque eros vehicula. Ut ac est nunc. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Phasellus id ligula sed turpis sollicitudin dapibus. Sed luctus, mauris sit amet auctor aliquet, mi libero laoreet metus, non accumsan metus massa non nunc. Morbi ut dolor sit amet velit auctor tincidunt. Curabitur hendrerit, massa at aliquam sagittis, sapien leo vehicula risus, vel gravida purus lacus vel nisl. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi.",
+            description: "Normal",
             milestones: [
                 {
-                    id: "milestone1",
+                    id: 1,
                     title: "Milestone 1",
                     estimatedEnd: "01.04.2024",
+                    description: "description",
                     isDone: true,
                 },
                 {
-                    id: "milestone2",
+                    id: 2,
                     title: "Milestone 2",
                     estimatedEnd: "06.04.2024",
+                    description: "description",
                     isDone: true,
                 },
                 {
-                    id: "milestone3",
+                    id: 3,
                     title: "Milestone 3",
                     estimatedEnd: "18.04.2024",
+                    description: "description",
                     isDone: false,
                 },
                 {
-                    id: "milestone4",
+                    id: 4,
                     title: "Milestone 4",
                     estimatedEnd: "22.04.2024",
+                    description: "description",
                     isDone: false,
                 },
             ],
+            users: [],
         },
         {
             id: 2,
             title: "Project 2",
             estimatedEnd: "2024-01-01",
             startDate: "2024-01-01",
-            description: "Lorem ipsum dolor sit amet.",
+            description: "Lorem ipsum",
             milestones: [
                 {
-                    id: "milestone1",
+                    id: 1,
                     title: "Milestone 1",
                     estimatedEnd: "01.04.2024",
+                    description: "description",
                     isDone: true,
                 },
                 {
-                    id: "milestone2",
+                    id: 2,
                     title: "Milestone 2",
                     estimatedEnd: "06.04.2024",
+                    description: "description",
                     isDone: true,
                 },
                 {
-                    id: "milestone3",
+                    id: 3,
                     title: "Milestone 3",
                     estimatedEnd: "18.04.2024",
+                    description: "description",
                     isDone: false,
                 },
             ],
+            users: [],
         },
         {
             id: 3,
             title: "Project 3",
             estimatedEnd: "2024-01-01",
             startDate: "2024-01-01",
-            description:
-                "Lorem ipsum dolor sit amet. Aliquam erat volutpat. Curabitur eu ante massa. Fusce nec felis id libero pretium vehicula. Vivamus lacinia sem vitae enim dictum, in ullamcorper elit ornare. Praesent tristique velit vel eros congue, at pellentesque eros vehicula. Ut ac est nunc. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Phasellus id ligula sed turpis sollicitudin dapibus. Sed luctus, mauris sit amet auctor aliquet, mi libero laoreet metus, non accumsan metus massa non nunc.",
+            description: "Normal",
             milestones: [],
+            users: [],
         },
         {
             id: 4,
             title: "Project 4",
             estimatedEnd: "2024-01-01",
             startDate: "2024-01-01",
-            description:
-                "Lorem ipsum dolor sit amet.Aliquam erat volutpat. Curabitur eu ante massa.Praesent tristique velit vel eros congue, at pellentesque eros vehicula. Ut ac est nunc. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. ",
+            description: "Normal",
             milestones: [
                 {
-                    id: "milestone1",
+                    id: 1,
                     title: "Milestone 1",
                     estimatedEnd: "01.04.2024",
+                    description: "description",
                     isDone: true,
                 },
                 {
-                    id: "milestone2",
+                    id: 2,
                     title: "Milestone 2",
                     estimatedEnd: "06.04.2024",
+                    description: "description",
                     isDone: true,
                 },
             ],
+            users: [],
         },
     ];
 
@@ -124,13 +137,29 @@ function ProjectCards() {
             const projectArray: ProjectObj[] = [];
             for (let index = 0; index < projectRespondsArray.length; index++) {
                 const project = projectRespondsArray[index];
+
+                const milestones: MilestoneObj[] = project.milestones
+                    .map((milestone) => {
+                        return {
+                            id: milestone.milestoneId,
+                            title: milestone.milestoneName,
+                            estimatedEnd: milestone.estimateDate?.split("T")[0] ?? "",
+                            description: milestone.description,
+                            isDone: milestone.isDone,
+                        };
+                    })
+                    .sort((a, b) => {
+                        return a.estimatedEnd.localeCompare(b.estimatedEnd);
+                    });
+
                 projectArray.push({
                     id: project.projectId,
                     title: project.projectName,
                     estimatedEnd: project.estimateDate,
                     startDate: project.startDate,
                     description: project.description,
-                    milestones: [],
+                    milestones: milestones,
+                    users: [],
                 });
             }
             console.log("json", json);
@@ -156,6 +185,12 @@ function ProjectCards() {
                                 deleteProject={() => {
                                     setSelectedProjectIndex(index);
                                 }}
+                                showMilestone={(milestone) => {
+                                    setSelectedMilestone(milestone);
+                                }}
+                                onMilestoneEvent={() => {
+                                    fetchAllProjects();
+                                }}
                             />
                         </div>
                     ))}
@@ -167,6 +202,7 @@ function ProjectCards() {
                     fetchAllProjects();
                 }}
             />
+            <MilestoneModal milestone={selectedMilestone} />
         </>
     );
 }

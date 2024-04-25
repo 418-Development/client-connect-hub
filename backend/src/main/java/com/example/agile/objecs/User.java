@@ -1,5 +1,8 @@
 package com.example.agile.objecs;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -33,6 +36,9 @@ public class User {
     @NotBlank
     @Size(max = 120)
     private String password;
+    @JsonBackReference
+    @ManyToMany(mappedBy = "users")
+    private Set<Project> projects;
 
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -84,4 +90,7 @@ public class User {
         this.roles = roles;
     }
 
+    public Set<Project> getProjects() {
+        return projects;
+    }
 }
