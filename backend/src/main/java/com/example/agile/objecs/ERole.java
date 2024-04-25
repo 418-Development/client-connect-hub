@@ -1,8 +1,8 @@
 package com.example.agile.objecs;
 
 public enum ERole {
-    ROLE_USER,
-    ROLE_MODERATOR,
-    ROLE_ADMIN
+    ROLE_CLIENT,
+    ROLE_TEAM,
+    ROLE_MANAGER
 }
 
