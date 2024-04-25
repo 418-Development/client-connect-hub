@@ -322,13 +322,13 @@ function ProjectCreation({ isEditing = false }: Props) {
                     </div>
                     <div className="m-3 d-flex justify-content-center align-items-center">
                         <Button
-                            kind="success"
+                            kind="secondary"
                             onClick={() => {
                                 navigate(`/project/${id}`);
                             }}
                         >
                             <i className="bi bi-arrow-left me-2"></i>
-                            Back
+                            Back to the Project
                         </Button>
                     </div>
                 </>

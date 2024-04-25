@@ -65,3 +65,7 @@
         max-width: 100%;
     }
 }
+
+.custom-client-color {
+    background-color: rgb(38, 23, 114) !important;
+}
