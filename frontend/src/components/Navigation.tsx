@@ -73,7 +73,7 @@ function Navigation() {
 
     return (
         <>
-            <nav className="navbar navbar-expand-lg bg-body-tertiary">
+            <nav className="navbar navbar-expand-lg  custom-client-color">
                 <div className="container-fluid justify-content-between">
                     <div className="d-flex align-items-center">
                         <img src={logo} alt="Logo" width="40" height="40" className="d-inline-block align-text-top logo" />
