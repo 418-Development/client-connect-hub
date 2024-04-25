@@ -5,7 +5,7 @@ function ManageUser() {
     const [allUsers, setAllUsers] = useState<UserObj[]>([]);
 
     useEffect(() => {
-        fetchUsers()
+        fetchUsers();
     }, []);
 
     const fetchUsers = async () => {
@@ -49,10 +49,10 @@ function ManageUser() {
                 "Content-Type": "application/json",
                 Authorization: localStorage.getItem("token") ?? "",
             },
-            body: JSON.stringify(
-                [role],
-            ),
+            body: JSON.stringify(role),
         });
+
+        console.log(url, response.ok, response.status);
 
         console.log(url, response.ok, response.status);
 

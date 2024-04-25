@@ -176,19 +176,17 @@ public class UserController {
         if (user == null){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("User not found"));
         }
-        Set<Role> listOfCurrentRole = user.getRoles();
-        if (roleId == 0){
-            listOfCurrentRole.add(new Role(ERole.ROLE_USER));
-        }
-        else if (roleId == 1){
-            listOfCurrentRole.add(new Role(ERole.ROLE_MODERATOR));
-        }
-        user.setRoles(listOfCurrentRole);
-        userRepository.save(user);
 
-        return ResponseEntity.ok(user.getProjects());
+        Set<Role> listOfCurrentRole = new HashSet<>();
+
+        Optional<Role> roleToAdd = roleRepository.findById(roleId);
+        if (roleToAdd.isPresent()) {
+            listOfCurrentRole.add(roleToAdd.get());
+            user.setRoles(listOfCurrentRole);
+            userRepository.save(user);
+            return ResponseEntity.ok(user.getProjects());
+        }
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("Invalid role ID"));
     }
-
-
-
 }
