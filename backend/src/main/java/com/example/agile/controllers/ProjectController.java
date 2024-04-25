@@ -188,6 +188,11 @@ public class ProjectController {
     @GetMapping("/all")
     public ResponseEntity<?> getAllProjects() {
         List<Project> projects = projectRepository.findAll();
+        projects.forEach(project -> {
+            List<Milestone> milestonesList = new ArrayList<>(project.getMilestones());
+            milestonesList.sort(Comparator.comparing(Milestone::getEstimateDate));
+            project.setMilestones(new HashSet<>(milestonesList));
+        });
         return ResponseEntity.ok(projects);
     }
 
@@ -195,7 +200,11 @@ public class ProjectController {
     public ResponseEntity<?> getProjectById(@PathVariable Long id) {
         Optional<Project> project = projectRepository.findById(id);
         if (project.isPresent()) {
-            return ResponseEntity.ok(project.get());
+            Project projectToReturn = project.get();
+            List<Milestone> milestonesList = new ArrayList<>(projectToReturn.getMilestones());
+            milestonesList.sort(Comparator.comparing(Milestone::getEstimateDate));
+            projectToReturn.setMilestones(new HashSet<>(milestonesList));
+            return ResponseEntity.ok(projectToReturn);
         } else {
             return ResponseEntity.notFound().build();
         }
