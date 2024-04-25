@@ -39,7 +39,7 @@ export function UserProvider({ children }: Props) {
                 const data = await response.json();
 
                 const userinfo = data as UserResponseObj;
-                const role = userinfo.roles[0].id as UserRole;
+                const role = (userinfo.roles[0]?.id as UserRole) ?? UserRole.CLIENT;
 
                 setUser({
                     id: userinfo.id,

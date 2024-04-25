@@ -63,7 +63,7 @@ function ProjectView() {
                     return {
                         id: user.id,
                         username: user.username,
-                        role: user.roles[0].id as UserRole,
+                        role: (user.roles[0]?.id as UserRole) ?? UserRole.CLIENT,
                         label: "M.I.A.",
                         email: user.email,
                     };
