@@ -76,7 +76,15 @@ function Navigation() {
             <nav className="navbar navbar-expand-lg  custom-client-color">
                 <div className="container-fluid justify-content-between">
                     <div className="d-flex align-items-center">
-                        <img src={logo} alt="Logo" width="40" height="40" className="d-inline-block align-text-top logo" />
+                        <img
+                            src={logo}
+                            alt="Logo"
+                            width="40"
+                            onClick={() => navigate("/")}
+                            height="40"
+                            style={{ cursor: "pointer" }}
+                            className="d-inline-block align-text-top mt-1 logo"
+                        />
                         <Button onClick={() => navigate("/")} kind="link" className="navbar-brand">
                             Client Connect Hub
                         </Button>

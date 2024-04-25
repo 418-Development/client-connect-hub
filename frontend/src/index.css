@@ -9,6 +9,7 @@
     --cch-timeline-color-bg: #ffffff;
     --cch-card-hover: #ececec;
     --cch-card-hover-2: #dbdbdb;
+    --ch-secondary-btn-text: #292c35;
 }
 
 .logo {
@@ -22,6 +23,7 @@
         --cch-timeline-color-bg: #ffffff;
         --cch-card-hover: #292c35;
         --cch-card-hover-2: #313641;
+        --ch-secondary-btn-text: #ececec;
     }
 
     .logo {
@@ -68,4 +70,8 @@
 
 .custom-client-color {
     background-color: rgb(38, 23, 114) !important;
+}
+
+.secondary-btn-text {
+    color: var(--ch-secondary-btn-text) !important;
 }

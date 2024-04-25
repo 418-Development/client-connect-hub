@@ -107,13 +107,15 @@ function UserAssignment({ project, onUserEvent }: Props) {
 
     return (
         <div>
-            <div className="dropdown-wrapper mt-0 mb-3">
+            <div className="dropdown-wrapper mt-0 mb-3 d-flex align-items-center">
                 <div className="btn-group dropend">
                     <Button
-                        className="btn btn-secondary dropdown-toggle"
+                        className="btn secondary-btn-text dropdown-toggle"
                         type="button"
                         id="roleSelect"
                         dataBsToggle="dropdown"
+                        outline
+                        kind="secondary"
                         ariaExpanded={false}
                     >
                         Filter by Role
@@ -136,7 +138,7 @@ function UserAssignment({ project, onUserEvent }: Props) {
                         </li>
                     </ul>
                 </div>
-                <label htmlFor="roleSelect" className="form-label ms-3 mb-0 mt-0">
+                <label htmlFor="roleSelect" className="form-label ms-3 mb-0">
                     {roleSearch == UserRole.MANAGER
                         ? "All"
                         : roleSearch == UserRole.CLIENT
@@ -146,55 +148,67 @@ function UserAssignment({ project, onUserEvent }: Props) {
                         : ""}
                 </label>
             </div>
-
-            {/* Div for already added users */}
-            <div>
-                <p>Current Participants</p>
-                {projectUsers
-                    .filter((user) => {
-                        if (roleSearch === UserRole.MANAGER) return true;
-                        return roleSearch === user.role || UserRole.MANAGER === user.role;
-                    })
-                    .map((user: UserObj) => (
-                        <div key={user.username} className="d-flex align-items-center">
-                            <div className="d-flex align-items-center" style={{ flex: 6 }}>
-                                <div className="col p-2">{user.username}</div>
-                                <div className="col p-2">{UserRole[user.role]}</div>
-                                <div className="col p-2">{user.label}</div>
-                            </div>
-                            <div className="d-flex justify-content-end" style={{ flex: 1 }}>
-                                {user.role !== UserRole.MANAGER && (
-                                    <Button outline kind="danger" className="ms-2 iconButton" onClick={() => removeUserFromProject(user)}>
-                                        <i className="bi bi-caret-down" style={{ fontSize: "1.2rem" }}></i>
-                                    </Button>
-                                )}
-                            </div>
+            <div className="card">
+                <div className="card-body">
+                    {/* Current Participants */}
+                    <div className="mb-4">
+                        <h5 className="card-title">Current Participants</h5>
+                        <div>
+                            {projectUsers
+                                .filter((user) => {
+                                    if (roleSearch === UserRole.MANAGER) return true;
+                                    return roleSearch === user.role || UserRole.MANAGER === user.role;
+                                })
+                                .map((user: UserObj) => (
+                                    <div key={user.username} className="d-flex align-items-center">
+                                        <div className="d-flex align-items-center" style={{ flex: 6 }}>
+                                            <div className="col p-2">{user.username}</div>
+                                            <div className="col p-2">{UserRole[user.role]}</div>
+                                            <div className="col p-2">{user.label}</div>
+                                        </div>
+                                        <div className="d-flex justify-content-end" style={{ flex: 1 }}>
+                                            {user.role !== UserRole.MANAGER && (
+                                                <Button
+                                                    outline
+                                                    kind="danger"
+                                                    className="ms-2 iconButton"
+                                                    onClick={() => removeUserFromProject(user)}
+                                                >
+                                                    <i className="bi bi-caret-down" style={{ fontSize: "1.2rem" }}></i>
+                                                </Button>
+                                            )}
+                                        </div>
+                                    </div>
+                                ))}
                         </div>
-                    ))}
-            </div>
-            <hr />
-            {/* Div for addable users */}
-            <div>
-                <p>Addable Participants</p>
-                {allUsers
-                    .filter((user) => {
-                        if (roleSearch === UserRole.MANAGER) return true;
-                        return roleSearch === user.role || UserRole.MANAGER === user.role;
-                    })
-                    .map((user: UserObj) => (
-                        <div key={user.username} className="d-flex align-items-center">
-                            <div className="d-flex align-items-center" style={{ flex: 6 }}>
-                                <div className="col p-2">{user.username}</div>
-                                <div className="col p-2">{UserRole[user.role]}</div>
-                                <div className="col p-2">{user.label}</div>
-                            </div>
-                            <div className="d-flex justify-content-end" style={{ flex: 1 }}>
-                                <Button outline kind="success" className="ms-2 iconButton" onClick={() => addUserToProject(user)}>
-                                    <i className="bi bi-caret-up" style={{ fontSize: "1.2rem" }}></i>
-                                </Button>
-                            </div>
+                    </div>
+                    <hr className="my-0" /> {/* Divider between sections */}
+                    {/* Addable Participants */}
+                    <div className="mt-4">
+                        <h5 className="card-title">Addable Participants</h5>
+                        <div>
+                            {allUsers
+                                .filter((user) => {
+                                    if (roleSearch === UserRole.MANAGER) return true;
+                                    return roleSearch === user.role || UserRole.MANAGER === user.role;
+                                })
+                                .map((user: UserObj) => (
+                                    <div key={user.username} className="d-flex align-items-center">
+                                        <div className="d-flex align-items-center" style={{ flex: 6 }}>
+                                            <div className="col p-2">{user.username}</div>
+                                            <div className="col p-2">{UserRole[user.role]}</div>
+                                            <div className="col p-2">{user.label}</div>
+                                        </div>
+                                        <div className="d-flex justify-content-end" style={{ flex: 1 }}>
+                                            <Button outline kind="success" className="ms-2 iconButton" onClick={() => addUserToProject(user)}>
+                                                <i className="bi bi-caret-up" style={{ fontSize: "1.2rem" }}></i>
+                                            </Button>
+                                        </div>
+                                    </div>
+                                ))}
                         </div>
-                    ))}
+                    </div>
+                </div>
             </div>
         </div>
     );

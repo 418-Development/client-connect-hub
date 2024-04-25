@@ -34,7 +34,7 @@ function MarkdownEditor({ value, onValueChanged, label, maxLength = 15000 }: Pro
                     <Button
                         type="button"
                         kind={showPreview ? "secondary" : "success"}
-                        style={{ borderRadius: 0 }}
+                        style={{ borderRadius: 0, padding: "2px 10px", fontSize: "0.85rem" }}
                         onClick={() => {
                             setShowPreview(false);
                         }}
@@ -45,7 +45,7 @@ function MarkdownEditor({ value, onValueChanged, label, maxLength = 15000 }: Pro
                     <Button
                         type="button"
                         kind={showPreview ? "success" : "secondary"}
-                        style={{ borderRadius: 0 }}
+                        style={{ borderRadius: 0, padding: "2px 10px", fontSize: "0.85rem" }}
                         onClick={() => {
                             setShowPreview(true);
                         }}
