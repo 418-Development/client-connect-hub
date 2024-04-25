@@ -187,8 +187,21 @@ public class ProjectController {
 
     @GetMapping("/all")
     public ResponseEntity<?> getAllProjects() {
-        List<Project> projects = projectRepository.findAll();
-        return ResponseEntity.ok(projects);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated() || !(authentication.getPrincipal() instanceof UserDetails userDetails)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new MessageResponse("Unauthorized"));
+        }
+
+        User currentUser = userRepository.findByUsername(userDetails.getUsername()).orElse(null);
+        if (currentUser == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new MessageResponse("User not found"));
+        }
+
+        if(currentUser.getRoles().stream().anyMatch(role -> role.getName() == ERole.ROLE_ADMIN || role.getName() == ERole.ROLE_MODERATOR)){
+            return ResponseEntity.ok(projectRepository.findAll());
+        }
+
+        return ResponseEntity.ok(currentUser.getProjects());
     }
 
     @GetMapping("/get/{id}")
