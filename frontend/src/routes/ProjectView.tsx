@@ -58,21 +58,22 @@ function ProjectView() {
                     return a.estimatedEnd.localeCompare(b.estimatedEnd);
                 });
 
-            const userArray: UserObj[] = projectResponse.users
-                .map((user) => {
-                    return {
-                        id: user.id,
-                        username: user.username,
-                        role: (user.roles[0]?.id as UserRole) ?? UserRole.CLIENT,
-                        label: "M.I.A.",
-                        email: user.email,
-                    };
-                })
-                .sort((a, b) => {
-                    if (a.role === b.role) return a.username.localeCompare(b.username);
-                    if (a.role < b.role) return 1;
-                    return -1;
-                });
+            const userArray: UserObj[] =
+                projectResponse.users
+                    ?.map((user) => {
+                        return {
+                            id: user.id,
+                            username: user.username,
+                            role: (user.roles[0]?.id as UserRole) ?? UserRole.CLIENT,
+                            label: "M.I.A.",
+                            email: user.email,
+                        };
+                    })
+                    .sort((a, b) => {
+                        if (a.role === b.role) return a.username.localeCompare(b.username);
+                        if (a.role < b.role) return 1;
+                        return -1;
+                    }) ?? [];
 
             const curProject = {
                 id: projectResponse.projectId,
