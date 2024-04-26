@@ -32,7 +32,7 @@ function ManageUser() {
                 "Content-Type": "application/json",
                 Authorization: localStorage.getItem("token") ?? "",
             },
-            body: JSON.stringify([role]),
+            body: JSON.stringify(role),
         });
 
         if (response.ok) {
