@@ -1,16 +1,17 @@
 import { useState, useRef, useEffect, useContext } from "react";
 import ProgressBar from "../components/ProgressBar";
 import Timeline from "../components/Timeline";
-import { ProjectObj, ProjectRespondsObj } from "../interfaces/Project";
+import { ProjectObj } from "../interfaces/Project";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import Button from "../components/Button";
 import { UserContext } from "../UserContext";
-import { UserObj, UserRole } from "../interfaces/UserObj";
+import { UserRole } from "../interfaces/UserObj";
 import { useNavigate, useParams } from "react-router-dom";
 import DeleteProjectModal from "../components/DeleteProjectModal";
 import Markdown from "../components/Markdown";
 import { MilestoneObj } from "../interfaces/Milestone";
 import MilestoneModal from "../components/MilestoneModal";
+import { fetchProject } from "../utils/project";
 
 function ProjectView() {
     const userInfo = useContext(UserContext);
@@ -26,67 +27,16 @@ function ProjectView() {
     const [selectedMilestone, setSelectedMilestone] = useState<MilestoneObj | null>(null);
 
     useEffect(() => {
-        if (id !== undefined) fetchProject(id);
+        if (id !== undefined) reloadProject(id);
     }, [id]);
 
-    const fetchProject = async (projectId: number | string) => {
-        const url = (import.meta.env.VITE_API_URL as string) + `projects/get/${projectId}`;
-
-        const response = await fetch(url, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: localStorage.getItem("token") ?? "",
-            },
-        });
-
-        if (response.ok) {
-            const json = await response.json();
-            const projectResponse = json as ProjectRespondsObj;
-
-            const milestones: MilestoneObj[] = projectResponse.milestones
-                .map((milestone) => {
-                    return {
-                        id: milestone.milestoneId,
-                        title: milestone.milestoneName,
-                        estimatedEnd: milestone.estimateDate?.split("T")[0] ?? "",
-                        description: milestone.description,
-                        isDone: milestone.isDone,
-                    };
-                })
-                .sort((a, b) => {
-                    return a.estimatedEnd.localeCompare(b.estimatedEnd);
-                });
-
-            const userArray: UserObj[] =
-                projectResponse.users
-                    ?.map((user) => {
-                        return {
-                            id: user.id,
-                            username: user.username,
-                            role: (user.roles[0]?.id as UserRole) ?? UserRole.CLIENT,
-                            label: "M.I.A.",
-                            email: user.email,
-                        };
-                    })
-                    .sort((a, b) => {
-                        if (a.role === b.role) return a.username.localeCompare(b.username);
-                        if (a.role < b.role) return 1;
-                        return -1;
-                    }) ?? [];
-
-            const curProject = {
-                id: projectResponse.projectId,
-                title: projectResponse.projectName,
-                estimatedEnd: projectResponse.estimateDate.split("T")[0],
-                startDate: projectResponse.startDate.split("T")[0],
-                description: projectResponse.description,
-                milestones: milestones,
-                users: userArray,
-            };
-            setProject(curProject);
-        } else {
-            setProject(null);
+    const reloadProject = async (projectId: number | string) => {
+        try {
+            const project = await fetchProject(projectId);
+            setProject(project);
+        } catch (error) {
+            console.log(error);
+            navigate("/");
         }
     };
 
@@ -202,7 +152,7 @@ function ProjectView() {
                                                 setSelectedMilestone(milestone);
                                             }}
                                             onMilestoneEvent={() => {
-                                                if (id) fetchProject(id);
+                                                if (id) reloadProject(id);
                                             }}
                                         />
                                     </div>

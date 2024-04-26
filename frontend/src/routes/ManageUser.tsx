@@ -1,42 +1,23 @@
 import { useEffect, useState } from "react";
 import { UserObj, UserResponseObj, UserRole } from "../interfaces/UserObj";
+import { fetchAllUsers } from "../utils/user";
+import { useNavigate } from "react-router-dom";
 
 function ManageUser() {
+    const navigate = useNavigate();
     const [allUsers, setAllUsers] = useState<UserObj[]>([]);
 
     useEffect(() => {
-        fetchUsers()
+        reloadAllUsers();
     }, []);
 
-    const fetchUsers = async () => {
-        const url = (import.meta.env.VITE_API_URL as string) + "users/all";
-
-        const response = await fetch(url, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: localStorage.getItem("token") ?? "",
-            },
-        });
-
-        console.log(url, response.ok, response.status);
-
-        if (response.ok) {
-            const json = await response.json();
-            const userResponseArray = json as UserResponseObj[];
-            const userArray: UserObj[] = [];
-            for (let index = 0; index < userResponseArray.length; index++) {
-                const user = userResponseArray[index];
-                userArray.push({
-                    id: user.id,
-                    username: user.username,
-                    role: user.roles[0].id as UserRole,
-                    label: "M.I.A.",
-                    email: user.email,
-                });
-            }
-
-            setAllUsers(userArray);
+    const reloadAllUsers = async () => {
+        try {
+            const allUser = await fetchAllUsers();
+            setAllUsers(allUser);
+        } catch (error) {
+            console.log(error);
+            navigate("/");
         }
     };
 
@@ -49,15 +30,13 @@ function ManageUser() {
                 "Content-Type": "application/json",
                 Authorization: localStorage.getItem("token") ?? "",
             },
-            body: JSON.stringify(
-                [role],
-            ),
+            body: JSON.stringify([role]),
         });
 
         console.log(url, response.ok, response.status);
 
         if (response.ok) {
-            fetchUsers();
+            reloadAllUsers();
         }
     };
 

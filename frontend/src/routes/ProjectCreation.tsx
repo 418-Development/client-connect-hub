@@ -5,9 +5,8 @@ import { UserContext } from "../UserContext";
 import UserAssignment from "../components/UserAssignment";
 import { ProjectObj, ProjectRespondsObj } from "../interfaces/Project";
 import EditMilestones from "../components/EditMilestones";
-import { UserObj, UserRole } from "../interfaces/UserObj";
-import { MilestoneObj } from "../interfaces/Milestone";
 import MarkdownEditor from "../components/MarkdownEditor";
+import { fetchProject } from "../utils/project";
 
 interface Props {
     isEditing?: boolean;
@@ -26,77 +25,22 @@ function ProjectCreation({ isEditing = false }: Props) {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (id !== undefined) fetchProjects(id);
+        if (id !== undefined) reloadProject(id);
     }, [id]);
 
-    const fetchProjects = async (projectId: number | string) => {
-        const url = (import.meta.env.VITE_API_URL as string) + `projects/get/${projectId}`;
-
-        const response = await fetch(url, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: localStorage.getItem("token") ?? "",
-            },
-        });
-
-        if (response.ok) {
-            const json = await response.json();
-            const projectResponse = json as ProjectRespondsObj;
-
-            console.log(projectResponse);
-            const milestones: MilestoneObj[] = projectResponse.milestones
-                .map((milestone) => {
-                    return {
-                        id: milestone.milestoneId,
-                        title: milestone.milestoneName,
-                        estimatedEnd: milestone.estimateDate.split("T")[0],
-                        description: milestone.description,
-                        isDone: milestone.isDone,
-                    };
-                })
-                .sort((a, b) => {
-                    return a.estimatedEnd.localeCompare(b.estimatedEnd);
-                });
-
-            // Generate UserObj Array from ProjectResponseObj
-            const userArray: UserObj[] =
-                projectResponse.users
-                    ?.map((user) => {
-                        return {
-                            id: user.id,
-                            username: user.username,
-                            role: (user.roles[0]?.id as UserRole) ?? UserRole.CLIENT,
-                            label: "M.I.A.",
-                            email: user.email,
-                        };
-                    })
-                    .sort((a, b) => {
-                        if (a.role === b.role) return a.username.localeCompare(b.username);
-                        if (a.role < b.role) return 1;
-                        return -1;
-                    }) ?? [];
-
-            // Create current Project with data from the ProjectResponseObj
-            const curProject = {
-                id: projectResponse.projectId,
-                title: projectResponse.projectName,
-                estimatedEnd: projectResponse.estimateDate,
-                startDate: projectResponse.startDate,
-                description: projectResponse.description,
-                users: userArray,
-                milestones: milestones,
-            };
+    const reloadProject = async (projectId: number | string) => {
+        try {
+            const curProject = await fetchProject(projectId);
             setProject(curProject);
-
             if (curProject) {
                 setTitle(curProject.title);
                 setDescription(curProject.description);
-                setStartDate(curProject.startDate.split("T")[0]);
-                setEndDate(curProject.estimatedEnd.split("T")[0]);
+                setStartDate(curProject.startDate);
+                setEndDate(curProject.estimatedEnd);
             }
-        } else {
-            setProject(null);
+        } catch (error) {
+            console.log(error);
+            navigate("/");
         }
     };
 
@@ -293,7 +237,7 @@ function ProjectCreation({ isEditing = false }: Props) {
                                     <UserAssignment
                                         project={project}
                                         onUserEvent={() => {
-                                            fetchProjects(project.id);
+                                            reloadProject(project.id);
                                         }}
                                     />
                                 )}
@@ -317,7 +261,7 @@ function ProjectCreation({ isEditing = false }: Props) {
                                 <EditMilestones
                                     project={project}
                                     onMilestoneEvent={() => {
-                                        fetchProjects(project.id);
+                                        reloadProject(project.id);
                                     }}
                                 />
                             )}
