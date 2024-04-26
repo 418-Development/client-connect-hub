@@ -4,6 +4,7 @@ export interface MilestoneObj {
     description: string;
     estimatedEnd: string;
     isDone: boolean;
+    createdDate: string;
 }
 
 export interface MilestoneResponseObj {

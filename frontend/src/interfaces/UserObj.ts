@@ -12,6 +12,7 @@ export interface UserResponseObj {
     roles: { id: number; name: string }[];
     password: string;
     email: string;
+    label: string;
 }
 
 export enum UserRole {

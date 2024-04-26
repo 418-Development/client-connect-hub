@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { ProjectObj, ProjectRespondsObj } from "../interfaces/Project";
+import { ProjectObj } from "../interfaces/Project";
 import ProjectCard from "./ProjectCard";
 import DeleteProjectModal from "./DeleteProjectModal";
 import { MilestoneObj } from "../interfaces/Milestone";
 import MilestoneModal from "./MilestoneModal";
+import { fetchAllProjects } from "../utils/project";
 
 function ProjectCards() {
     const [projects, setProjects] = useState<ProjectObj[]>([]);
@@ -23,6 +24,7 @@ function ProjectCards() {
                     estimatedEnd: "01.04.2024",
                     description: "description",
                     isDone: true,
+                    createdDate: "01.04.2024",
                 },
                 {
                     id: 2,
@@ -30,6 +32,7 @@ function ProjectCards() {
                     estimatedEnd: "06.04.2024",
                     description: "description",
                     isDone: true,
+                    createdDate: "01.04.2024",
                 },
                 {
                     id: 3,
@@ -37,6 +40,7 @@ function ProjectCards() {
                     estimatedEnd: "18.04.2024",
                     description: "description",
                     isDone: false,
+                    createdDate: "01.04.2024",
                 },
                 {
                     id: 4,
@@ -44,6 +48,7 @@ function ProjectCards() {
                     estimatedEnd: "22.04.2024",
                     description: "description",
                     isDone: false,
+                    createdDate: "01.04.2024",
                 },
             ],
             users: [],
@@ -61,6 +66,7 @@ function ProjectCards() {
                     estimatedEnd: "01.04.2024",
                     description: "description",
                     isDone: true,
+                    createdDate: "01.04.2024",
                 },
                 {
                     id: 2,
@@ -68,6 +74,7 @@ function ProjectCards() {
                     estimatedEnd: "06.04.2024",
                     description: "description",
                     isDone: true,
+                    createdDate: "01.04.2024",
                 },
                 {
                     id: 3,
@@ -75,6 +82,7 @@ function ProjectCards() {
                     estimatedEnd: "18.04.2024",
                     description: "description",
                     isDone: false,
+                    createdDate: "01.04.2024",
                 },
             ],
             users: [],
@@ -101,6 +109,7 @@ function ProjectCards() {
                     estimatedEnd: "01.04.2024",
                     description: "description",
                     isDone: true,
+                    createdDate: "01.04.2024",
                 },
                 {
                     id: 2,
@@ -108,6 +117,7 @@ function ProjectCards() {
                     estimatedEnd: "06.04.2024",
                     description: "description",
                     isDone: true,
+                    createdDate: "01.04.2024",
                 },
             ],
             users: [],
@@ -115,57 +125,17 @@ function ProjectCards() {
     ];
 
     useEffect(() => {
-        fetchAllProjects();
+        reloadProjects();
     }, []);
 
-    const fetchAllProjects = async () => {
-        const url = (import.meta.env.VITE_API_URL as string) + "projects/all";
-
-        const response = await fetch(url, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: localStorage.getItem("token") ?? "",
-            },
-        });
-
-        console.log(url, response.ok, response.status);
-
-        if (response.ok) {
-            const json = await response.json();
-            const projectRespondsArray = json as ProjectRespondsObj[];
-            const projectArray: ProjectObj[] = [];
-            for (let index = 0; index < projectRespondsArray.length; index++) {
-                const project = projectRespondsArray[index];
-
-                const milestones: MilestoneObj[] = project.milestones
-                    .map((milestone) => {
-                        return {
-                            id: milestone.milestoneId,
-                            title: milestone.milestoneName,
-                            estimatedEnd: milestone.estimateDate?.split("T")[0] ?? "",
-                            description: milestone.description,
-                            isDone: milestone.isDone,
-                        };
-                    })
-                    .sort((a, b) => {
-                        return a.estimatedEnd.localeCompare(b.estimatedEnd);
-                    });
-
-                projectArray.push({
-                    id: project.projectId,
-                    title: project.projectName,
-                    estimatedEnd: project.estimateDate,
-                    startDate: project.startDate,
-                    description: project.description,
-                    milestones: milestones,
-                    users: [],
-                });
-            }
-            console.log("json", json);
-            console.log("projectArray", projectArray);
-            setProjects(projectArray);
-        } else {
+    const reloadProjects = async () => {
+        try {
+            const projects = await fetchAllProjects();
+            setProjects(projects);
+        } catch (error) {
+            /* eslint-disable no-console */
+            console.error(error);
+            /* eslint-enable no-console */
             if (import.meta.env.VITE_DEBUG) {
                 setProjects(debugProjects);
             } else {
@@ -189,7 +159,7 @@ function ProjectCards() {
                                     setSelectedMilestone(milestone);
                                 }}
                                 onMilestoneEvent={() => {
-                                    fetchAllProjects();
+                                    reloadProjects();
                                 }}
                             />
                         </div>
@@ -199,7 +169,7 @@ function ProjectCards() {
             <DeleteProjectModal
                 project={projects[selectedProjectIndex]}
                 onDeletion={() => {
-                    fetchAllProjects();
+                    reloadProjects();
                 }}
             />
             <MilestoneModal milestone={selectedMilestone} />
