@@ -1,7 +1,6 @@
 import { useContext } from "react";
 import { Route, Routes } from "react-router-dom";
 import Navigation from "./components/Navigation";
-import DebugTimeline from "./routes/DebugTimeline";
 import ProjectCreation from "./routes/ProjectCreation";
 import { UserContext } from "./UserContext";
 import ManageUser from "./routes/ManageUser";
@@ -19,7 +18,6 @@ function App() {
                 {/* Routes only the manager can visit */}
                 {userInfo?.role === UserRole.MANAGER ? (
                     <>
-                        <Route path="/debug/timeline" element={<DebugTimeline />} />
                         <Route path="/manage-user" element={<ManageUser />} />
                         <Route path="/create-project" element={<ProjectCreation />} />
                         <Route path="/edit-project/:id" element={<ProjectCreation isEditing />} />
