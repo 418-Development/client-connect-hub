@@ -4,7 +4,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import com.example.agile.objecs.ERole;
-import com.example.agile.objecs.Project;
 import com.example.agile.objecs.Role;
 import com.example.agile.objecs.User;
 import com.example.agile.payload.request.LoginRequest;
@@ -13,7 +12,6 @@ import com.example.agile.payload.response.JwtResponse;
 import com.example.agile.payload.response.MessageResponse;
 import com.example.agile.repositories.RoleRepo;
 import com.example.agile.repositories.UserRepo;
-import com.example.agile.security.AuthEntryPointJwt;
 import com.example.agile.security.JwtUtils;
 import com.example.agile.security.UserDetailsImpl;
 import jakarta.validation.Valid;
@@ -94,26 +92,26 @@ public class UserController {
         Set<Role> roles = new HashSet<>();
 
         if (strRoles == null) {
-            Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+            Role userRole = roleRepository.findByName(ERole.ROLE_CLIENT)
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
             roles.add(userRole);
         } else {
             strRoles.forEach(role -> {
                 switch (role) {
                     case "admin":
-                        Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
+                        Role adminRole = roleRepository.findByName(ERole.ROLE_MANAGER)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                         roles.add(adminRole);
 
                         break;
                     case "mod":
-                        Role modRole = roleRepository.findByName(ERole.ROLE_MODERATOR)
+                        Role modRole = roleRepository.findByName(ERole.ROLE_TEAM)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                         roles.add(modRole);
 
                         break;
                     default:
-                        Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+                        Role userRole = roleRepository.findByName(ERole.ROLE_CLIENT)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                         roles.add(userRole);
                 }
@@ -165,7 +163,7 @@ public class UserController {
         }
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_MANAGER')")
     @PostMapping("/set/{user_id}")
     public ResponseEntity<?> setUserRoles(@PathVariable Long user_id,@RequestBody Long roleId){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

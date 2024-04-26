@@ -54,7 +54,7 @@ public class MilestoneController {
     JwtUtils jwtUtils;
 
     @PostMapping("/{project_id}/create-milestone")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_MANAGER')")
     public ResponseEntity<?> createMilestone(@PathVariable Long project_id,@Valid @RequestBody Milestone milestone) {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -69,7 +69,7 @@ public class MilestoneController {
             }
 
             // Check if the user has the necessary role to create projects
-            if (!currentUser.getRoles().stream().anyMatch(role -> role.getName() == ERole.ROLE_ADMIN)) {
+            if (!currentUser.getRoles().stream().anyMatch(role -> role.getName() == ERole.ROLE_MANAGER)) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new MessageResponse("User does not have permission to create projects"));
             }
             Project project = projectRepository.findById(project_id).orElse(null);
@@ -117,7 +117,7 @@ public class MilestoneController {
     }
 
     @PutMapping("/update-milestone/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_MANAGER')")
     public ResponseEntity<?> updateMilestone(@PathVariable Long id, @Valid @RequestBody Milestone milestoneDetails) {
 
         Optional<Milestone> optionalMilestone = milestoneRepo.findById(id);
@@ -136,7 +136,7 @@ public class MilestoneController {
     }
 
     @DeleteMapping("/delete-milestone/{project_id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_MANAGER')")
     public ResponseEntity<?> deleteMilestone(@PathVariable Long project_id,@RequestBody Long id) {
         Optional<Milestone> optionalMilestone = milestoneRepo.findById(id);
         Optional<Project> tempProject = projectRepository.findById(project_id);
@@ -155,7 +155,7 @@ public class MilestoneController {
     }
 
     @PutMapping("/milestone-status/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_MANAGER')")
     public ResponseEntity<?> updateMilestoneStatus(@PathVariable Long id, @RequestBody Boolean isComplete) {
         Optional<Milestone> optionalMilestone = milestoneRepo.findById(id);
         if (optionalMilestone.isPresent()) {
