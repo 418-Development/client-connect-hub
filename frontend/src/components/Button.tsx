@@ -2,7 +2,7 @@ import { ReactNode, forwardRef } from "react";
 
 interface Props {
     children?: ReactNode;
-    kind?: "primary" | "secondary" | "success" | "danger" | "warning" | "info" | "light" | "dark" | "link" | "close";
+    kind?: "primary" | "secondary" | "success" | "danger" | "warning" | "info" | "light" | "dark" | "link" | "close" | "none";
     outline?: boolean;
     type?: "button" | "submit";
     style?: React.CSSProperties;
@@ -56,7 +56,7 @@ const Button = forwardRef<HTMLButtonElement, Props>(
                 id={id}
                 aria-expanded={ariaExpanded}
                 data-bs-toggle={dataBsToggle}
-                className={`${kind != "close" ? "btn " : ""}btn-${outline ? "outline-" : ""}${kind} ${className}`}
+                className={`${kind != "close" && "btn "}btn-${outline ? "outline-" : ""}${kind} ${className}`}
                 onClick={onClick}
                 {...additionalProps}
             >
