@@ -39,7 +39,9 @@ function ProjectCreation({ isEditing = false }: Props) {
                 setEndDate(curProject.estimatedEnd);
             }
         } catch (error) {
-            console.log(error);
+            /* eslint-disable no-console */
+            console.error(error);
+            /* eslint-enable no-console */
             navigate("/");
         }
     };
@@ -73,12 +75,8 @@ function ProjectCreation({ isEditing = false }: Props) {
             }),
         });
 
-        console.log(url, response.ok, response.status);
-
         if (response.ok) {
             const json = await response.json();
-            console.log("json", json);
-
             const project = json as ProjectRespondsObj;
 
             navigate(`/edit-project/${project.projectId}`);

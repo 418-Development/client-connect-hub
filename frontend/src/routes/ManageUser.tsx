@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { UserObj, UserResponseObj, UserRole } from "../interfaces/UserObj";
+import { UserObj, UserRole } from "../interfaces/UserObj";
 import { fetchAllUsers } from "../utils/user";
 import { useNavigate } from "react-router-dom";
 
@@ -16,7 +16,9 @@ function ManageUser() {
             const allUser = await fetchAllUsers();
             setAllUsers(allUser);
         } catch (error) {
-            console.log(error);
+            /* eslint-disable no-console */
+            console.error(error);
+            /* eslint-enable no-console */
             navigate("/");
         }
     };
@@ -32,8 +34,6 @@ function ManageUser() {
             },
             body: JSON.stringify([role]),
         });
-
-        console.log(url, response.ok, response.status);
 
         if (response.ok) {
             reloadAllUsers();

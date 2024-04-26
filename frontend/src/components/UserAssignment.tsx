@@ -25,7 +25,9 @@ function UserAssignment({ project, onUserEvent }: Props) {
             const allUser = await fetchAllUsers();
             setAllUsers(allUser.filter((user) => !project.users.some((projectUser) => projectUser.id === user.id)));
         } catch (error) {
-            console.log(error);
+            /* eslint-disable no-console */
+            console.error(error);
+            /* eslint-enable no-console */
             setAllUsers([]);
         }
     };

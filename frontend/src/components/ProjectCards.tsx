@@ -133,7 +133,9 @@ function ProjectCards() {
             const projects = await fetchAllProjects();
             setProjects(projects);
         } catch (error) {
-            console.log(error);
+            /* eslint-disable no-console */
+            console.error(error);
+            /* eslint-enable no-console */
             if (import.meta.env.VITE_DEBUG) {
                 setProjects(debugProjects);
             } else {

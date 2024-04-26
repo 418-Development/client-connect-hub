@@ -61,12 +61,9 @@ function Navigation() {
             setIsLoginInvalid(true);
             setPassword("");
         }
-
-        console.log(url, response.ok, response.status);
     };
 
     const signOut = async () => {
-        console.log("signOut");
         localStorage.removeItem("token");
         updateUserInfo();
     };

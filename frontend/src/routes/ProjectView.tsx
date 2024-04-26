@@ -35,7 +35,9 @@ function ProjectView() {
             const project = await fetchProject(projectId);
             setProject(project);
         } catch (error) {
-            console.log(error);
+            /* eslint-disable no-console */
+            console.error(error);
+            /* eslint-enable no-console */
             navigate("/");
         }
     };
@@ -70,13 +72,11 @@ function ProjectView() {
     }, []);
 
     const handleResize = () => {
-        console.log("contentRef.current", contentRef.current);
         if (contentRef.current) {
             const contentHeight = contentRef.current.scrollHeight;
             const containerHeight = contentRef.current.clientHeight;
             const overflowThreshold = 10;
             setHasOverflow(contentHeight - containerHeight > overflowThreshold);
-            console.log("setHasOverflow", contentHeight - containerHeight > overflowThreshold);
         }
     };
 
