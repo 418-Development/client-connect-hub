@@ -5,7 +5,7 @@ import { ProjectObj, ProjectRespondsObj } from "../interfaces/Project";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import Button from "../components/Button";
 import { UserContext } from "../UserContext";
-import { UserRole } from "../interfaces/UserObj";
+import { UserObj, UserRole } from "../interfaces/UserObj";
 import { useNavigate, useParams } from "react-router-dom";
 import DeleteProjectModal from "../components/DeleteProjectModal";
 import Markdown from "../components/Markdown";
@@ -58,6 +58,23 @@ function ProjectView() {
                     return a.estimatedEnd.localeCompare(b.estimatedEnd);
                 });
 
+            const userArray: UserObj[] =
+                projectResponse.users
+                    ?.map((user) => {
+                        return {
+                            id: user.id,
+                            username: user.username,
+                            role: (user.roles[0]?.id as UserRole) ?? UserRole.CLIENT,
+                            label: "M.I.A.",
+                            email: user.email,
+                        };
+                    })
+                    .sort((a, b) => {
+                        if (a.role === b.role) return a.username.localeCompare(b.username);
+                        if (a.role < b.role) return 1;
+                        return -1;
+                    }) ?? [];
+
             const curProject = {
                 id: projectResponse.projectId,
                 title: projectResponse.projectName,
@@ -65,31 +82,13 @@ function ProjectView() {
                 startDate: projectResponse.startDate.split("T")[0],
                 description: projectResponse.description,
                 milestones: milestones,
-                users: [],
+                users: userArray,
             };
             setProject(curProject);
         } else {
             setProject(null);
         }
     };
-
-    const clients = [
-        { id: 1, name: "Marc Beyer", label: "haha" },
-        { id: 2, name: "Felix Held", label: "haha" },
-        { id: 3, name: "Robert Soumagne", label: "hahaha" },
-        { id: 4, name: "Marc Beyer", label: "haha" },
-        { id: 5, name: "Felix Held", label: "haha" },
-        { id: 6, name: "Robert Soumagne", label: "hahaha" },
-        // Add more clients as needed
-    ];
-
-    // Dummy data for developers
-    const developers = [
-        { id: 1, name: "John Doe", label: "Frontend" },
-        { id: 2, name: "Jane Smith", label: "Backend" },
-        { id: 3, name: "Steve Brown", label: "Fullstack" },
-        // Add more developers as needed
-    ];
 
     const toggleExpand = () => {
         setIsExpanded(!isExpanded);
@@ -216,45 +215,49 @@ function ProjectView() {
                                     <div className="mb-3">
                                         <h3>Client</h3>
                                         <div className="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4">
-                                            {clients.map((client) => (
-                                                <div key={client.id} className="col">
-                                                    <div className="card">
-                                                        <div className="card-header text-truncate" style={{ padding: "0.4rem" }}>
-                                                            {client.name}
-                                                        </div>
-                                                        <div className="card-body" style={{ padding: "0.4rem" }}>
-                                                            <p
-                                                                className="card-text text-truncate"
-                                                                style={{ fontSize: "0.8em", lineHeight: "1.2", marginBottom: "0" }}
-                                                            >
-                                                                {client.label}
-                                                            </p>
+                                            {project?.users
+                                                .filter((user) => user.role === UserRole.CLIENT)
+                                                .map((client) => (
+                                                    <div key={client.id} className="col">
+                                                        <div className="card">
+                                                            <div className="card-header text-truncate" style={{ padding: "0.4rem" }}>
+                                                                {client.username}
+                                                            </div>
+                                                            <div className="card-body" style={{ padding: "0.4rem" }}>
+                                                                <p
+                                                                    className="card-text text-truncate"
+                                                                    style={{ fontSize: "0.8em", lineHeight: "1.2", marginBottom: "0" }}
+                                                                >
+                                                                    {client.label}
+                                                                </p>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            ))}
+                                                ))}
                                         </div>
                                     </div>
                                     <div>
                                         <h3>Developer</h3>
                                         <div className="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4">
-                                            {developers.map((developer) => (
-                                                <div key={developer.id} className="col">
-                                                    <div className="card">
-                                                        <div className="card-header text-truncate" style={{ padding: "0.4rem" }}>
-                                                            {developer.name}
-                                                        </div>
-                                                        <div className="card-body" style={{ padding: "0.4rem" }}>
-                                                            <p
-                                                                className="card-text text-truncate"
-                                                                style={{ fontSize: "0.8em", lineHeight: "1.2", marginBottom: "0" }}
-                                                            >
-                                                                {developer.label}
-                                                            </p>
+                                            {project?.users
+                                                .filter((user) => user.role === UserRole.TEAM || user.role === UserRole.MANAGER)
+                                                .map((developer) => (
+                                                    <div key={developer.id} className="col">
+                                                        <div className="card">
+                                                            <div className="card-header text-truncate" style={{ padding: "0.4rem" }}>
+                                                                {developer.username}
+                                                            </div>
+                                                            <div className="card-body" style={{ padding: "0.4rem" }}>
+                                                                <p
+                                                                    className="card-text text-truncate"
+                                                                    style={{ fontSize: "0.8em", lineHeight: "1.2", marginBottom: "0" }}
+                                                                >
+                                                                    {developer.label}
+                                                                </p>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            ))}
+                                                ))}
                                         </div>
                                     </div>
                                 </div>

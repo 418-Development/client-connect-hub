@@ -2,7 +2,6 @@ package com.example.agile.controllers;
 
 
 import com.example.agile.objecs.*;
-import com.example.agile.payload.request.SignupRequest;
 import com.example.agile.payload.response.MessageResponse;
 import com.example.agile.repositories.ProjectRepo;
 import com.example.agile.repositories.RoleRepo;
@@ -51,7 +50,7 @@ public class ProjectController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @PostMapping("/create-project")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_MANAGER')")
     public ResponseEntity<?> createProject(@Valid @RequestBody Project project) {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -66,7 +65,7 @@ public class ProjectController {
             }
 
             // Check if the user has the necessary role to create projects
-            if (!currentUser.getRoles().stream().anyMatch(role -> role.getName() == ERole.ROLE_ADMIN)) {
+            if (!currentUser.getRoles().stream().anyMatch(role -> role.getName() == ERole.ROLE_MANAGER)) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new MessageResponse("User does not have permission to create projects"));
             }
             project.setCreatorId(currentUser.getId());
@@ -81,7 +80,7 @@ public class ProjectController {
 
 
     @DeleteMapping("/delete-project/{projectId}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_MANAGER')")
     public ResponseEntity<?> deleteProject(@PathVariable Long projectId) {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -101,7 +100,7 @@ public class ProjectController {
             if (currentUser == null) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new MessageResponse("User not found"));
             }
-            if (!currentUser.getRoles().stream().anyMatch(role -> role.getName() == ERole.ROLE_ADMIN)) {
+            if (!currentUser.getRoles().stream().anyMatch(role -> role.getName() == ERole.ROLE_MANAGER)) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new MessageResponse("User does not have permission to delete projects"));
             }
 
@@ -115,7 +114,7 @@ public class ProjectController {
     }
 
     @PutMapping("/update-project/{projectId}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_MANAGER')")
     public ResponseEntity<?> updateProject(@PathVariable Long projectId, @Valid @RequestBody Project projectDetails) {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -135,7 +134,7 @@ public class ProjectController {
             if (currentUser == null) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new MessageResponse("User not found"));
             }
-            if (!currentUser.getRoles().stream().anyMatch(role -> role.getName() == ERole.ROLE_ADMIN)) {
+            if (!currentUser.getRoles().stream().anyMatch(role -> role.getName() == ERole.ROLE_MANAGER)) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new MessageResponse("User does not have permission to update projects"));
             }
 
@@ -174,7 +173,7 @@ public class ProjectController {
             if (currentUser == null) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new MessageResponse("User not found"));
             }
-            if (!currentUser.getRoles().stream().anyMatch(role -> role.getName() == ERole.ROLE_ADMIN)) {
+            if (!currentUser.getRoles().stream().anyMatch(role -> role.getName() == ERole.ROLE_MANAGER)) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new MessageResponse("User does not have permission to update projects"));
             }
             // Save the updated project
@@ -187,30 +186,53 @@ public class ProjectController {
 
     @GetMapping("/all")
     public ResponseEntity<?> getAllProjects() {
-        List<Project> projects = projectRepository.findAll();
-        projects.forEach(project -> {
-            List<Milestone> milestonesList = new ArrayList<>(project.getMilestones());
-            milestonesList.sort(Comparator.comparing(Milestone::getEstimateDate));
-            project.setMilestones(new HashSet<>(milestonesList));
-        });
-        return ResponseEntity.ok(projects);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated() || !(authentication.getPrincipal() instanceof UserDetails userDetails)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new MessageResponse("Unauthorized"));
+        }
+
+        User currentUser = userRepository.findByUsername(userDetails.getUsername()).orElse(null);
+        if (currentUser == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new MessageResponse("User not found"));
+        }
+
+        if(currentUser.getRoles().stream().anyMatch(role -> role.getName() == ERole.ROLE_MANAGER || role.getName() == ERole.ROLE_TEAM)){
+            return ResponseEntity.ok(projectRepository.findAll());
+        }
+
+        return ResponseEntity.ok(currentUser.getProjects());
     }
 
     @GetMapping("/get/{id}")
     public ResponseEntity<?> getProjectById(@PathVariable Long id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated() || !(authentication.getPrincipal() instanceof UserDetails userDetails)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new MessageResponse("Unauthorized"));
+        }
+
+        User currentUser = userRepository.findByUsername(userDetails.getUsername()).orElse(null);
+        if (currentUser == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new MessageResponse("User not found"));
+        }
+
         Optional<Project> project = projectRepository.findById(id);
         if (project.isPresent()) {
-            Project projectToReturn = project.get();
-            List<Milestone> milestonesList = new ArrayList<>(projectToReturn.getMilestones());
-            milestonesList.sort(Comparator.comparing(Milestone::getEstimateDate));
-            projectToReturn.setMilestones(new HashSet<>(milestonesList));
-            return ResponseEntity.ok(projectToReturn);
+            Project p = project.get();
+            if(
+                    currentUser.getRoles().stream().anyMatch(role -> role.getName() == ERole.ROLE_MANAGER ||
+                            role.getName() == ERole.ROLE_TEAM) ||
+                            p.getUsers().stream().anyMatch( user -> Objects.equals(user.getId(), currentUser.getId()))
+            ){
+                return ResponseEntity.ok(p);
+            }
+            return ResponseEntity.notFound().build();
+
         } else {
             return ResponseEntity.notFound().build();
         }
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_MANAGER')")
     @PostMapping("/{projectId}/addUser/{userId}")
     public ResponseEntity<?> addUserToProject(@PathVariable Long projectId, @PathVariable Long userId) {
         // Fetch project from the database
@@ -235,7 +257,7 @@ public class ProjectController {
 
         return ResponseEntity.ok(project);
     }
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_MANAGER')")
     @DeleteMapping("/{projectId}/removeUser/{userId}")
     public ResponseEntity<?> removeUserFromProject(@PathVariable Long projectId, @PathVariable Long userId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

@@ -13,7 +13,9 @@ function Dashboard() {
             <div className="container mt-3">
                 {userInfo ? (
                     <>
-                        <ProjectCards />
+                        <div style={{ paddingBottom: "30px" }}>
+                            <ProjectCards />
+                        </div>
                         {userInfo.role === UserRole.MANAGER ? <ManagerFooter /> : <></>}
                     </>
                 ) : (

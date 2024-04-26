@@ -5,12 +5,12 @@ function ManagerFooter() {
     const navigate = useNavigate();
 
     return (
-        <footer className="border-top mt-3">
-            <div className="container d-flex justify-content-between mt-3 mb-3">
+        <nav className="navbar fixed-bottom custom-client-color">
+            <div className="container-fluid justify-content-around">
                 <Button onClick={() => navigate("/create-project")}>Create Project</Button>
                 <Button onClick={() => navigate("/manage-user")}>Manage User</Button>
             </div>
-        </footer>
+        </nav>
     );
 }
 

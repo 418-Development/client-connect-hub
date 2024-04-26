@@ -1,4 +1,6 @@
-import { useRef } from "react";
+{
+    /* import { useRef } from "react";*/
+}
 import Button from "./Button";
 import { MilestoneObj } from "../interfaces/Milestone";
 import Markdown from "./Markdown";
@@ -8,7 +10,9 @@ interface Props {
 }
 
 function MilestoneModal({ milestone }: Props) {
-    const closeButton = useRef<HTMLButtonElement>(null);
+    {
+        /*  const closeButton = useRef<HTMLButtonElement>(null); */
+    }
 
     return (
         <div id="milestoneModal" className="modal fade">
@@ -18,11 +22,11 @@ function MilestoneModal({ milestone }: Props) {
                         <div>
                             <h5>
                                 {milestone?.title}
-                                {milestone?.isDone && <i className="bi bi-check2-circle ms-2"></i>}
+                                {milestone?.isDone && <i className="bi bi-check2-circle ms-2" style={{ color: "#198754" }}></i>}
                             </h5>
                             <figcaption className="blockquote-footer m-0">{milestone?.estimatedEnd}</figcaption>
                         </div>
-                        <Button ref={closeButton} kind="close" dismissModal={true} ariaLabel="Close"></Button>
+                        {/*  <Button ref={closeButton} kind="close" dismissModal={true} ariaLabel="Close"></Button> */}
                     </div>
 
                     <div className="modal-body">
