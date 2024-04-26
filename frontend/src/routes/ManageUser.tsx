@@ -40,6 +40,23 @@ function ManageUser() {
         }
     };
 
+    const updateUserLabel = async (id: number, label: string) => {
+        const url = (import.meta.env.VITE_API_URL as string) + "users/" + id + "/setLabel";
+
+        const response = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: localStorage.getItem("token") ?? "",
+            },
+            body: JSON.stringify(label),
+        });
+
+        if (response.ok) {
+            reloadAllUsers();
+        }
+    };
+
     const handleRoleChange = (e: React.ChangeEvent<HTMLSelectElement>, index: number) => {
         const updatedUsers = [...allUsers];
         const value = Number(e.target.value);
@@ -50,8 +67,12 @@ function ManageUser() {
         updatedUsers[index].label = (e.target as HTMLInputElement).value;
         setAllUsers(updatedUsers);
     };
-    const handleLabelChange = () => {
-        //
+    const handleLabelChange = (e: React.KeyboardEvent<HTMLInputElement>, index: number) => {
+        if (e.key === "Enter") {
+            const updatedUsers = [...allUsers];
+            const label = (e.target as HTMLInputElement).value;
+            updateUserLabel(updatedUsers[index].id, label)
+        }
     };
 
     return (
@@ -72,7 +93,7 @@ function ManageUser() {
                             className="form-control"
                             value={user.label}
                             onInput={(e) => handleLabelInput(e, index)}
-                            onChange={handleLabelChange}
+                            onKeyUp={(e) => handleLabelChange(e, index)}
                         />
                     </div>
                 </div>
