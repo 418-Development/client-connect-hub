@@ -12,6 +12,8 @@ import Markdown from "../components/Markdown";
 import { MilestoneObj } from "../interfaces/Milestone";
 import MilestoneModal from "../components/MilestoneModal";
 import { fetchProject } from "../utils/project";
+import Forum from "../components/Forum";
+import { getDummyMessages } from "../utils/Message";
 
 function ProjectView() {
     const userInfo = useContext(UserContext);
@@ -234,6 +236,9 @@ function ProjectView() {
                         <></>
                     )}
                 </div>
+                <div>
+                    <Forum messages={getDummyMessages}
+                </div>             
             </div>
             {project && (
                 <DeleteProjectModal
