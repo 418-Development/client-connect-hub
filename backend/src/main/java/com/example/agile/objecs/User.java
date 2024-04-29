@@ -37,6 +37,10 @@ public class User {
     @Size(max = 120)
     private String password;
 
+    @NotBlank
+    @Size(max = 50)
+    private String label;
+
     @ManyToMany(mappedBy = "users")
     @JsonIgnore
     private Set<Project> projects;
@@ -81,6 +85,14 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
     }
 
     public Set<Role> getRoles() {
