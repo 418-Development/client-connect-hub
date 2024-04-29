@@ -16,13 +16,12 @@ function DeleteProjectModal({ project, onDeletion }: Props) {
     const deleteProject = async () => {
         if (verifyDelete !== project.title) {
             deleteValidation.current?.classList.add("is-invalid");
-            console.log("NOT VALID");
             return;
         }
 
         const url = (import.meta.env.VITE_API_URL as string) + `projects/delete-project/${project.id}`;
 
-        const response = await fetch(url, {
+        await fetch(url, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
@@ -30,7 +29,6 @@ function DeleteProjectModal({ project, onDeletion }: Props) {
             },
         });
 
-        console.log(url, response.ok, response.status);
         onDeletion();
         closeButton.current?.click();
         setVerifyDelete("");
