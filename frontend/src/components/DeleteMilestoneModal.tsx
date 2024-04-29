@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import Button from "./Button";
 import { MilestoneObj } from "../interfaces/Milestone";
+import { useParams } from "react-router-dom";
 
 interface Props {
     milestone: MilestoneObj | null;
@@ -9,6 +10,7 @@ interface Props {
 
 function DeleteMilestoneModal({ milestone, onDeletion }: Props) {
     const [verifyDelete, setVerifyDelete] = useState<string>("");
+    const { id } = useParams<{ id: string }>();
 
     const closeButton = useRef<HTMLButtonElement>(null);
     const deleteValidation = useRef<HTMLInputElement>(null);
@@ -16,13 +18,12 @@ function DeleteMilestoneModal({ milestone, onDeletion }: Props) {
     const deleteMilestone = async () => {
         if (milestone == null || verifyDelete !== milestone.title) {
             deleteValidation.current?.classList.add("is-invalid");
-            console.log("NOT VALID");
             return;
         }
 
-        const url = (import.meta.env.VITE_API_URL as string) + `milestones/delete-milestone/${milestone.id}`;
+        const url = (import.meta.env.VITE_API_URL as string) + `milestones/delete-milestone/${id}`;
 
-        const response = await fetch(url, {
+        await fetch(url, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
@@ -31,7 +32,6 @@ function DeleteMilestoneModal({ milestone, onDeletion }: Props) {
             body: JSON.stringify(milestone.id),
         });
 
-        console.log(url, response.ok, response.status);
         onDeletion();
         closeButton.current?.click();
         setVerifyDelete("");

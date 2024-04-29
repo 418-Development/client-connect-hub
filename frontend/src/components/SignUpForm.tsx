@@ -51,12 +51,8 @@ function SignUpForm({ login, setUsername, setPassword, username = "", password =
             }),
         });
 
-        console.log(url, response.ok, response.status);
-
         if (!response.ok) {
             const json = await response.json();
-
-            console.log("json", json);
             const msg: string = json.message;
             if (msg.toLowerCase().includes("email")) {
                 emailValidationInput.current?.classList.add("is-invalid");

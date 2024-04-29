@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { UserObj, UserResponseObj, UserRole } from "../interfaces/UserObj";
+import { UserObj, UserRole } from "../interfaces/UserObj";
 import Button from "./Button";
 import { useParams } from "react-router";
 import { ProjectObj } from "../interfaces/Project";
+import { fetchAllUsers } from "../utils/user";
 
 interface Props {
     project: ProjectObj;
@@ -11,62 +12,23 @@ interface Props {
 
 function UserAssignment({ project, onUserEvent }: Props) {
     const [allUsers, setAllUsers] = useState<UserObj[]>([]);
-    const [projectUsers, setProjectUsers] = useState<UserObj[]>([]);
     const [roleSearch, setRoleSearch] = useState<UserRole>(UserRole.MANAGER);
     // Project ID for updates
     const { id } = useParams<{ id: string }>();
 
     useEffect(() => {
-        fetchProjectUser();
+        reloadAllUsers();
     }, [project]);
 
-    useEffect(() => {
-        fetchAllUsers();
-    }, [projectUsers]);
-
-    const fetchProjectUser = async () => {
-        const userArray = project.users;
-
-        setProjectUsers(userArray);
-    };
-
-    const fetchAllUsers = async () => {
-        const url = (import.meta.env.VITE_API_URL as string) + "users/all";
-
-        const response = await fetch(url, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: localStorage.getItem("token") ?? "",
-            },
-        });
-
-        console.log(url, response.ok, response.status);
-
-        if (response.ok) {
-            const json = await response.json();
-            const userResponseArray = json as UserResponseObj[];
-            const userArray: UserObj[] = [];
-            for (let index = 0; index < userResponseArray.length; index++) {
-                const user = userResponseArray[index];
-                if (!projectUsers.some((projectUser) => projectUser.id === user.id)) {
-                    userArray.push({
-                        id: user.id,
-                        username: user.username,
-                        role: user.roles[0].id as UserRole,
-                        label: "M.I.A.",
-                        email: user.email,
-                    });
-                }
-            }
-
-            setAllUsers(
-                userArray.sort((a, b) => {
-                    if (a.role === b.role) return a.username.localeCompare(b.username);
-                    if (a.role < b.role) return 1;
-                    return -1;
-                })
-            );
+    const reloadAllUsers = async () => {
+        try {
+            const allUser = await fetchAllUsers();
+            setAllUsers(allUser.filter((user) => !project.users.some((projectUser) => projectUser.id === user.id)));
+        } catch (error) {
+            /* eslint-disable no-console */
+            console.error(error);
+            /* eslint-enable no-console */
+            setAllUsers([]);
         }
     };
 
@@ -110,7 +72,7 @@ function UserAssignment({ project, onUserEvent }: Props) {
             <div className="dropdown-wrapper mt-0 mb-3 d-flex align-items-center">
                 <div className="btn-group dropend">
                     <Button
-                        className="btn secondary-btn-text dropdown-toggle"
+                        className="btn white-btn-text dropdown-toggle"
                         type="button"
                         id="roleSelect"
                         dataBsToggle="dropdown"
@@ -154,7 +116,7 @@ function UserAssignment({ project, onUserEvent }: Props) {
                     <div className="mb-4">
                         <h5 className="card-title">Current Participants</h5>
                         <div>
-                            {projectUsers
+                            {project.users
                                 .filter((user) => {
                                     if (roleSearch === UserRole.MANAGER) return true;
                                     return roleSearch === user.role || UserRole.MANAGER === user.role;
