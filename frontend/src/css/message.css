@@ -1,0 +1,17 @@
+.message {
+    display: flex;
+    align-items: center;
+}
+
+.message .message-container {
+    width: 90%;
+}
+
+.message-1 {
+    justify-content: start;
+}
+
+.message-2,
+.message-2 {
+    justify-content: end;
+}

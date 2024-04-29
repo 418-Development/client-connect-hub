@@ -23,7 +23,7 @@ export function parseMessageResponseObj(message: MessageResponseObj): MessageObj
     };
 }
 
-export async function fetchAllMassages(projectId: number): MessageObj[] {
+export async function fetchAllMassages(projectId: number) {
     return [
         {
             id: 1,
