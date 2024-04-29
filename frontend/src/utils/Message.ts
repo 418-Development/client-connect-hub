@@ -23,7 +23,7 @@ export function parseMessageResponseObj(message: MessageResponseObj): MessageObj
     };
 }
 
-export async function fetchAllMassages(projectId: number) {
+export async function getDummyMessages() {
     return [
         {
             id: 1,
