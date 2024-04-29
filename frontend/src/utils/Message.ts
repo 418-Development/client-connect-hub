@@ -35,7 +35,7 @@ export function getDummyMessages() {
                 role: UserRole.TEAM,
             },
             content: "This is a message!",
-            timestamp: new Date("2024-01-01"),
+            timestamp: new Date("2024-01-01T23:07:32.000Z"),
         },
         {
             id: 2,
@@ -47,7 +47,31 @@ export function getDummyMessages() {
                 role: UserRole.CLIENT,
             },
             content: "Ok thanks for that information!",
-            timestamp: new Date("2024-01-02"),
+            timestamp: new Date("2024-01-02T12:30:00.000Z"),
+        },
+        {
+            id: 3,
+            user: {
+                id: 1,
+                email: "team@team.com",
+                username: "User 1",
+                label: "Developer",
+                role: UserRole.TEAM,
+            },
+            content: "Ok...",
+            timestamp: new Date("2024-01-02T12:45:00.000Z"),
+        },
+        {
+            id: 4,
+            user: {
+                id: 1,
+                email: "team@team.com",
+                username: "User 1",
+                label: "Developer",
+                role: UserRole.TEAM,
+            },
+            content: "...",
+            timestamp: new Date("2024-01-02T13:02:00.000Z"),
         },
     ];
 }

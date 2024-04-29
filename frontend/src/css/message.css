@@ -7,11 +7,10 @@
     width: 90%;
 }
 
-.message-1 {
+.message-other {
     justify-content: start;
 }
 
-.message-2,
-.message-2 {
+.message-own {
     justify-content: end;
 }
