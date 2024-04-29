@@ -23,7 +23,7 @@ export function parseMessageResponseObj(message: MessageResponseObj): MessageObj
     };
 }
 
-export async function getDummyMessages() {
+export function getDummyMessages() {
     return [
         {
             id: 1,
