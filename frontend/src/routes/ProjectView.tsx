@@ -237,7 +237,7 @@ function ProjectView() {
                     )}
                 </div>
                 <div>
-                    <Forum messages={getDummyMessages}
+                    <Forum messages={getDummyMessages()}/>
                 </div>             
             </div>
             {project && (
