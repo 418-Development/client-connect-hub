@@ -36,7 +36,7 @@ function UserAssignment({ project, onUserEvent }: Props) {
         // Can't remove manager from project
         if (user.role === UserRole.MANAGER) return;
 
-        const url = (import.meta.env.VITE_API_URL as string) + "projects/" + id + "/removeUser/" + user.id;
+        const url = `${import.meta.env.VITE_API_URL as string}projects/${id}/removeUser/${user.id}`;
 
         const response = await fetch(url, {
             method: "DELETE",
@@ -52,7 +52,7 @@ function UserAssignment({ project, onUserEvent }: Props) {
     };
 
     const addUserToProject = async (user: UserObj) => {
-        const url = (import.meta.env.VITE_API_URL as string) + "projects/" + id + "/addUser/" + user.id;
+        const url = `${import.meta.env.VITE_API_URL as string}projects/${id}/addUser/${user.id}`;
 
         const response = await fetch(url, {
             method: "POST",
@@ -104,10 +104,10 @@ function UserAssignment({ project, onUserEvent }: Props) {
                     {roleSearch == UserRole.MANAGER
                         ? "All"
                         : roleSearch == UserRole.CLIENT
-                        ? "Client"
-                        : roleSearch == UserRole.TEAM
-                        ? "Team Member"
-                        : ""}
+                            ? "Client"
+                            : roleSearch == UserRole.TEAM
+                                ? "Team Member"
+                                : ""}
                 </label>
             </div>
             <div className="card">

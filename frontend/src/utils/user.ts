@@ -23,7 +23,7 @@ export function parseUserResponseObj(user: UserResponseObj): UserObj {
 }
 
 export async function fetchAllUsers() {
-    const url = (import.meta.env.VITE_API_URL as string) + "users/all";
+    const url = `${import.meta.env.VITE_API_URL as string  }users/all`;
 
     const response = await fetch(url, {
         method: "GET",

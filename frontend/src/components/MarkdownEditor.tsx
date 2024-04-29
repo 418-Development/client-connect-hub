@@ -45,6 +45,8 @@ function MarkdownEditor({ value, onValueChanged, label, maxLength = 15000 }: Pro
         const selectedValue = value.substring(selectionStart, selectionEnd);
         const endValue = value.substring(selectionEnd);
 
+        if (selectedValue.length === 0) return;
+
         if (selectedValue.startsWith("**") && selectedValue.endsWith("**") && selectedValue.length > 4) {
             onValueChanged(`${startValue}${selectedValue.substring(2, selectedValue.length - 2)}${endValue}`);
         } else if (startValue.endsWith("**") && endValue.startsWith("**")) {
@@ -60,6 +62,8 @@ function MarkdownEditor({ value, onValueChanged, label, maxLength = 15000 }: Pro
         const startValue = value.substring(0, selectionStart);
         const selectedValue = value.substring(selectionStart, selectionEnd);
         const endValue = value.substring(selectionEnd);
+
+        if (selectedValue.length === 0) return;
 
         if (selectedValue.startsWith("***") && selectedValue.endsWith("***") && selectedValue.length > 6) {
             onValueChanged(`${startValue}${selectedValue.substring(1, selectedValue.length - 1)}${endValue}`);
@@ -79,9 +83,18 @@ function MarkdownEditor({ value, onValueChanged, label, maxLength = 15000 }: Pro
     };
 
     const toggleBlockquoteMarkdown = () => {
-        let [selectionStart] = getSelection();
-
+        // eslint-disable-next-line prefer-const
+        let [selectionStart, selectionEnd] = getSelection();
+        if (selectionStart > 0) selectionStart--;
         while (value[selectionStart] !== "\n" && selectionStart >= 0) selectionStart--;
+
+        const startValue = value.substring(0, selectionStart);
+        let selectedValue = value.substring(selectionStart, selectionEnd);
+        const endValue = value.substring(selectionEnd);
+        if (selectedValue.match(/\n/g)?.length ?? 0 > 1) {
+            selectedValue = selectedValue.replace("\n\n", "\n>\n>");
+            value = `${startValue}${selectedValue}${endValue}`;
+        }
 
         if (value[selectionStart + 1] === ">") {
             onValueChanged(`${value.substring(0, selectionStart + 1)}${value.substring(selectionStart + 2)}`);
@@ -90,11 +103,23 @@ function MarkdownEditor({ value, onValueChanged, label, maxLength = 15000 }: Pro
         }
     };
 
+    const toggleHeadingMarkdown = () => {
+        let [selectionStart] = getSelection();
+        if (selectionStart > 0) selectionStart--;
+        while (value[selectionStart] !== "\n" && selectionStart >= 0) selectionStart--;
+
+        if (value[selectionStart + 1] === "#") {
+            onValueChanged(`${value.substring(0, selectionStart + 1)}${value.substring(selectionStart + 2)}`);
+        } else {
+            onValueChanged(`${value.substring(0, selectionStart + 1)}#${value.substring(selectionStart + 1)}`);
+        }
+    };
+
     return (
         <div>
             <div className="d-flex align-items-center">
                 {label && <label htmlFor="markdownEditorTextArea">{label}</label>}
-                <div className="ms-3 m-2">
+                <div className="ms-3 m-2 d-flex">
                     <Button
                         type="button"
                         kind={showPreview ? "secondary" : "success"}
@@ -128,13 +153,13 @@ function MarkdownEditor({ value, onValueChanged, label, maxLength = 15000 }: Pro
                     <Button kind="none" outline onClick={toggleBlockquoteMarkdown}>
                         <i className="bi bi-quote"></i>
                     </Button>
-                    <Button kind="none" outline onClick={toggleBoldMarkdown}>
+                    <Button kind="none" outline onClick={toggleHeadingMarkdown}>
                         <i className="bi bi-code"></i>
                     </Button>
-                    <Button kind="none" outline onClick={toggleBoldMarkdown}>
+                    <Button kind="none" outline onClick={toggleHeadingMarkdown}>
                         <i className="bi bi-type-h1"></i>
                     </Button>
-                    <Button kind="none" outline onClick={toggleBoldMarkdown}>
+                    <Button kind="none" outline onClick={toggleHeadingMarkdown}>
                         <i className="bi bi-type-h2"></i>
                     </Button>
                     <Button kind="none" outline onClick={toggleBoldMarkdown}>
@@ -142,6 +167,15 @@ function MarkdownEditor({ value, onValueChanged, label, maxLength = 15000 }: Pro
                     </Button>
                     <Button kind="none" outline onClick={toggleBoldMarkdown}>
                         <i className="bi bi-list-ul"></i>
+                    </Button>
+                    <Button kind="none" outline onClick={toggleBoldMarkdown}>
+                        <i className="bi bi-list-ul"></i>
+                    </Button>
+                    <Button kind="none" outline onClick={toggleBoldMarkdown}>
+                        <i className="bi bi-link-45deg"></i>
+                    </Button>
+                    <Button kind="none" outline onClick={toggleBoldMarkdown}>
+                        <i className="bi bi-image"></i>
                     </Button>
                 </div>
             </div>

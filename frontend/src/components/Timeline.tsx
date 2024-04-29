@@ -64,7 +64,7 @@ function Timeline({
     const setMilestoneStatus = async (milestone: MilestoneObj, isDone: boolean) => {
         if (!userInfo) return;
 
-        const url = (import.meta.env.VITE_API_URL as string) + `milestones/milestone-status/${milestone.id}`;
+        const url = `${import.meta.env.VITE_API_URL as string  }milestones/milestone-status/${milestone.id}`;
 
         const response = await fetch(url, {
             method: "PUT",
@@ -87,11 +87,11 @@ function Timeline({
                 <li
                     key={milestone.id}
                     className={
-                        "pt-2 pb-2 d-flex " +
-                        (milestone.isDone ? " is-done" : "") +
-                        (index == isActiveIndex ? " is-active" : "") +
-                        (indicateMoreAtBeginning && index == 0 ? " indicate-more" : "") +
-                        (indicateMoreAtEnd && index == displayedMilestones.length - 1 ? " indicate-more" : "")
+                        `pt-2 pb-2 d-flex ${ 
+                            milestone.isDone ? " is-done" : "" 
+                        }${index == isActiveIndex ? " is-active" : "" 
+                        }${indicateMoreAtBeginning && index == 0 ? " indicate-more" : "" 
+                        }${indicateMoreAtEnd && index == displayedMilestones.length - 1 ? " indicate-more" : ""}`
                     }
                 >
                     <Button

@@ -27,7 +27,7 @@ function EditMilestones({ project, onMilestoneEvent }: Props) {
         if (!userInfo || !selectedMilestone) return;
 
         const currentDate = new Date();
-        const url = (import.meta.env.VITE_API_URL as string) + `milestones/update-milestone/${selectedMilestone.id}`;
+        const url = `${import.meta.env.VITE_API_URL as string  }milestones/update-milestone/${selectedMilestone.id}`;
 
         const response = await fetch(url, {
             method: "PUT",
@@ -57,7 +57,7 @@ function EditMilestones({ project, onMilestoneEvent }: Props) {
         if (!userInfo) return;
 
         const currentDate = new Date();
-        const url = (import.meta.env.VITE_API_URL as string) + `milestones/${project.id}/create-milestone`;
+        const url = `${import.meta.env.VITE_API_URL as string  }milestones/${project.id}/create-milestone`;
 
         const response = await fetch(url, {
             method: "POST",

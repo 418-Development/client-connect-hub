@@ -37,7 +37,7 @@ function SignUpForm({ login, setUsername, setPassword, username = "", password =
     };
 
     const signUp = async () => {
-        const url = (import.meta.env.VITE_API_URL as string) + "users/auth/signup";
+        const url = `${import.meta.env.VITE_API_URL as string  }users/auth/signup`;
 
         const response = await fetch(url, {
             method: "POST",

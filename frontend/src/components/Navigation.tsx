@@ -38,7 +38,7 @@ function Navigation() {
     }, []);
 
     const login = async () => {
-        const url = (import.meta.env.VITE_API_URL as string) + "users/auth/signin";
+        const url = `${import.meta.env.VITE_API_URL as string}users/auth/signin`;
 
         const response = await fetch(url, {
             method: "POST",
@@ -95,7 +95,10 @@ function Navigation() {
 
                         {!userInfo ? (
                             <div
-                                className="d-flex flex-column flex-lg-row align-items-center justify-content-center justify-content-lg-end w-100"
+                                className={
+                                    "d-flex flex-column flex-lg-row align-items-center " +
+                                    "justify-content-center justify-content-lg-end w-100"
+                                }
                                 style={{ gap: "0.5rem" }}
                             >
                                 <input

@@ -50,7 +50,7 @@ function ProjectCreation({ isEditing = false }: Props) {
         if (!userInfo) return;
 
         const currentDate = new Date();
-        const url = (import.meta.env.VITE_API_URL as string) + "projects/create-project";
+        const url = `${import.meta.env.VITE_API_URL as string  }projects/create-project`;
 
         const response = await fetch(url, {
             method: "POST",
@@ -86,7 +86,7 @@ function ProjectCreation({ isEditing = false }: Props) {
     const updateProject = async () => {
         if (!userInfo) return;
 
-        const url = (import.meta.env.VITE_API_URL as string) + `projects/update-project/${id}`;
+        const url = `${import.meta.env.VITE_API_URL as string  }projects/update-project/${id}`;
 
         const response = await fetch(url, {
             method: "PUT",

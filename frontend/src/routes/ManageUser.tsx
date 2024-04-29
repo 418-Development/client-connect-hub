@@ -24,7 +24,7 @@ function ManageUser() {
     };
 
     const updateUserRole = async (id: number, role: number) => {
-        const url = (import.meta.env.VITE_API_URL as string) + "users/set/" + id;
+        const url = `${import.meta.env.VITE_API_URL as string  }users/set/${  id}`;
 
         const response = await fetch(url, {
             method: "POST",
