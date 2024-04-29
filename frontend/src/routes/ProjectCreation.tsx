@@ -113,11 +113,20 @@ function ProjectCreation({ isEditing = false }: Props) {
         <div className="container">
             {isEditing ? (
                 <>
-                    <h1 className="mt-3">Edit "{title}"</h1>
+                    <h1 className="mt-3">
+                        <Button onClick={() => navigate("/")} className="me-3" outline>
+                            <i className="bi bi-arrow-left"></i>
+                        </Button>
+                        Edit "{title}"
+                    </h1>
                 </>
             ) : (
                 <>
-                    <h1 className="mt-3">Create a new Project</h1>
+                    <h1 className="mt-3">
+                        <Button onClick={() => navigate("/")} className="me-3" outline>
+                            <i className="bi bi-arrow-left"></i>
+                        </Button>Create a new Project
+                    </h1>
                 </>
             )}
 

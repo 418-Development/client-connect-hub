@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { UserObj, UserRole } from "../interfaces/UserObj";
 import { fetchAllUsers } from "../utils/user";
 import { useNavigate } from "react-router-dom";
+import Button from "../components/Button";
+import "bootstrap-icons/font/bootstrap-icons.css";
 
 function ManageUser() {
     const navigate = useNavigate();
@@ -56,6 +58,12 @@ function ManageUser() {
 
     return (
         <div className="container">
+            <h1 className="mt-3">
+                <Button onClick={() => navigate("/")} className="me-3 mb-2" outline>
+                    <i className="bi bi-arrow-left"></i>
+                </Button>
+                User Role Management
+            </h1>
             {allUsers.map((user: UserObj, index: number) => (
                 <div key={user.username} className="d-flex align-items-center">
                     <div className="col p-2">{user.username}</div>
