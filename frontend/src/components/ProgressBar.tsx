@@ -20,7 +20,7 @@ function ProgressBar({ progress, width, height, vertical = false }: Props) {
     }
 
     const css: React.CSSProperties = { height: height + heightUnit };
-    if (width) css["width"] = width + "px";
+    if (width) css["width"] = `${width  }px`;
 
     return (
         <div
@@ -32,7 +32,7 @@ function ProgressBar({ progress, width, height, vertical = false }: Props) {
             //aria-valuemax="100"
             style={css}
         >
-            <div className="progress-bar" style={vertical ? { height: progress + "%", width: "100%" } : { width: progress + "%" }}>
+            <div className="progress-bar" style={vertical ? { height: `${progress  }%`, width: "100%" } : { width: `${progress  }%` }}>
                 {progress}%
             </div>
         </div>

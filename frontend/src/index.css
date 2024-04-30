@@ -1,5 +1,6 @@
 @import url("css/markdown.css");
 @import url("css/timeline.css");
+@import url("css/message.css");
 
 :root {
     box-sizing: border-box;
@@ -11,6 +12,8 @@
     --cch-card-hover-2: #dbdbdb;
     --ch-secondary-btn-text: #292c35;
     --ch-modal-header: #f8f9fa;
+    --cch-blockquote-color: #f8f9fa;
+    --cch-blockquote-border-color: #004daa;
 }
 
 .logo {
@@ -26,6 +29,8 @@
         --cch-card-hover-2: #313641;
         --ch-secondary-btn-text: #ececec;
         --ch-modal-header: #343a40;
+        --cch-blockquote-color: #272b30;
+        --cch-blockquote-border-color: #004daa;
     }
 
     .logo {

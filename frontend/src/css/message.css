@@ -1,0 +1,16 @@
+.message {
+    display: flex;
+    align-items: center;
+}
+
+.message .message-container {
+    width: 90%;
+}
+
+.message-other {
+    justify-content: start;
+}
+
+.message-own {
+    justify-content: end;
+}

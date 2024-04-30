@@ -12,6 +12,8 @@ import Markdown from "../components/Markdown";
 import { MilestoneObj } from "../interfaces/Milestone";
 import MilestoneModal from "../components/MilestoneModal";
 import { fetchProject } from "../utils/project";
+import Forum from "../components/Forum";
+import { getDummyMessages } from "../utils/Message";
 
 function ProjectView() {
     const userInfo = useContext(UserContext);
@@ -84,7 +86,12 @@ function ProjectView() {
         <>
             <div className="card m-3 mx-auto" style={{ width: "85%", boxSizing: "border-box" }}>
                 <div className="card-header" style={{ textDecoration: "none" }}>
-                    <h2 className="m-0 text-truncate">{project?.title}</h2>
+                    <h2 className="m-0 text-truncate">
+                        <Button onClick={() => navigate("/")} className="me-3 mb-1" outline>
+                            <i className="bi bi-arrow-left"></i>
+                        </Button>
+                        {project?.title}
+                    </h2>
                 </div>
                 <div className="card-body">
                     <div className="row">
@@ -233,6 +240,9 @@ function ProjectView() {
                     ) : (
                         <></>
                     )}
+                </div>
+                <div>
+                    <Forum messages={getDummyMessages()} />
                 </div>
             </div>
             {project && (

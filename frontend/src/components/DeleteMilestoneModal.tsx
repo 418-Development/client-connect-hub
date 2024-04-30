@@ -21,7 +21,7 @@ function DeleteMilestoneModal({ milestone, onDeletion }: Props) {
             return;
         }
 
-        const url = (import.meta.env.VITE_API_URL as string) + `milestones/delete-milestone/${id}`;
+        const url = `${import.meta.env.VITE_API_URL as string  }milestones/delete-milestone/${id}`;
 
         await fetch(url, {
             method: "DELETE",

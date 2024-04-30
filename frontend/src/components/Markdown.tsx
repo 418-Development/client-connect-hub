@@ -22,9 +22,9 @@ function Markdown({ children, small = false }: Props) {
         },
         code(props) {
             return (
-                <div className="code-container p-3">
+                <span className="code-container p-3">
                     <code {...props}></code>
-                </div>
+                </span>
             );
         },
     };
