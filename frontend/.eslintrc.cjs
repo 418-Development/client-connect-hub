@@ -8,5 +8,10 @@ module.exports = {
     rules: {
         "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
         "no-console": "warn",
+        "prefer-template": "warn",
+        "max-len": ["error", { code: 142 }],
+        "@typescript-eslint/quotes": ["error", "double", { allowTemplateLiterals: true }],
+        "@typescript-eslint/indent": ["error", 4],
+        "no-alert": "error",
     },
 };

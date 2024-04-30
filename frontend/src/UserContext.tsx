@@ -25,7 +25,7 @@ export function UserProvider({ children }: Props) {
 
     async function updateUserInfo() {
         if (localStorage.getItem("token")) {
-            const url = (import.meta.env.VITE_API_URL as string) + "users/test/userinfo";
+            const url = `${import.meta.env.VITE_API_URL as string  }users/test/userinfo`;
 
             const response = await fetch(url, {
                 method: "GET",

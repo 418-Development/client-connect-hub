@@ -38,7 +38,7 @@ function Navigation() {
     }, []);
 
     const login = async () => {
-        const url = (import.meta.env.VITE_API_URL as string) + "users/auth/signin";
+        const url = `${import.meta.env.VITE_API_URL as string}users/auth/signin`;
 
         const response = await fetch(url, {
             method: "POST",
@@ -95,7 +95,10 @@ function Navigation() {
 
                         {!userInfo ? (
                             <div
-                                className="d-flex flex-column flex-lg-row align-items-center justify-content-center justify-content-lg-end w-100"
+                                className={
+                                    "d-flex flex-column flex-lg-row align-items-center " +
+                                    "justify-content-center justify-content-lg-end w-100"
+                                }
                                 style={{ gap: "0.5rem" }}
                             >
                                 <input
@@ -108,6 +111,8 @@ function Navigation() {
                                     placeholder="Username"
                                     aria-label="Username"
                                     style={{ height: "40px", maxWidth: "200px" }}
+                                    data-bs-toggle="tooltip" 
+                                    title="Enter your Username here."
                                 />
                                 <input
                                     className={`form-control form-control-sm mb-2 mb-lg-0 me-lg-2${isLoginInvalid ? " is-invalid" : ""}`}
@@ -119,6 +124,8 @@ function Navigation() {
                                     placeholder="Password"
                                     aria-label="Password"
                                     style={{ height: "40px", maxWidth: "200px" }}
+                                    data-bs-toggle="tooltip" 
+                                    title="Enter your Password here."
                                 />
                                 <div className="d-flex justify-content-center">
                                     <Button onClick={login} kind="success" outline={true} className="me-2 text-nowrap" type="submit">

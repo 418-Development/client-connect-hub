@@ -27,7 +27,7 @@ function EditMilestones({ project, onMilestoneEvent }: Props) {
         if (!userInfo || !selectedMilestone) return;
 
         const currentDate = new Date();
-        const url = (import.meta.env.VITE_API_URL as string) + `milestones/update-milestone/${selectedMilestone.id}`;
+        const url = `${import.meta.env.VITE_API_URL as string  }milestones/update-milestone/${selectedMilestone.id}`;
 
         const response = await fetch(url, {
             method: "PUT",
@@ -57,7 +57,7 @@ function EditMilestones({ project, onMilestoneEvent }: Props) {
         if (!userInfo) return;
 
         const currentDate = new Date();
-        const url = (import.meta.env.VITE_API_URL as string) + `milestones/${project.id}/create-milestone`;
+        const url = `${import.meta.env.VITE_API_URL as string  }milestones/${project.id}/create-milestone`;
 
         const response = await fetch(url, {
             method: "POST",
@@ -127,13 +127,15 @@ function EditMilestones({ project, onMilestoneEvent }: Props) {
                                     type="string"
                                     className="form-control mt-2"
                                     id="milestoneName"
-                                    placeholder=""
+                                    placeholder="Enter Name"
                                     onChange={(e) => {
                                         setMilestoneName(e.target.value);
                                     }}
                                     value={milestoneName}
                                     maxLength={50}
                                     required
+                                    data-bs-toggle="tooltip" 
+                                    title="Enter the Name of the Milestone here."
                                 />
                                 <div className="invalid-feedback"></div>
                             </div>
@@ -149,6 +151,8 @@ function EditMilestones({ project, onMilestoneEvent }: Props) {
                                     }}
                                     value={endDate}
                                     required
+                                    data-bs-toggle="tooltip" 
+                                    title="Enter the End Date of the Milestone here."
                                 />
                                 <div className="invalid-feedback"></div>
                             </div>
@@ -176,6 +180,8 @@ function EditMilestones({ project, onMilestoneEvent }: Props) {
                                     setMilestoneName("");
                                     setSelectedMilestone(null);
                                 }}
+                                data-bs-toggle="tooltip" 
+                                title="Cancel Creation/Editing."
                             >
                                 Cancel
                             </Button>

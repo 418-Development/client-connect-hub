@@ -4,9 +4,13 @@
 
 .markdown blockquote {
     padding: 0.5rem;
+    border-width: 0;
     border-left-width: 0.4rem;
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
+
+    border-color: var(--cch-blockquote-border-color) !important;
+    background: var(--cch-blockquote-color);
 }
 
 .markdown blockquote p {
@@ -16,4 +20,12 @@
 .markdown .code-container {
     background-color: rgb(24, 24, 24);
     width: fit-content;
+    display: block;
+}
+
+.markdown p .code-container {
+    display: inline;
+    width: auto;
+    margin: 0;
+    padding: 0 0.3rem !important;
 }
