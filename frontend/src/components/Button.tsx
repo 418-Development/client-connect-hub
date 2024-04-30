@@ -14,6 +14,7 @@ interface Props {
     id?: string;
     dataBsToggle?: string;
     ariaExpanded?: boolean;
+    title?: string;
 }
 
 const Button = forwardRef<HTMLButtonElement, Props>(
@@ -32,6 +33,7 @@ const Button = forwardRef<HTMLButtonElement, Props>(
             id,
             dataBsToggle,
             ariaExpanded,
+            title,
         },
         ref
     ) => {
@@ -58,6 +60,7 @@ const Button = forwardRef<HTMLButtonElement, Props>(
                 data-bs-toggle={dataBsToggle}
                 className={`${kind != "close" && "btn "}btn-${outline ? "outline-" : ""}${kind} ${className}`}
                 onClick={onClick}
+                title={title}
                 {...additionalProps}
             >
                 {children}

@@ -100,6 +100,8 @@ function SignUpForm({ login, setUsername, setPassword, username = "", password =
                                     placeholder="Enter email"
                                     required
                                     maxLength={50}
+                                    data-bs-toggle="tooltip" 
+                                    title="Enter your Email here."
                                 />
                                 <div className="invalid-feedback" ref={emailValidation}></div>
                                 <small id="emailHelp" className="form-text text-muted">
@@ -122,6 +124,8 @@ function SignUpForm({ login, setUsername, setPassword, username = "", password =
                                     value={username}
                                     required
                                     maxLength={20}
+                                    data-bs-toggle="tooltip" 
+                                    title="Enter your Username here."
                                 />
                                 <div className="invalid-feedback" ref={usernameValidation}></div>
                             </div>
@@ -140,6 +144,8 @@ function SignUpForm({ login, setUsername, setPassword, username = "", password =
                                     required
                                     min={6}
                                     maxLength={120}
+                                    data-bs-toggle="tooltip" 
+                                    title="Enter your Password here."
                                 />
                             </div>
                             <div className="form-group mt-3">
@@ -157,6 +163,8 @@ function SignUpForm({ login, setUsername, setPassword, username = "", password =
                                     required
                                     min={6}
                                     maxLength={120}
+                                    data-bs-toggle="tooltip" 
+                                    title="Enter your Password here again to verify it."
                                 />
                                 <div className="invalid-feedback" ref={passwordValidation}></div>
                             </div>

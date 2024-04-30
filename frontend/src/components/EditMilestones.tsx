@@ -134,6 +134,8 @@ function EditMilestones({ project, onMilestoneEvent }: Props) {
                                     value={milestoneName}
                                     maxLength={50}
                                     required
+                                    data-bs-toggle="tooltip" 
+                                    title="Enter the Name of the Milestone here."
                                 />
                                 <div className="invalid-feedback"></div>
                             </div>
@@ -149,6 +151,8 @@ function EditMilestones({ project, onMilestoneEvent }: Props) {
                                     }}
                                     value={endDate}
                                     required
+                                    data-bs-toggle="tooltip" 
+                                    title="Enter the End Date of the Milestone here."
                                 />
                                 <div className="invalid-feedback"></div>
                             </div>
@@ -176,6 +180,8 @@ function EditMilestones({ project, onMilestoneEvent }: Props) {
                                     setMilestoneName("");
                                     setSelectedMilestone(null);
                                 }}
+                                data-bs-toggle="tooltip" 
+                                title="Cancel Creation/Editing."
                             >
                                 Cancel
                             </Button>

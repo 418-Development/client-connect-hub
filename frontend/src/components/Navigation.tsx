@@ -111,6 +111,8 @@ function Navigation() {
                                     placeholder="Username"
                                     aria-label="Username"
                                     style={{ height: "40px", maxWidth: "200px" }}
+                                    data-bs-toggle="tooltip" 
+                                    title="Enter your Username here."
                                 />
                                 <input
                                     className={`form-control form-control-sm mb-2 mb-lg-0 me-lg-2${isLoginInvalid ? " is-invalid" : ""}`}
@@ -122,6 +124,8 @@ function Navigation() {
                                     placeholder="Password"
                                     aria-label="Password"
                                     style={{ height: "40px", maxWidth: "200px" }}
+                                    data-bs-toggle="tooltip" 
+                                    title="Enter your Password here."
                                 />
                                 <div className="d-flex justify-content-center">
                                     <Button onClick={login} kind="success" outline={true} className="me-2 text-nowrap" type="submit">

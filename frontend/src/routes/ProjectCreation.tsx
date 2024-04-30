@@ -162,6 +162,8 @@ function ProjectCreation({ isEditing = false }: Props) {
                                     value={title}
                                     maxLength={50}
                                     required
+                                    data-bs-toggle="tooltip" 
+                                    title="Enter the Title of the Project here."
                                 />
                                 <div className="invalid-feedback"></div>
                             </div>
@@ -188,6 +190,8 @@ function ProjectCreation({ isEditing = false }: Props) {
                                     }}
                                     value={startDate}
                                     required
+                                    data-bs-toggle="tooltip" 
+                                    title="Enter the Start Date of the Project here."
                                 />
                                 <div className="invalid-feedback"></div>
                             </div>
@@ -203,6 +207,8 @@ function ProjectCreation({ isEditing = false }: Props) {
                                     }}
                                     value={endDate}
                                     required
+                                    data-bs-toggle="tooltip" 
+                                    title="Enter the End Date of the Project here."
                                 />
                                 <div className="invalid-feedback"></div>
                             </div>
@@ -211,19 +217,25 @@ function ProjectCreation({ isEditing = false }: Props) {
                         <div className="d-flex justify-content-end">
                             {isEditing ? (
                                 <>
-                                    <Button kind="link" className="mt-3">
+                                    <Button kind="link" className="mt-3" data-bs-toggle="tooltip" title="Revert unsaved Edits.">
                                         Cancel
                                     </Button>
-                                    <Button type="submit" kind="success" className="mt-3">
+                                    <Button type="submit" kind="success" className="mt-3" data-bs-toggle="tooltip" title="Save Edits made.">
                                         Save Changes
                                     </Button>
                                 </>
                             ) : (
                                 <>
-                                    <Button kind="link" className="mt-3">
+                                    <Button 
+                                        onClick={ () => navigate("/")} 
+                                        kind="link" 
+                                        className="mt-3" 
+                                        data-bs-toggle="tooltip" 
+                                        title="Cancel Creation."
+                                    >
                                         Cancel
                                     </Button>
-                                    <Button type="submit" kind="success" className="mt-3">
+                                    <Button type="submit" kind="success" className="mt-3" data-bs-toggle="tooltip" title="Create Project.">
                                         Create Project
                                     </Button>
                                 </>
