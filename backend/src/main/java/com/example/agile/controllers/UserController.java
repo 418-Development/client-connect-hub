@@ -6,10 +6,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.example.agile.objecs.ELabel;
-import com.example.agile.objecs.ERole;
-import com.example.agile.objecs.Role;
-import com.example.agile.objecs.User;
+import com.example.agile.objecs.*;
 import com.example.agile.payload.request.LoginRequest;
 import com.example.agile.payload.request.SignupRequest;
 import com.example.agile.payload.response.JwtResponse;
@@ -19,7 +16,6 @@ import com.example.agile.repositories.UserRepo;
 import com.example.agile.security.AuthEntryPointJwt;
 import com.example.agile.security.JwtUtils;
 import com.example.agile.security.UserDetailsImpl;
-import com.example.agile.services.UserService;
 import jakarta.validation.Valid;
 
 import org.slf4j.Logger;
@@ -43,9 +39,6 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     @Autowired
     AuthenticationManager authenticationManager;
-
-    @Autowired
-    private UserService userService;
 
     @Autowired
     UserRepo userRepository;
@@ -171,14 +164,16 @@ public class UserController {
     }
 
     @PostMapping("/{userId}/addLabel/{labelName}")
-    public ResponseEntity<User> addUserLabel(@PathVariable Long userId, @PathVariable ELabel labelName) {
-        User updatedUser = userService.addUserLabel(userId, labelName);
+    public ResponseEntity<?> addLabelToUser(@RequestParam("username") String username, @RequestParam("label") ELabel label) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("Error: User not found."));
 
-        if (updatedUser != null) {
-            return new ResponseEntity<>(updatedUser, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        Label userLabel = new Label(label);
+        user.addLabel(userLabel);
+
+        userRepository.save(user);
+
+        return ResponseEntity.ok(new MessageResponse("Label added successfully to the user!"));
     }
 
 }

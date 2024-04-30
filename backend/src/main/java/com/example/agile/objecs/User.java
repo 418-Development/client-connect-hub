@@ -99,4 +99,6 @@ public class User {
         this.labels = labels;
     }
 
+    public void addLabel(Label userLabel) {
+    }
 }
