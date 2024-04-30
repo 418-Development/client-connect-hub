@@ -155,11 +155,12 @@ function ProjectCreation({ isEditing = false }: Props) {
                                     autoComplete="title"
                                     className="form-control mt-2"
                                     id="projectTitle"
-                                    placeholder="Enter title"
+                                    placeholder="Enter Title"
                                     onChange={(e) => {
                                         setTitle(e.target.value);
                                     }}
                                     value={title}
+                                    maxLength={50}
                                     required
                                 />
                                 <div className="invalid-feedback"></div>

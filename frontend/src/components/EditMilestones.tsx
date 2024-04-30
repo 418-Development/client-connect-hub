@@ -127,7 +127,7 @@ function EditMilestones({ project, onMilestoneEvent }: Props) {
                                     type="string"
                                     className="form-control mt-2"
                                     id="milestoneName"
-                                    placeholder=""
+                                    placeholder="Enter Name"
                                     onChange={(e) => {
                                         setMilestoneName(e.target.value);
                                     }}
