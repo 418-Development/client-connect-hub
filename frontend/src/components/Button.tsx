@@ -79,7 +79,7 @@ const Button = forwardRef<HTMLButtonElement, Props>(
                 id={id}
                 aria-expanded={ariaExpanded}
                 data-bs-toggle={dataBsToggle}
-                className={`${kind != "close" && "btn "}btn-${outline ? "outline-" : ""}${kind} ${className}`}
+                className={`${kind != "close" ? "btn " : ""}btn-${outline ? "outline-" : ""}${kind} ${className}`}
                 onClick={() => {
                     tooltip?.hide();
                     if (disposeTitle) tooltip?.dispose();
