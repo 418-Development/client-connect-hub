@@ -118,6 +118,7 @@ function ProjectCard({ project, deleteProject, showMilestone, onMilestoneEvent }
                             kind="secondary"
                             outline
                             title="Edit Project"
+                            disposeTitle
                             onClick={() => {
                                 navigate(`/edit-project/${project.id}`);
                             }}

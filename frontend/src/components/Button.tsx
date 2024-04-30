@@ -1,6 +1,6 @@
 import * as bootstrap from "bootstrap";
 import * as React from "react";
-import { ReactNode, forwardRef, useRef } from "react";
+import { ReactNode, forwardRef, useEffect, useRef } from "react";
 
 interface Props {
     children?: ReactNode;
@@ -17,6 +17,7 @@ interface Props {
     dataBsToggle?: string;
     ariaExpanded?: boolean;
     title?: string;
+    disposeTitle?: boolean;
 }
 
 const Button = forwardRef<HTMLButtonElement, Props>(
@@ -36,11 +37,25 @@ const Button = forwardRef<HTMLButtonElement, Props>(
             dataBsToggle,
             ariaExpanded,
             title,
+            disposeTitle,
         },
-        ref
+        ref,
     ) => {
         const buttonRef = useRef<HTMLButtonElement>(null);
         const additionalProps: { [key: string]: string } = {};
+        const [tooltip, setTooltip] = React.useState<bootstrap.Tooltip | undefined>();
+
+        useEffect(() => {
+            if (!title || !buttonRef.current) return;
+
+            setTooltip(
+                new bootstrap.Tooltip(buttonRef.current, {
+                    title: title,
+                    placement: "top",
+                    trigger: "hover",
+                }),
+            );
+        }, [title]);
 
         if (modalTarget) {
             additionalProps["data-bs-toggle"] = "modal";
@@ -51,15 +66,6 @@ const Button = forwardRef<HTMLButtonElement, Props>(
         }
         if (ariaLabel) {
             additionalProps["aria-label"] = ariaLabel;
-        }
-        if (title && buttonRef.current) {
-            if (!buttonRef?.current) return;
-            additionalProps["data-bs-placement"] = "top";
-            additionalProps["data-bs-custom-class"] = "custom-tooltip";
-            additionalProps["data-bs-title"] = title;
-            additionalProps["title"] = title;
-            dataBsToggle = "true";
-            new bootstrap.Tooltip(buttonRef.current);
         }
 
         // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -74,14 +80,18 @@ const Button = forwardRef<HTMLButtonElement, Props>(
                 aria-expanded={ariaExpanded}
                 data-bs-toggle={dataBsToggle}
                 className={`${kind != "close" && "btn "}btn-${outline ? "outline-" : ""}${kind} ${className}`}
-                onClick={onClick}
+                onClick={() => {
+                    tooltip?.hide();
+                    if (disposeTitle) tooltip?.dispose();
+                    if (onClick) onClick();
+                }}
                 title={title}
                 {...additionalProps}
             >
                 {children}
             </button>
         );
-    }
+    },
 );
 
 export default Button;

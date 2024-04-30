@@ -6,7 +6,6 @@ import Button from "../components/Button";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import ChangeUserRoleModal from "../components/ChangeUserRoleModal";
 import * as bootstrap from "bootstrap";
-import Button from "../components/Button";
 
 function ManageUser() {
     const navigate = useNavigate();
@@ -31,7 +30,7 @@ function ManageUser() {
     };
 
     const updateUserRole = async (id: number, role: number) => {
-        const url = `${import.meta.env.VITE_API_URL as string  }users/set/${  id}`;
+        const url = `${import.meta.env.VITE_API_URL as string}users/set/${id}`;
 
         const response = await fetch(url, {
             method: "POST",
@@ -69,34 +68,35 @@ function ManageUser() {
     };
 
     return (
-        <div className="container">
-            <h1 className="mt-3">
-                <Button onClick={() => navigate("/")} className="me-3 mb-2" outline>
-                    <i className="bi bi-arrow-left"></i>
-                </Button>
-                User Role Management
-            </h1>
-            {allUsers.map((user: UserObj, index: number) => (
-                <div key={user.username} className="d-flex align-items-center">
-                    <div className="col p-2">{user.username}</div>
-                    <div className="col p-2">
-                        <select className="form-control" value={user.role} onChange={(e) => handleRoleChange(e, index)}>
-                            <option value={UserRole.MANAGER}>Project Manager</option>
-                            <option value={UserRole.TEAM}>Team Member</option>
-                            <option value={UserRole.CLIENT}>Client</option>
-                        </select>
-                    </div>
-                    <div className="col p-2">
-                        <input
-                            type="text"
-                            className="form-control"
-                            value={user.label}
-                            onInput={(e) => handleLabelInput(e, index)}
-                            onChange={handleLabelChange}
-                        />
+        <>
+            <div className="container">
+                <h1 className="mt-3">
+                    <Button onClick={() => navigate("/")} className="me-3 mb-2" outline>
+                        <i className="bi bi-arrow-left"></i>
+                    </Button>
+                    User Role Management
+                </h1>
+                {allUsers.map((user: UserObj, index: number) => (
+                    <div key={user.username} className="d-flex align-items-center">
+                        <div className="col p-2">{user.username}</div>
+                        <div className="col p-2">
+                            <select className="form-control" value={user.role} onChange={(e) => handleRoleChange(e, index)}>
+                                <option value={UserRole.MANAGER}>Project Manager</option>
+                                <option value={UserRole.TEAM}>Team Member</option>
+                                <option value={UserRole.CLIENT}>Client</option>
+                            </select>
+                        </div>
+                        <div className="col p-2">
+                            <input
+                                type="text"
+                                className="form-control"
+                                value={user.label}
+                                onInput={(e) => handleLabelInput(e, index)}
+                                onChange={handleLabelChange}
+                            />
+                        </div>
                     </div>
                 ))}
-                <Button title="Test"></Button>
             </div>
             <ChangeUserRoleModal
                 user={allUsers[selectedUser]}
