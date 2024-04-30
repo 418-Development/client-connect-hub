@@ -48,12 +48,14 @@ function MarkdownEditor({ value, onValueChanged, label, maxLength = 15000 }: Pro
         if (selectedValue.length === 0) return;
 
         if (selectedValue.startsWith("**") && selectedValue.endsWith("**") && selectedValue.length > 4) {
-            onValueChanged(`${startValue}${selectedValue.substring(2, selectedValue.length - 2)}${endValue}`);
+            onValueChanged(`${startValue}${selectedValue.substring(2, selectedValue.length - 4)}${endValue}`);
         } else if (startValue.endsWith("**") && endValue.startsWith("**")) {
             onValueChanged(`${startValue.substring(0, startValue.length - 2)}${selectedValue}${endValue.substring(2)}`);
         } else {
             onValueChanged(`${startValue}**${selectedValue}**${endValue}`);
         }
+
+        textArea.current?.focus();
     };
 
     const toggleItalicMarkdown = () => {
@@ -80,6 +82,8 @@ function MarkdownEditor({ value, onValueChanged, label, maxLength = 15000 }: Pro
         } else {
             onValueChanged(`${startValue}*${selectedValue}*${endValue}`);
         }
+
+        textArea.current?.focus();
     };
 
     const toggleBlockquoteMarkdown = () => {
@@ -101,6 +105,8 @@ function MarkdownEditor({ value, onValueChanged, label, maxLength = 15000 }: Pro
         } else {
             onValueChanged(`${value.substring(0, selectionStart + 1)}>${value.substring(selectionStart + 1)}`);
         }
+
+        textArea.current?.focus();
     };
 
     const toggleHeadingMarkdown = () => {
@@ -108,11 +114,35 @@ function MarkdownEditor({ value, onValueChanged, label, maxLength = 15000 }: Pro
         if (selectionStart > 0) selectionStart--;
         while (value[selectionStart] !== "\n" && selectionStart >= 0) selectionStart--;
 
-        if (value[selectionStart + 1] === "#") {
-            onValueChanged(`${value.substring(0, selectionStart + 1)}${value.substring(selectionStart + 2)}`);
+        if (value[selectionStart + 1] === "#" && value[selectionStart + 2] === " ") {
+            onValueChanged(`${value.substring(0, selectionStart + 1)}${value.substring(selectionStart + 3)}`);
         } else {
-            onValueChanged(`${value.substring(0, selectionStart + 1)}#${value.substring(selectionStart + 1)}`);
+            onValueChanged(`${value.substring(0, selectionStart + 1)}# ${value.substring(selectionStart + 1)}`);
         }
+
+        textArea.current?.focus();
+    };
+
+    const toggleHeading2Markdown = () => {
+        let [selectionStart] = getSelection();
+        if (selectionStart > 0) selectionStart--;
+        while (value[selectionStart] !== "\n" && selectionStart >= 0) selectionStart--;
+
+        if (value[selectionStart + 1] === "#" && value[selectionStart + 2] === "#" && value[selectionStart + 3] === " ") {
+            onValueChanged(`${value.substring(0, selectionStart + 1)}${value.substring(selectionStart + 4)}`);
+        } else {
+            onValueChanged(`${value.substring(0, selectionStart + 1)}## ${value.substring(selectionStart + 1)}`);
+        }
+
+        textArea.current?.focus();
+    };
+
+    const addImageMarkdown = () => {
+        const [selectionStart] = getSelection();
+
+        onValueChanged(`${value.substring(0, selectionStart)}![image {100x100}](url)${value.substring(selectionStart)}`);
+
+        textArea.current?.focus();
     };
 
     return (
@@ -159,7 +189,7 @@ function MarkdownEditor({ value, onValueChanged, label, maxLength = 15000 }: Pro
                     <Button kind="none" outline onClick={toggleHeadingMarkdown}>
                         <i className="bi bi-type-h1"></i>
                     </Button>
-                    <Button kind="none" outline onClick={toggleHeadingMarkdown}>
+                    <Button kind="none" outline onClick={toggleHeading2Markdown}>
                         <i className="bi bi-type-h2"></i>
                     </Button>
                     <Button kind="none" outline onClick={toggleBoldMarkdown}>
@@ -174,7 +204,7 @@ function MarkdownEditor({ value, onValueChanged, label, maxLength = 15000 }: Pro
                     <Button kind="none" outline onClick={toggleBoldMarkdown}>
                         <i className="bi bi-link-45deg"></i>
                     </Button>
-                    <Button kind="none" outline onClick={toggleBoldMarkdown}>
+                    <Button kind="none" outline onClick={addImageMarkdown}>
                         <i className="bi bi-image"></i>
                     </Button>
                 </div>
