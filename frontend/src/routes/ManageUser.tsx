@@ -4,6 +4,7 @@ import { fetchAllUsers } from "../utils/user";
 import { useNavigate } from "react-router-dom";
 import ChangeUserRoleModal from "../components/ChangeUserRoleModal";
 import * as bootstrap from "bootstrap";
+import Button from "../components/Button";
 
 function ManageUser() {
     const navigate = useNavigate();
@@ -91,6 +92,7 @@ function ManageUser() {
                         </div>
                     </div>
                 ))}
+                <Button title="Test"></Button>
             </div>
             <ChangeUserRoleModal
                 user={allUsers[selectedUser]}

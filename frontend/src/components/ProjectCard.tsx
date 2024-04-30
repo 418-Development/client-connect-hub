@@ -104,12 +104,20 @@ function ProjectCard({ project, deleteProject, showMilestone, onMilestoneEvent }
 
                 {userInfo?.role === UserRole.MANAGER ? (
                     <div className="d-flex justify-content-end me-2">
-                        <Button kind="danger" className="me-2" outline onClick={deleteProject} modalTarget="#deleteProjectModal">
+                        <Button
+                            kind="danger"
+                            className="me-2"
+                            outline
+                            onClick={deleteProject}
+                            modalTarget="#deleteProjectModal"
+                            title="Delete Project"
+                        >
                             <i className="bi bi-trash"></i>
                         </Button>
                         <Button
                             kind="secondary"
                             outline
+                            title="Edit Project"
                             onClick={() => {
                                 navigate(`/edit-project/${project.id}`);
                             }}

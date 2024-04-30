@@ -1,4 +1,6 @@
-import { ReactNode, forwardRef } from "react";
+import * as bootstrap from "bootstrap";
+import * as React from "react";
+import { ReactNode, forwardRef, useRef } from "react";
 
 interface Props {
     children?: ReactNode;
@@ -14,6 +16,7 @@ interface Props {
     id?: string;
     dataBsToggle?: string;
     ariaExpanded?: boolean;
+    title?: string;
 }
 
 const Button = forwardRef<HTMLButtonElement, Props>(
@@ -32,11 +35,12 @@ const Button = forwardRef<HTMLButtonElement, Props>(
             id,
             dataBsToggle,
             ariaExpanded,
+            title,
         },
         ref
     ) => {
-        const additionalProps: { "data-bs-toggle"?: string; "data-bs-target"?: string; "data-bs-dismiss"?: string; "aria-label"?: string } =
-            {};
+        const buttonRef = useRef<HTMLButtonElement>(null);
+        const additionalProps: { [key: string]: string } = {};
 
         if (modalTarget) {
             additionalProps["data-bs-toggle"] = "modal";
@@ -48,9 +52,22 @@ const Button = forwardRef<HTMLButtonElement, Props>(
         if (ariaLabel) {
             additionalProps["aria-label"] = ariaLabel;
         }
+        if (title && buttonRef.current) {
+            if (!buttonRef?.current) return;
+            additionalProps["data-bs-placement"] = "top";
+            additionalProps["data-bs-custom-class"] = "custom-tooltip";
+            additionalProps["data-bs-title"] = title;
+            additionalProps["title"] = title;
+            dataBsToggle = "true";
+            new bootstrap.Tooltip(buttonRef.current);
+        }
+
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        React.useImperativeHandle(ref, () => buttonRef.current!);
+
         return (
             <button
-                ref={ref}
+                ref={buttonRef}
                 type={type}
                 style={style}
                 id={id}
