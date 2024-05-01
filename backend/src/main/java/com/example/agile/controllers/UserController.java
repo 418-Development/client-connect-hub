@@ -4,7 +4,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import com.example.agile.objecs.ERole;
-import com.example.agile.objecs.Project;
 import com.example.agile.objecs.Role;
 import com.example.agile.objecs.User;
 import com.example.agile.payload.request.LoginRequest;
@@ -13,7 +12,6 @@ import com.example.agile.payload.response.JwtResponse;
 import com.example.agile.payload.response.MessageResponse;
 import com.example.agile.repositories.RoleRepo;
 import com.example.agile.repositories.UserRepo;
-import com.example.agile.security.AuthEntryPointJwt;
 import com.example.agile.security.JwtUtils;
 import com.example.agile.security.UserDetailsImpl;
 import jakarta.validation.Valid;
@@ -94,26 +92,26 @@ public class UserController {
         Set<Role> roles = new HashSet<>();
 
         if (strRoles == null) {
-            Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+            Role userRole = roleRepository.findByName(ERole.ROLE_CLIENT)
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
             roles.add(userRole);
         } else {
             strRoles.forEach(role -> {
                 switch (role) {
                     case "admin":
-                        Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
+                        Role adminRole = roleRepository.findByName(ERole.ROLE_MANAGER)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                         roles.add(adminRole);
 
                         break;
                     case "mod":
-                        Role modRole = roleRepository.findByName(ERole.ROLE_MODERATOR)
+                        Role modRole = roleRepository.findByName(ERole.ROLE_TEAM)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                         roles.add(modRole);
 
                         break;
                     default:
-                        Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+                        Role userRole = roleRepository.findByName(ERole.ROLE_CLIENT)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                         roles.add(userRole);
                 }
@@ -152,6 +150,9 @@ public class UserController {
     @GetMapping("/all")
     public ResponseEntity<?> getAllUsers() {
         List<User> users = userRepository.findAll();
+
+        Collections.sort(users);
+        
         return ResponseEntity.ok(users);
     }
 
@@ -165,7 +166,7 @@ public class UserController {
         }
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_MANAGER')")
     @PostMapping("/set/{user_id}")
     public ResponseEntity<?> setUserRoles(@PathVariable Long user_id,@RequestBody Long roleId){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -188,5 +189,32 @@ public class UserController {
         }
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("Invalid role ID"));
+    }
+
+    @PreAuthorize("hasRole('ROLE_MANAGER')")
+    @PostMapping("/setLabel/{user_id}")
+    public ResponseEntity<?> setLabel(@PathVariable Long user_id, @RequestBody String label) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated() || !(authentication.getPrincipal() instanceof UserDetails)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new MessageResponse("Unauthorized"));
+        }
+        User user = userRepository.findById(user_id).orElse(null);
+        if (user == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("User not found"));
+        }
+        
+        // Validate the provided label
+        if (label != null && !label.isEmpty()) {
+            // Check if the provided label is different from the current label
+            if (!label.equals(user.getLabel())) {
+                user.setLabel(label);
+                userRepository.save(user);
+                return ResponseEntity.ok(new MessageResponse("Label updated successfully"));
+            } else {
+                return ResponseEntity.ok(new MessageResponse("Label is already set to the provided value"));
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("Label not provided"));
+        }
     }
 }
