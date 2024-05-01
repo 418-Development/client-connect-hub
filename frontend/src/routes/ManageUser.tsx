@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { UserObj, UserRole } from "../interfaces/UserObj";
-import { fetchAllUsers } from "../utils/user";
+import { fetchAllUsers } from "../utils/User";
 import { useNavigate } from "react-router-dom";
 import Button from "../components/Button";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import ChangeUserRoleModal from "../components/ChangeUserRoleModal";
 import * as bootstrap from "bootstrap";
+import ConfirmInput from "../components/ConfirmInput";
 
 function ManageUser() {
     const navigate = useNavigate();
@@ -30,7 +31,7 @@ function ManageUser() {
     };
 
     const updateUserRole = async (id: number, role: number) => {
-        const url = `${import.meta.env.VITE_API_URL as string  }users/set/${  id}`;
+        const url = `${import.meta.env.VITE_API_URL as string}users/set/${id}`;
 
         const response = await fetch(url, {
             method: "POST",
@@ -46,8 +47,8 @@ function ManageUser() {
         }
     };
 
-    const updateUserLabel = async (id: number, label: string) => {
-        const url = (import.meta.env.VITE_API_URL as string) + "users/" + id + "/setLabel";
+    const updateUserLabel = async (id: number, label: string, callback: () => void) => {
+        const url = `${import.meta.env.VITE_API_URL as string}users/setLabel/${id}`;
 
         const response = await fetch(url, {
             method: "POST",
@@ -55,11 +56,12 @@ function ManageUser() {
                 "Content-Type": "application/json",
                 Authorization: localStorage.getItem("token") ?? "",
             },
-            body: JSON.stringify(label),
+            body: label,
         });
 
         if (response.ok) {
             reloadAllUsers();
+            callback();
         }
     };
 
@@ -80,40 +82,37 @@ function ManageUser() {
         updatedUsers[index].label = (e.target as HTMLInputElement).value;
         setAllUsers(updatedUsers);
     };
-    const handleLabelChange = (e: React.KeyboardEvent<HTMLInputElement>, index: number) => {
-        if (e.key === "Enter") {
-            const updatedUsers = [...allUsers];
-            const label = (e.target as HTMLInputElement).value;
-            updateUserLabel(updatedUsers[index].id, label)
-        }
+    const handleLabelChange = (label: string, index: number, callback: () => void) => {
+        const updatedUsers = [...allUsers];
+        updateUserLabel(updatedUsers[index].id, label, callback);
     };
 
     return (
-        <div className="container">
-            <h1 className="mt-3">
-                <Button onClick={() => navigate("/")} className="me-3 mb-2" outline>
-                    <i className="bi bi-arrow-left"></i>
-                </Button>
-                User Role Management
-            </h1>
-            {allUsers.map((user: UserObj, index: number) => (
-                <div key={user.username} className="d-flex align-items-center">
-                    <div className="col p-2">{user.username}</div>
-                    <div className="col p-2">
-                        <select className="form-control" value={user.role} onChange={(e) => handleRoleChange(e, index)}>
-                            <option value={UserRole.MANAGER}>Project Manager</option>
-                            <option value={UserRole.TEAM}>Team Member</option>
-                            <option value={UserRole.CLIENT}>Client</option>
-                        </select>
-                    </div>
-                    <div className="col p-2">
-                        <input
-                            type="text"
-                            className="form-control"
-                            value={user.label}
-                            onInput={(e) => handleLabelInput(e, index)}
-                            onKeyUp={(e) => handleLabelChange(e, index)}
-                        />
+        <>
+            <div className="container">
+                <h1 className="mt-3">
+                    <Button onClick={() => navigate("/")} className="me-3 mb-2" outline>
+                        <i className="bi bi-arrow-left"></i>
+                    </Button>
+                    User Role Management
+                </h1>
+                {allUsers.map((user: UserObj, index: number) => (
+                    <div key={user.username} className="d-flex align-items-center  p-2" style={{ position: "relative" }}>
+                        <div className="col px-2">{user.username}</div>
+                        <div className="col px-2">
+                            <select className="form-control" value={user.role} onChange={(e) => handleRoleChange(e, index)}>
+                                <option value={UserRole.MANAGER}>Project Manager</option>
+                                <option value={UserRole.TEAM}>Team Member</option>
+                                <option value={UserRole.CLIENT}>Client</option>
+                            </select>
+                        </div>
+                        <div className="col px-2">
+                            <ConfirmInput
+                                value={user.label}
+                                onInput={(e) => handleLabelInput(e, index)}
+                                onConfirm={(callback) => handleLabelChange(user.label, index, callback)}
+                            />
+                        </div>
                     </div>
                 ))}
             </div>

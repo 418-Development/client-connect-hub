@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Comparator;
 import java.util.HashSet;
@@ -38,6 +39,7 @@ public class User implements Comparable<User> {
     @Size(max = 120)
     private String password;
 
+    @Setter
     @NotBlank
     @Size(max = 50)
     private String label;
@@ -90,10 +92,6 @@ public class User implements Comparable<User> {
 
     public String getLabel() {
         return label;
-    }
-
-    public void setLabel(String label) {
-        this.label = label;
     }
 
     public Set<Role> getRoles() {
