@@ -26,8 +26,8 @@ function ConfirmInput({ value, onInput, onConfirm, maxLength = 50, minLength = 1
                     onKeyUp={(e) => {
                         if (value.length >= minLength && onConfirm && e.key === "Enter") {
                             setShowSpinner(true);
+                            setShowIndicator(false);
                             onConfirm(() => {
-                                setShowIndicator(false);
                                 setShowSpinner(false);
                             });
                         }
