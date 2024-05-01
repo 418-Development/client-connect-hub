@@ -12,6 +12,7 @@ public class RoleService {
 
     public void insertRolesIfNotExist() {
         for (ERole role : ERole.values()) {
+
             String roleName = role.name();
             int count = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM public.roles WHERE name = ?", Integer.class, roleName);
             if (count == 0) {

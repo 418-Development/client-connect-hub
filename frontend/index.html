@@ -3,14 +3,30 @@
 
 <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/Logo418-light.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>BMI Calculator</title>
+    <meta name="description" content="Logic Pulse's central client management platform.">
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Client Connect Hub" />
+    <meta property="og:description" content="Logic Pulse's central client management platform" />
+    <meta property="og:image" content="/LogoPulseWhiteShadow.png" />
+
+    <link href="/LogoPulse.svg" rel="icon" media="(prefers-color-scheme: light)">
+    <link href="/LogoPulseWhite.svg" rel="icon" media="(prefers-color-scheme: dark)">
+
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./src/index.css">
+
+    <title>Client Connect Hub</title>
 </head>
 
 <body>
     <div id="root"></div>
+    <script>
+        document.querySelector("html")
+            .setAttribute("data-bs-theme", window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+    </script>
     <script type="module" src="/src/main.tsx"></script>
 </body>
 

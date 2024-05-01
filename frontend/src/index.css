@@ -1,50 +1,88 @@
+@import url("css/markdown.css");
+@import url("css/timeline.css");
+@import url("css/message.css");
+
+:root {
+    box-sizing: border-box;
+
+    --cch-timeline-color: #0d6efd;
+    --cch-timeline-color-active: #8ebcff;
+    --cch-timeline-color-bg: #ffffff;
+    --cch-card-hover: #ececec;
+    --cch-card-hover-2: #dbdbdb;
+    --ch-secondary-btn-text: #292c35;
+    --ch-modal-header: #f8f9fa;
+    --cch-blockquote-color: #f8f9fa;
+    --cch-blockquote-border-color: #004daa;
+}
+
+.logo {
+    filter: invert(100%);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --cch-timeline-color: white;
+        --cch-timeline-color-active: #007728;
+        --cch-timeline-color-bg: #ffffff;
+        --cch-card-hover: #292c35;
+        --cch-card-hover-2: #313641;
+        --ch-secondary-btn-text: #ececec;
+        --ch-modal-header: #343a40;
+        --cch-blockquote-color: #272b30;
+        --cch-blockquote-border-color: #004daa;
+    }
+
+    .logo {
+        filter: none;
+    }
+}
+
 .input-group-text {
     width: 150px !important;
 }
 
-.bmi-scale-container {
-    display: flex;
-    flex-direction: row;
-    position: relative;
+.project-card-header:hover + div {
+    transition: background-color 0.3s, text-decoration 0.3s;
+    background-color: var(--cch-card-hover);
 }
 
-.bmi-scale {
-    flex: 1;
-    height: 50px;
-
-    position: relative;
+.project-card-header:hover {
+    transition: background-color 0.3s, text-decoration 0.3s;
+    background-color: var(--cch-card-hover-2);
 }
 
-#bmi-indicator {
-    height: 50px;
-    width: 50px;
-    position: absolute;
-    top: 0;
-    left: 0;
-    transform: translate(-50%, -60%);
+.iconButton {
+    padding: 0.21rem 0.5rem !important;
 }
 
-#underweight {
-    flex: calc(18.5 - 15);
-}
-#healthy {
-    flex: calc(25 - 18.5);
-}
-#overweight {
-    flex: calc(30 - 25);
-}
-#obese {
-    flex: calc(45 - 30);
+.edit-milestone-timeline {
+    max-width: 50%;
 }
 
-.description {
-    position: absolute;
-    right: 0;
-    bottom: 0;
+@media only screen and (max-width: 995px) {
+    .edit-milestone-container {
+        flex-direction: column;
+    }
 
-    transform: translate(50%, 100%);
+    .edit-milestone.ms-5 {
+        margin-left: 0 !important;
+        margin-top: 1rem !important;
+    }
 
-    height: 50px;
+    .edit-milestone-timeline {
+        max-width: 100%;
+    }
+}
 
-    font-weight: bold;
+.custom-client-color {
+    background-color: rgb(38, 23, 114) !important;
+}
+
+.white-btn-text {
+    color: var(--ch-secondary-btn-text) !important;
+}
+
+.modal-header {
+    background-color: var(--ch-modal-header) !important;
 }

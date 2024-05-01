@@ -1,19 +1,17 @@
 package com.example.agile.controllers;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
-import com.example.agile.objecs.*;
+import com.example.agile.objecs.ERole;
+import com.example.agile.objecs.Role;
+import com.example.agile.objecs.User;
 import com.example.agile.payload.request.LoginRequest;
 import com.example.agile.payload.request.SignupRequest;
 import com.example.agile.payload.response.JwtResponse;
 import com.example.agile.payload.response.MessageResponse;
 import com.example.agile.repositories.RoleRepo;
 import com.example.agile.repositories.UserRepo;
-import com.example.agile.security.AuthEntryPointJwt;
 import com.example.agile.security.JwtUtils;
 import com.example.agile.security.UserDetailsImpl;
 import jakarta.validation.Valid;
@@ -23,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -45,6 +44,7 @@ public class UserController {
 
     @Autowired
     RoleRepo roleRepository;
+
 
     @Autowired
     PasswordEncoder encoder;
@@ -92,26 +92,26 @@ public class UserController {
         Set<Role> roles = new HashSet<>();
 
         if (strRoles == null) {
-            Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+            Role userRole = roleRepository.findByName(ERole.ROLE_CLIENT)
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
             roles.add(userRole);
         } else {
             strRoles.forEach(role -> {
                 switch (role) {
                     case "admin":
-                        Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
+                        Role adminRole = roleRepository.findByName(ERole.ROLE_MANAGER)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                         roles.add(adminRole);
 
                         break;
                     case "mod":
-                        Role modRole = roleRepository.findByName(ERole.ROLE_MODERATOR)
+                        Role modRole = roleRepository.findByName(ERole.ROLE_TEAM)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                         roles.add(modRole);
 
                         break;
                     default:
-                        Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+                        Role userRole = roleRepository.findByName(ERole.ROLE_CLIENT)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                         roles.add(userRole);
                 }
@@ -163,17 +163,28 @@ public class UserController {
         }
     }
 
-    @PostMapping("/{userId}/addLabel/{labelName}")
-    public ResponseEntity<?> addLabelToUser(@RequestParam("username") String username, @RequestParam("label") ELabel label) {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("Error: User not found."));
+    @PreAuthorize("hasRole('ROLE_MANAGER')")
+    @PostMapping("/set/{user_id}")
+    public ResponseEntity<?> setUserRoles(@PathVariable Long user_id,@RequestBody Long roleId){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated() || !(authentication.getPrincipal() instanceof UserDetails)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new MessageResponse("Unauthorized"));
+        }
+        User user = userRepository.findById(user_id).orElse(null);
+        if (user == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("User not found"));
+        }
 
-        Label userLabel = new Label(label);
-        user.addLabel(userLabel);
+        Set<Role> listOfCurrentRole = new HashSet<>();
 
-        userRepository.save(user);
+        Optional<Role> roleToAdd = roleRepository.findById(roleId);
+        if (roleToAdd.isPresent()) {
+            listOfCurrentRole.add(roleToAdd.get());
+            user.setRoles(listOfCurrentRole);
+            userRepository.save(user);
+            return ResponseEntity.ok(user.getProjects());
+        }
 
-        return ResponseEntity.ok(new MessageResponse("Label added successfully to the user!"));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("Invalid role ID"));
     }
-
 }

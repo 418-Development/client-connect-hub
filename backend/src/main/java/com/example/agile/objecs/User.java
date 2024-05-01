@@ -1,5 +1,8 @@
 package com.example.agile.objecs;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -34,17 +37,13 @@ public class User {
     @Size(max = 120)
     private String password;
 
-    private int age;
-    private int weight;
-    private int height;
+    @ManyToMany(mappedBy = "users")
+    @JsonIgnore
+    private Set<Project> projects;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
-
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "user_labels", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "label_id"))
-    private Set<Label> labels = new HashSet<>();
 
     public User(String username) {
         this.username = username;
@@ -91,14 +90,7 @@ public class User {
         this.roles = roles;
     }
 
-    public Set<Label> getLabels() {
-        return labels;
-    }
-
-    public void setLabels(Set<Label> labels) {
-        this.labels = labels;
-    }
-
-    public void addLabel(Label userLabel) {
+    public Set<Project> getProjects() {
+        return projects;
     }
 }

@@ -2,14 +2,14 @@ import { useRef, useState } from "react";
 import Button from "./Button";
 
 interface Props {
-    signin: (username: string, password: string) => void;
+    login: () => void;
     username?: string;
     password?: string;
     setUsername: React.Dispatch<React.SetStateAction<string>>;
     setPassword: React.Dispatch<React.SetStateAction<string>>;
 }
 
-function SignUpForm({ signin, setUsername, setPassword, username = "", password = "" }: Props) {
+function SignUpForm({ login, setUsername, setPassword, username = "", password = "" }: Props) {
     const [email, setEmail] = useState<string>("");
     const [verifyPassword, setVerifyPassword] = useState<string>("");
 
@@ -25,9 +25,9 @@ function SignUpForm({ signin, setUsername, setPassword, username = "", password 
 
     const checkPassword = async () => {
         if (password == verifyPassword) {
-            const success = await signup();
+            const success = await signUp();
             if (success) {
-                await signin(username, password);
+                await login();
                 closeButton.current?.click();
             }
         } else if (passwordValidation.current != null) {
@@ -36,8 +36,8 @@ function SignUpForm({ signin, setUsername, setPassword, username = "", password 
         }
     };
 
-    const signup = async () => {
-        const url = (import.meta.env.VITE_API_URL as string) + "api/auth/signup";
+    const signUp = async () => {
+        const url = `${import.meta.env.VITE_API_URL as string  }users/auth/signup`;
 
         const response = await fetch(url, {
             method: "POST",
@@ -51,12 +51,8 @@ function SignUpForm({ signin, setUsername, setPassword, username = "", password 
             }),
         });
 
-        console.log("http://localhost:8080/api/auth/signup", response.ok, response.status);
-
         if (!response.ok) {
             const json = await response.json();
-
-            console.log("json", json);
             const msg: string = json.message;
             if (msg.toLowerCase().includes("email")) {
                 emailValidationInput.current?.classList.add("is-invalid");
@@ -76,7 +72,7 @@ function SignUpForm({ signin, setUsername, setPassword, username = "", password 
                 <div className="modal-content">
                     <div className="modal-header">
                         <h5>Sign Up Form</h5>
-                        <Button ref={closeButton} style="close" dismissModal={true} ariaLabel="Close"></Button>
+                        <Button ref={closeButton} kind="close" dismissModal={true} ariaLabel="Close"></Button>
                     </div>
 
                     <form
@@ -102,6 +98,10 @@ function SignUpForm({ signin, setUsername, setPassword, username = "", password 
                                     id="userEmail"
                                     aria-describedby="emailHelp"
                                     placeholder="Enter email"
+                                    required
+                                    maxLength={50}
+                                    data-bs-toggle="tooltip" 
+                                    title="Enter your Email here."
                                 />
                                 <div className="invalid-feedback" ref={emailValidation}></div>
                                 <small id="emailHelp" className="form-text text-muted">
@@ -122,6 +122,10 @@ function SignUpForm({ signin, setUsername, setPassword, username = "", password 
                                     id="username"
                                     placeholder="Username"
                                     value={username}
+                                    required
+                                    maxLength={20}
+                                    data-bs-toggle="tooltip" 
+                                    title="Enter your Username here."
                                 />
                                 <div className="invalid-feedback" ref={usernameValidation}></div>
                             </div>
@@ -137,7 +141,11 @@ function SignUpForm({ signin, setUsername, setPassword, username = "", password 
                                     id="userPassword"
                                     placeholder="Password"
                                     value={password}
+                                    required
                                     min={6}
+                                    maxLength={120}
+                                    data-bs-toggle="tooltip" 
+                                    title="Enter your Password here."
                                 />
                             </div>
                             <div className="form-group mt-3">
@@ -152,16 +160,20 @@ function SignUpForm({ signin, setUsername, setPassword, username = "", password 
                                     className="form-control"
                                     id="verifyUserPassword"
                                     placeholder="Verify Password"
+                                    required
                                     min={6}
+                                    maxLength={120}
+                                    data-bs-toggle="tooltip" 
+                                    title="Enter your Password here again to verify it."
                                 />
                                 <div className="invalid-feedback" ref={passwordValidation}></div>
                             </div>
                         </div>
                         <div className="modal-footer">
-                            <Button style="secondary" dismissModal={true}>
+                            <Button kind="secondary" dismissModal={true}>
                                 Close
                             </Button>
-                            <Button type="submit" style="primary">
+                            <Button type="submit" kind="primary">
                                 Submit
                             </Button>
                         </div>
