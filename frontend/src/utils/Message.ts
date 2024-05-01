@@ -41,7 +41,7 @@ export function getDummyMessages() {
             id: 2,
             user: {
                 id: 2,
-                email: "client@client.com",
+                email: "client@gmail.com",
                 username: "User 2",
                 label: "Client",
                 role: UserRole.CLIENT,
@@ -64,13 +64,13 @@ export function getDummyMessages() {
         {
             id: 4,
             user: {
-                id: 1,
-                email: "team@team.com",
-                username: "User 1",
+                id: 3,
+                email: "user3@team.com",
+                username: "User 3",
                 label: "Developer",
-                role: UserRole.TEAM,
+                role: UserRole.MANAGER,
             },
-            content: "...",
+            content: "# Title\n\n**Ok** I got it!",
             timestamp: new Date("2024-01-02T13:02:00.000Z"),
         },
     ];

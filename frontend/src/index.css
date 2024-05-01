@@ -14,6 +14,8 @@
     --ch-modal-header: #f8f9fa;
     --cch-blockquote-color: #f8f9fa;
     --cch-blockquote-border-color: #004daa;
+    --cch-tooltip-bg-color: #0d6efd;
+    --cch-tooltip-color: #ffffff;
 }
 
 .logo {
@@ -31,6 +33,8 @@
         --ch-modal-header: #343a40;
         --cch-blockquote-color: #272b30;
         --cch-blockquote-border-color: #004daa;
+        --cch-tooltip-bg-color: #0d6efd;
+        --cch-tooltip-color: #ffffff;
     }
 
     .logo {
@@ -87,7 +91,13 @@
     background-color: var(--ch-modal-header) !important;
 }
 
-.custom-tooltip {
-    --bs-tooltip-bg: var(--bd-violet-bg);
-    --bs-tooltip-color: var(--bs-white);
+.tooltip {
+    --bs-tooltip-bg: var(--cch-tooltip-bg-color) !important;
+    --bs-tooltip-color: var(--cch-tooltip-color) !important;
+}
+
+.gravatar {
+    border-radius: 100%;
+    width: 32px;
+    height: 32px;
 }

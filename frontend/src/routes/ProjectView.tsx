@@ -224,7 +224,13 @@ function ProjectView() {
 
                     {userInfo?.role === UserRole.MANAGER ? (
                         <div className="d-flex justify-content-end me-2">
-                            <Button kind="danger" className="me-2" outline modalTarget="#deleteProjectModal">
+                            <Button
+                                kind="danger"
+                                className="me-2"
+                                outline
+                                modalTarget="#deleteProjectModal"
+                                title={`Delete '${project?.title}'`}
+                            >
                                 <i className="bi bi-trash"></i>
                             </Button>
                             <Button
@@ -233,6 +239,7 @@ function ProjectView() {
                                 onClick={() => {
                                     navigate(`/edit-project/${project?.id}`);
                                 }}
+                                title={`Edit '${project?.title}'`}
                             >
                                 <i className="bi bi-pencil"></i>
                             </Button>

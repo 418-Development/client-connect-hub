@@ -15,18 +15,20 @@ function Forum({ messages }: Props) {
     return (
         <div className="p-3">
             <div className="mt-3">
-                <MarkdownEditor
-                    value={messageContent}
-                    onValueChanged={(value) => {
-                        setMessageContent(value);
-                    }}
-                    label="Description"
-                />
+                <div className="p-2 pt-1 border">
+                    <MarkdownEditor
+                        value={messageContent}
+                        onValueChanged={(value) => {
+                            setMessageContent(value);
+                        }}
+                        label="Message"
+                    />
 
-                <div className="d-flex justify-content-end">
-                    <Button type="submit" kind="success" className="mt-3">
-                        Send Message
-                    </Button>
+                    <div className="d-flex justify-content-end">
+                        <Button type="submit" kind="success" className="mt-2">
+                            Send Message
+                        </Button>
+                    </div>
                 </div>
             </div>
             <div>

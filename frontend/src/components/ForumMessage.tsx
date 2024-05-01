@@ -2,6 +2,8 @@ import { useContext } from "react";
 import { MessageObj } from "../interfaces/MessageObj";
 import { UserContext } from "../UserContext";
 import { UserRole } from "../interfaces/UserObj";
+import Markdown from "./Markdown";
+import Gravatar from "./Gravatar";
 
 interface Props {
     message: MessageObj;
@@ -18,13 +20,14 @@ function ForumMessage({ message }: Props) {
             } mt-3`}
         >
             <div className="message-container card">
-                <div className="message-header card-header d-flex align-items-end">
-                    <h5 className="card-title m-0">{message.user.username}</h5>
-                    <span className="badge rounded-pill text-bg-secondary ms-2">{message.user.label}</span>
+                <div className="message-header card-header d-flex align-items-center">
+                    <Gravatar email={message.user.email} />
+                    <h5 className="card-title my-0  mx-2">{message.user.username}</h5>
+                    <span className="badge rounded-pill text-bg-secondary">{message.user.label}</span>
                 </div>
-                <div className="card-body">{message.content}</div>
-                <div className="card-footer text-body-secondary">
-                    {`${message.timestamp.toLocaleTimeString()} ${message.timestamp.toLocaleDateString()}`}
+                <div className="card-body">
+                    <Markdown medium>{message.content}</Markdown>
+                    <div className="text-body-secondary">{message.timestamp.toLocaleString()}</div>
                 </div>
             </div>
         </div>

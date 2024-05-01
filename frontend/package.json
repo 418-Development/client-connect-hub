@@ -11,8 +11,10 @@
         "preview": "vite preview"
     },
     "dependencies": {
+        "@types/crypto-js": "^4.2.2",
         "bootstrap": "^5.3.3",
         "bootstrap-icons": "^1.11.3",
+        "crypto-js": "^4.2.0",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
         "react-markdown": "^9.0.1",
