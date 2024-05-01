@@ -11,8 +11,16 @@ public class ApplicationStartup {
     @Autowired
     private RoleService roleService;
 
+    @Autowired
+    private LabelService labelService;
+
     @EventListener(ApplicationReadyEvent.class)
     public void initializeRoles() {
         roleService.insertRolesIfNotExist();
+    }
+
+    @EventListener(ApplicationReadyEvent.class)
+    public void initializeLabels() {
+        labelService.insertLabelsIfNotExist();
     }
 }

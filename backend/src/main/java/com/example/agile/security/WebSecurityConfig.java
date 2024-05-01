@@ -62,10 +62,6 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers("/users/**").permitAll()
                                 .requestMatchers(AUTH_WHITELIST).permitAll()
-<<<<<<< HEAD
-                                .requestMatchers("/projects/**").authenticated()
-=======
->>>>>>> 0bad31a154bbbddfbcc69771210129ce724197a2
                                 .anyRequest().authenticated()
                 );
 
@@ -80,16 +76,9 @@ public class WebSecurityConfig {
             "/swagger-ui.html",
             "/swagger-ui/**",
             "/v3/api-docs/**",
-<<<<<<< HEAD
-            "/swagger-resources/**"
-    };
-
-}
-=======
             "/swagger-resources/**",
             "/error",
             "/error/**"
     };
 
 }
->>>>>>> 0bad31a154bbbddfbcc69771210129ce724197a2

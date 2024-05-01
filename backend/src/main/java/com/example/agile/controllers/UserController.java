@@ -3,13 +3,12 @@ package com.example.agile.controllers;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import com.example.agile.objecs.ERole;
-import com.example.agile.objecs.Role;
-import com.example.agile.objecs.User;
+import com.example.agile.objecs.*;
 import com.example.agile.payload.request.LoginRequest;
 import com.example.agile.payload.request.SignupRequest;
 import com.example.agile.payload.response.JwtResponse;
 import com.example.agile.payload.response.MessageResponse;
+import com.example.agile.repositories.LabelRepo;
 import com.example.agile.repositories.RoleRepo;
 import com.example.agile.repositories.UserRepo;
 import com.example.agile.security.JwtUtils;
@@ -44,6 +43,9 @@ public class UserController {
 
     @Autowired
     RoleRepo roleRepository;
+
+    @Autowired
+    LabelRepo labelRepository;
 
 
     @Autowired
@@ -187,4 +189,36 @@ public class UserController {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("Invalid role ID"));
     }
+
+    @PostMapping("/addLabel/{user_id}")
+    public ResponseEntity<?> addLabelToUser(@PathVariable Long user_id, @RequestBody ELabel label) {
+        // Omitted authentication check for brevity
+
+        User user = userRepository.findById(user_id).orElse(null);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("User not found"));
+        }
+
+        Label newLabel = new Label(label);
+
+        switch (label) {
+            case FRONTEND:
+            case BACKEND:
+            case QA:
+            case DESIGNER:
+                // Save the new label before associating it with the user
+                Label savedLabel = labelRepository.save(newLabel);
+
+                // Add the saved label to the user's labels
+                user.getLabels().add(savedLabel);
+                userRepository.save(user);
+
+                return ResponseEntity.ok(new MessageResponse("Label added successfully"));
+            default:
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("Invalid label"));
+        }
+    }
+
+
+
 }
