@@ -1,26 +1,40 @@
 package com.example.agile.objecs;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.Date;
 
 @Setter
 @Getter
 @Entity
-@Table(name = "posts")
+@Table(name = "post")
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "forum_id", nullable = false)
-    private Forum forum;
-
-    @OneToOne
-    @JoinColumn(name = "author_id", nullable = false)
-    private User author;
-
-    @Column(columnDefinition = "TEXT")
     private String content;
+
+    private Date postedDate;
+
+    private Long projectId;
+
+    private Long userId;
+    public Post() {
+    }
+
+    public Post(String content, Date postedDate) {
+        this.content = content;
+        this.postedDate = postedDate;
+    }
+
+    public Post(Long id, String content, Date postedDate) {
+        this.id = id;
+        this.content = content;
+        this.postedDate = postedDate;
+    }
+
 }

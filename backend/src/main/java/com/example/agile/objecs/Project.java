@@ -1,7 +1,5 @@
 package com.example.agile.objecs;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -52,10 +50,20 @@ public class Project {
     )
     private Set<Milestone> milestones = new HashSet<>();
 
-    public Project(String projectName){
+
+    @OneToMany
+    @JoinTable(
+            name = "project_post",
+            joinColumns = @JoinColumn(name = "project_id"),
+            inverseJoinColumns = @JoinColumn(name = "post_id")
+    )
+    private Set<Post> posts = new HashSet<>();
+
+    public Project(String projectName) {
         this.projectName = projectName;
     }
-    public Project(String projectName, String description, Long creatorId ){
+
+    public Project(String projectName, String description, Long creatorId) {
         setProjectName(projectName);
         setDescription(description);
         setCreatorId(creatorId);
@@ -63,7 +71,7 @@ public class Project {
         setCreatedDate(localDate);
     }
 
-    public Project(){
+    public Project() {
     }
 
 
