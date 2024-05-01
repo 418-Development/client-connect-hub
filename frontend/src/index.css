@@ -86,3 +86,8 @@
 .modal-header {
     background-color: var(--ch-modal-header) !important;
 }
+
+.custom-tooltip {
+    --bs-tooltip-bg: var(--bd-violet-bg);
+    --bs-tooltip-color: var(--bs-white);
+}

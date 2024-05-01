@@ -1,4 +1,6 @@
-import { ReactNode, forwardRef } from "react";
+import * as bootstrap from "bootstrap";
+import * as React from "react";
+import { ReactNode, forwardRef, useEffect, useRef } from "react";
 
 interface Props {
     children?: ReactNode;
@@ -15,6 +17,7 @@ interface Props {
     dataBsToggle?: string;
     ariaExpanded?: boolean;
     title?: string;
+    disposeTitle?: boolean;
 }
 
 const Button = forwardRef<HTMLButtonElement, Props>(
@@ -34,11 +37,25 @@ const Button = forwardRef<HTMLButtonElement, Props>(
             dataBsToggle,
             ariaExpanded,
             title,
+            disposeTitle,
         },
-        ref
+        ref,
     ) => {
-        const additionalProps: { "data-bs-toggle"?: string; "data-bs-target"?: string; "data-bs-dismiss"?: string; "aria-label"?: string } =
-            {};
+        const buttonRef = useRef<HTMLButtonElement>(null);
+        const additionalProps: { [key: string]: string } = {};
+        const [tooltip, setTooltip] = React.useState<bootstrap.Tooltip | undefined>();
+
+        useEffect(() => {
+            if (!title || !buttonRef.current) return;
+
+            setTooltip(
+                new bootstrap.Tooltip(buttonRef.current, {
+                    title: title,
+                    placement: "top",
+                    trigger: "hover",
+                }),
+            );
+        }, [title]);
 
         if (modalTarget) {
             additionalProps["data-bs-toggle"] = "modal";
@@ -50,23 +67,31 @@ const Button = forwardRef<HTMLButtonElement, Props>(
         if (ariaLabel) {
             additionalProps["aria-label"] = ariaLabel;
         }
+
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        React.useImperativeHandle(ref, () => buttonRef.current!);
+
         return (
             <button
-                ref={ref}
+                ref={buttonRef}
                 type={type}
                 style={style}
                 id={id}
                 aria-expanded={ariaExpanded}
                 data-bs-toggle={dataBsToggle}
-                className={`${kind != "close" && "btn "}btn-${outline ? "outline-" : ""}${kind} ${className}`}
-                onClick={onClick}
+                className={`${kind != "close" ? "btn " : ""}btn-${outline ? "outline-" : ""}${kind} ${className}`}
+                onClick={() => {
+                    tooltip?.hide();
+                    if (disposeTitle) tooltip?.dispose();
+                    if (onClick) onClick();
+                }}
                 title={title}
                 {...additionalProps}
             >
                 {children}
             </button>
         );
-    }
+    },
 );
 
 export default Button;
