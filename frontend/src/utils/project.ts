@@ -1,5 +1,5 @@
 import { ProjectObj, ProjectRespondsObj } from "../interfaces/Project";
-import { parseMilestoneResponseObjArray } from "./milestone";
+import { parseMilestoneResponseObjArray } from "./Milestone";
 import { parseUserResponseObjArray } from "./User";
 
 export function parseProjectResponseObjArray(projects: ProjectRespondsObj[]): ProjectObj[] {

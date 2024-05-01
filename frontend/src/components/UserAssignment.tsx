@@ -101,13 +101,9 @@ function UserAssignment({ project, onUserEvent }: Props) {
                     </ul>
                 </div>
                 <label htmlFor="roleSelect" className="form-label ms-3 mb-0">
-                    {roleSearch == UserRole.MANAGER
-                        ? "All"
-                        : roleSearch == UserRole.CLIENT
-                        ? "Client"
-                        : roleSearch == UserRole.TEAM
-                        ? "Team Member"
-                        : ""}
+                    {roleSearch == UserRole.MANAGER && "All"}
+                    {roleSearch == UserRole.CLIENT && "Client"}
+                    {roleSearch == UserRole.TEAM && "Team Member"}
                 </label>
             </div>
             <div className="card">

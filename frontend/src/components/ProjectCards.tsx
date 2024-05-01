@@ -4,7 +4,7 @@ import ProjectCard from "./ProjectCard";
 import DeleteProjectModal from "./DeleteProjectModal";
 import { MilestoneObj } from "../interfaces/Milestone";
 import MilestoneModal from "./MilestoneModal";
-import { fetchAllProjects } from "../utils/project";
+import { fetchAllProjects } from "../utils/Project";
 
 function ProjectCards() {
     const [projects, setProjects] = useState<ProjectObj[]>([]);
