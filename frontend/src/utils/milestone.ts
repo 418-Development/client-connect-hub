@@ -1,22 +1,9 @@
 import { MilestoneObj, MilestoneResponseObj } from "../interfaces/Milestone";
 
 export function parseMilestoneResponseObjArray(milestones: MilestoneResponseObj[]): MilestoneObj[] {
-    return (
-        milestones
-            ?.map((milestone) => {
-                return parseMilestoneResponseObj(milestone);
-            })
-            .sort((a, b) => {
-                let comp = a.estimatedEnd.localeCompare(b.estimatedEnd);
-                if (comp === 0) {
-                    comp = a.title.localeCompare(b.title);
-                    if (comp === 0) {
-                        comp = a.id > b.id ? 1 : -1;
-                    }
-                }
-                return comp;
-            }) ?? []
-    );
+    return milestones?.map((milestone) => {
+        return parseMilestoneResponseObj(milestone);
+    });
 }
 
 export function parseMilestoneResponseObj(milestone: MilestoneResponseObj): MilestoneObj {

@@ -8,7 +8,9 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
+import lombok.Setter;
 
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,7 +20,7 @@ import java.util.Set;
                 @UniqueConstraint(columnNames = "username"),
                 @UniqueConstraint(columnNames = "email")
         })
-public class User {
+public class User implements Comparable<User> {
     @Getter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,6 +38,11 @@ public class User {
     @NotBlank
     @Size(max = 120)
     private String password;
+
+    @Setter
+    @NotBlank
+    @Size(max = 50)
+    private String label;
 
     @ManyToMany(mappedBy = "users")
     @JsonIgnore
@@ -83,6 +90,10 @@ public class User {
         this.password = password;
     }
 
+    public String getLabel() {
+        return label;
+    }
+
     public Set<Role> getRoles() {
         return roles;
     }
@@ -92,5 +103,27 @@ public class User {
 
     public Set<Project> getProjects() {
         return projects;
+    }
+
+
+    @Override
+    public int compareTo(User other) {
+        ERole roles = this.roles.stream()
+                .map(Role::getName)
+                .max(Comparator.naturalOrder())
+                .orElse(ERole.ROLE_CLIENT);
+
+        ERole otherRoles = other.roles.stream()
+                .map(Role::getName)
+                .max(Comparator.naturalOrder())
+                .orElse(ERole.ROLE_CLIENT);
+
+        if(roles.ordinal() > otherRoles.ordinal()){
+            return -1;
+        }else if(roles.ordinal() < otherRoles.ordinal()){
+            return 1;
+        }else {
+           return getUsername().compareTo(other.getUsername());
+        }
     }
 }
