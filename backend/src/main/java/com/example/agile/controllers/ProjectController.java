@@ -22,6 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -196,12 +197,18 @@ public class ProjectController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new MessageResponse("User not found"));
         }
 
-        if(currentUser.getRoles().stream().anyMatch(role -> role.getName() == ERole.ROLE_MANAGER || role.getName() == ERole.ROLE_TEAM)){
-            return ResponseEntity.ok(projectRepository.findAll());
-        }
 
-        return ResponseEntity.ok(currentUser.getProjects());
+        if (currentUser.getRoles().stream().anyMatch(role -> role.getName() == ERole.ROLE_MANAGER || role.getName() == ERole.ROLE_TEAM)) {
+            List<Project> projects = projectRepository.findAll();
+            sortProjectsMilestones(projects);
+            return ResponseEntity.ok(projects);
+        } else {
+            Set<Project> projects = currentUser.getProjects();
+            sortProjectsMilestones(projects);
+            return ResponseEntity.ok(projects);
+        }
     }
+
 
     @GetMapping("/get/{id}")
     public ResponseEntity<?> getProjectById(@PathVariable Long id) {
@@ -218,11 +225,12 @@ public class ProjectController {
         Optional<Project> project = projectRepository.findById(id);
         if (project.isPresent()) {
             Project p = project.get();
-            if(
+            if (
                     currentUser.getRoles().stream().anyMatch(role -> role.getName() == ERole.ROLE_MANAGER ||
                             role.getName() == ERole.ROLE_TEAM) ||
-                            p.getUsers().stream().anyMatch( user -> Objects.equals(user.getId(), currentUser.getId()))
-            ){
+                            p.getUsers().stream().anyMatch(user -> Objects.equals(user.getId(), currentUser.getId()))
+            ) {
+                sortProjectMilestones(p);
                 return ResponseEntity.ok(p);
             }
             return ResponseEntity.notFound().build();
@@ -242,13 +250,12 @@ public class ProjectController {
         }
 
         Project project = projectRepository.findById(projectId).orElse(null);
-        if (project == null)
-        {
+        if (project == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("Project not found"));
         }
         // Fetch user from the database
         User user = userRepository.findById(userId).orElse(null);
-        if (user == null){
+        if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("User not found"));
         }
         // Add user to the project
@@ -257,6 +264,7 @@ public class ProjectController {
 
         return ResponseEntity.ok(project);
     }
+
     @PreAuthorize("hasRole('ROLE_MANAGER')")
     @DeleteMapping("/{projectId}/removeUser/{userId}")
     public ResponseEntity<?> removeUserFromProject(@PathVariable Long projectId, @PathVariable Long userId) {
@@ -287,14 +295,30 @@ public class ProjectController {
 
     @GetMapping("/get_projects_by_user/{user_id}")
     public ResponseEntity<?> getProjectsByCurrentUser(@PathVariable Long user_id) {
-            User user = userRepository.findById(user_id).orElse(null);
-            if (user == null)
-            {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("User not found"));
-            }
+        User user = userRepository.findById(user_id).orElse(null);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("User not found"));
+        }
 
-            return ResponseEntity.ok(user);
+        return ResponseEntity.ok(user);
     }
 
+    private void sortProjectsMilestones(Set<Project> projects) {
+        projects.forEach(this::sortProjectMilestones);
+    }
+
+    private void sortProjectsMilestones(List<Project> projects) {
+        projects.forEach(this::sortProjectMilestones);
+    }
+
+    private void sortProjectMilestones(Project project) {
+        Set<Milestone> sortedMilestones = project.getMilestones().stream()
+                .sorted(Comparator.comparing(Milestone::getEstimateDate)
+                        .thenComparing(Milestone::getMilestoneName)
+                        .thenComparing(Milestone::getMilestoneId))
+                .collect(Collectors.toCollection(LinkedHashSet::new));
+        project.setMilestones(sortedMilestones);
+
+    }
 
 }

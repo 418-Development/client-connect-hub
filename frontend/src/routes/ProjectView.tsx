@@ -11,7 +11,7 @@ import DeleteProjectModal from "../components/DeleteProjectModal";
 import Markdown from "../components/Markdown";
 import { MilestoneObj } from "../interfaces/Milestone";
 import MilestoneModal from "../components/MilestoneModal";
-import { fetchProject } from "../utils/project";
+import { fetchProject } from "../utils/Project";
 import Forum from "../components/Forum";
 import { getDummyMessages } from "../utils/Message";
 

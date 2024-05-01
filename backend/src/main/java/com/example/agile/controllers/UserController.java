@@ -152,6 +152,9 @@ public class UserController {
     @GetMapping("/all")
     public ResponseEntity<?> getAllUsers() {
         List<User> users = userRepository.findAll();
+
+        Collections.sort(users);
+        
         return ResponseEntity.ok(users);
     }
 
@@ -188,5 +191,32 @@ public class UserController {
         }
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("Invalid role ID"));
+    }
+
+    @PreAuthorize("hasRole('ROLE_MANAGER')")
+    @PostMapping("/setLabel/{user_id}")
+    public ResponseEntity<?> setLabel(@PathVariable Long user_id, @RequestBody String label) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated() || !(authentication.getPrincipal() instanceof UserDetails)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new MessageResponse("Unauthorized"));
+        }
+        User user = userRepository.findById(user_id).orElse(null);
+        if (user == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("User not found"));
+        }
+        
+        // Validate the provided label
+        if (label != null && !label.isEmpty()) {
+            // Check if the provided label is different from the current label
+            if (!label.equals(user.getLabel())) {
+                user.setLabel(label);
+                userRepository.save(user);
+                return ResponseEntity.ok(new MessageResponse("Label updated successfully"));
+            } else {
+                return ResponseEntity.ok(new MessageResponse("Label is already set to the provided value"));
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("Label not provided"));
+        }
     }
 }

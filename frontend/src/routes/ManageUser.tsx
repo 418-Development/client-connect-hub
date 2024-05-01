@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { UserObj, UserRole } from "../interfaces/UserObj";
-import { fetchAllUsers } from "../utils/user";
+import { fetchAllUsers } from "../utils/User";
 import { useNavigate } from "react-router-dom";
 import Button from "../components/Button";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import ChangeUserRoleModal from "../components/ChangeUserRoleModal";
 import * as bootstrap from "bootstrap";
 import Gravatar from "../components/Gravatar";
+import ConfirmInput from "../components/ConfirmInput";
 
 function ManageUser() {
     const navigate = useNavigate();
@@ -47,6 +48,24 @@ function ManageUser() {
         }
     };
 
+    const updateUserLabel = async (id: number, label: string, callback: () => void) => {
+        const url = `${import.meta.env.VITE_API_URL as string}users/setLabel/${id}`;
+
+        const response = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: localStorage.getItem("token") ?? "",
+            },
+            body: label,
+        });
+
+        if (response.ok) {
+            reloadAllUsers();
+            callback();
+        }
+    };
+
     const handleRoleChange = (e: React.ChangeEvent<HTMLSelectElement>, index: number) => {
         const updatedUsers = [...allUsers];
         const value = Number(e.target.value);
@@ -64,8 +83,9 @@ function ManageUser() {
         updatedUsers[index].label = (e.target as HTMLInputElement).value;
         setAllUsers(updatedUsers);
     };
-    const handleLabelChange = () => {
-        //
+    const handleLabelChange = (label: string, index: number, callback: () => void) => {
+        const updatedUsers = [...allUsers];
+        updateUserLabel(updatedUsers[index].id, label, callback);
     };
 
     return (
@@ -78,7 +98,7 @@ function ManageUser() {
                     User Role Management
                 </h1>
                 {allUsers.map((user: UserObj, index: number) => (
-                    <div key={user.username} className="d-flex align-items-center">
+                    <div key={user.username} className="d-flex align-items-center" style={{ position: "relative" }}>
                         <div className="col p-2 d-flex align-items-center">
                             <Gravatar gravatar={user.gravatar} />
                             <div className="mx-2">
@@ -93,13 +113,11 @@ function ManageUser() {
                                 <option value={UserRole.CLIENT}>Client</option>
                             </select>
                         </div>
-                        <div className="col p-2">
-                            <input
-                                type="text"
-                                className="form-control"
+                        <div className="col px-2">
+                            <ConfirmInput
                                 value={user.label}
                                 onInput={(e) => handleLabelInput(e, index)}
-                                onChange={handleLabelChange}
+                                onConfirm={(callback) => handleLabelChange(user.label, index, callback)}
                             />
                         </div>
                     </div>

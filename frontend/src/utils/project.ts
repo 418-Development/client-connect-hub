@@ -1,6 +1,6 @@
 import { ProjectObj, ProjectRespondsObj } from "../interfaces/Project";
-import { parseMilestoneResponseObjArray } from "./milestone";
-import { parseUserResponseObjArray } from "./user";
+import { parseMilestoneResponseObjArray } from "./Milestone";
+import { parseUserResponseObjArray } from "./User";
 
 export function parseProjectResponseObjArray(projects: ProjectRespondsObj[]): ProjectObj[] {
     return (
@@ -31,7 +31,7 @@ export function parseProjectResponseObj(project: ProjectRespondsObj): ProjectObj
 }
 
 export async function fetchAllProjects() {
-    const url = `${import.meta.env.VITE_API_URL as string  }projects/all`;
+    const url = `${import.meta.env.VITE_API_URL as string}projects/all`;
 
     const response = await fetch(url, {
         method: "GET",
@@ -53,7 +53,7 @@ export async function fetchAllProjects() {
 }
 
 export async function fetchProject(projectId: number | string) {
-    const url = `${import.meta.env.VITE_API_URL as string  }projects/get/${projectId}`;
+    const url = `${import.meta.env.VITE_API_URL as string}projects/get/${projectId}`;
 
     const response = await fetch(url, {
         method: "GET",

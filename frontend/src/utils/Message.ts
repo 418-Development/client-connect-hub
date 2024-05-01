@@ -1,6 +1,6 @@
 import { MessageObj, MessageResponseObj } from "../interfaces/MessageObj";
 import { UserRole } from "../interfaces/UserObj";
-import { parseUserResponseObj } from "./user";
+import { parseUserResponseObj } from "./User";
 
 export function parseMessageResponseObjArray(messages: MessageResponseObj[]): MessageObj[] {
     return (

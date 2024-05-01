@@ -1,15 +1,7 @@
 import { UserObj, UserResponseObj, UserRole } from "../interfaces/UserObj";
 
 export function parseUserResponseObjArray(users: UserResponseObj[]): UserObj[] {
-    return (
-        users
-            ?.map((user) => parseUserResponseObj(user))
-            .sort((a, b) => {
-                if (a.role === b.role) return a.username.localeCompare(b.username);
-                if (a.role < b.role) return 1;
-                return -1;
-            }) ?? []
-    );
+    return users?.map((user) => parseUserResponseObj(user));
 }
 
 export function parseUserResponseObj(user: UserResponseObj): UserObj {

@@ -1,6 +1,6 @@
 import React, { ReactNode, useEffect, useState } from "react";
 import { UserObj, UserResponseObj, UserRole } from "./interfaces/UserObj";
-import { parseUserResponseObj } from "./utils/user";
+import { parseUserResponseObj } from "./utils/User";
 
 export const UserContext = React.createContext<UserObj | null>(null);
 export const UserUpdateContext = React.createContext(() => {});

@@ -68,7 +68,7 @@ const Button = forwardRef<HTMLButtonElement, Props>(
             additionalProps["aria-label"] = ariaLabel;
         }
 
-        // eslint-disable-next-line react-hooks/rules-of-hooks
+         
         React.useImperativeHandle(ref, () => buttonRef.current!);
 
         return (

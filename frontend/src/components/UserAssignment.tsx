@@ -3,7 +3,7 @@ import { UserObj, UserRole } from "../interfaces/UserObj";
 import Button from "./Button";
 import { useParams } from "react-router";
 import { ProjectObj } from "../interfaces/Project";
-import { fetchAllUsers } from "../utils/user";
+import { fetchAllUsers } from "../utils/User";
 
 interface Props {
     project: ProjectObj;
@@ -101,13 +101,9 @@ function UserAssignment({ project, onUserEvent }: Props) {
                     </ul>
                 </div>
                 <label htmlFor="roleSelect" className="form-label ms-3 mb-0">
-                    {roleSearch == UserRole.MANAGER
-                        ? "All"
-                        : roleSearch == UserRole.CLIENT
-                            ? "Client"
-                            : roleSearch == UserRole.TEAM
-                                ? "Team Member"
-                                : ""}
+                    {roleSearch == UserRole.MANAGER && "All"}
+                    {roleSearch == UserRole.CLIENT && "Client"}
+                    {roleSearch == UserRole.TEAM && "Team Member"}
                 </label>
             </div>
             <div className="card">
@@ -135,7 +131,7 @@ function UserAssignment({ project, onUserEvent }: Props) {
                                                     kind="danger"
                                                     className="ms-2 iconButton"
                                                     onClick={() => removeUserFromProject(user)}
-                                                    data-bs-toggle="tooltip" 
+                                                    data-bs-toggle="tooltip"
                                                     title="Remove User from the Project."
                                                 >
                                                     <i className="bi bi-caret-down" style={{ fontSize: "1.2rem" }}></i>
@@ -164,12 +160,12 @@ function UserAssignment({ project, onUserEvent }: Props) {
                                             <div className="col p-2">{user.label}</div>
                                         </div>
                                         <div className="d-flex justify-content-end" style={{ flex: 1 }}>
-                                            <Button 
-                                                outline 
-                                                kind="success" 
-                                                className="ms-2 iconButton" 
+                                            <Button
+                                                outline
+                                                kind="success"
+                                                className="ms-2 iconButton"
                                                 onClick={() => addUserToProject(user)}
-                                                data-bs-toggle="tooltip" 
+                                                data-bs-toggle="tooltip"
                                                 title="Add User to the Project."
                                             >
                                                 <i className="bi bi-caret-up" style={{ fontSize: "1.2rem" }}></i>
