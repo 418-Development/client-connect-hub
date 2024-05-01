@@ -37,7 +37,7 @@ function SignUpForm({ login, setUsername, setPassword, username = "", password =
     };
 
     const signUp = async () => {
-        const url = `${import.meta.env.VITE_API_URL as string  }users/auth/signup`;
+        const url = `${import.meta.env.VITE_API_URL as string}users/auth/signup`;
 
         const response = await fetch(url, {
             method: "POST",
@@ -100,7 +100,7 @@ function SignUpForm({ login, setUsername, setPassword, username = "", password =
                                     placeholder="Enter email"
                                     required
                                     maxLength={50}
-                                    data-bs-toggle="tooltip" 
+                                    data-bs-toggle="tooltip"
                                     title="Enter your Email here."
                                 />
                                 <div className="invalid-feedback" ref={emailValidation}></div>
@@ -124,7 +124,7 @@ function SignUpForm({ login, setUsername, setPassword, username = "", password =
                                     value={username}
                                     required
                                     maxLength={20}
-                                    data-bs-toggle="tooltip" 
+                                    data-bs-toggle="tooltip"
                                     title="Enter your Username here."
                                 />
                                 <div className="invalid-feedback" ref={usernameValidation}></div>
@@ -144,7 +144,7 @@ function SignUpForm({ login, setUsername, setPassword, username = "", password =
                                     required
                                     min={6}
                                     maxLength={120}
-                                    data-bs-toggle="tooltip" 
+                                    data-bs-toggle="tooltip"
                                     title="Enter your Password here."
                                 />
                             </div>
@@ -163,7 +163,7 @@ function SignUpForm({ login, setUsername, setPassword, username = "", password =
                                     required
                                     min={6}
                                     maxLength={120}
-                                    data-bs-toggle="tooltip" 
+                                    data-bs-toggle="tooltip"
                                     title="Enter your Password here again to verify it."
                                 />
                                 <div className="invalid-feedback" ref={passwordValidation}></div>

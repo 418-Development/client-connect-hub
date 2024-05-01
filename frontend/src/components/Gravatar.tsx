@@ -1,18 +1,9 @@
-import CryptoJS from "crypto-js";
-import { useEffect, useState } from "react";
-
 interface Props {
-    email: string;
+    gravatar: string;
 }
 
-function Gravatar({ email }: Props) {
-    const [gravatarUrl, setGravatarUrl] = useState("");
-    useEffect(() => {
-        const hashedEmail = CryptoJS.SHA256(email);
-        setGravatarUrl(`https://www.gravatar.com/avatar/${hashedEmail}?s=32&d=retro&r=PG`);
-    }, [email]);
-
-    return <img className="gravatar" src={gravatarUrl} alt="gravatar" />;
+function Gravatar({ gravatar }: Props) {
+    return <img className="gravatar" src={`https://www.gravatar.com/avatar/${gravatar}?s=32&d=retro&r=PG`} alt="gravatar" />;
 }
 
 export default Gravatar;

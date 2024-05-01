@@ -12,6 +12,8 @@ import lombok.Getter;
 import java.util.HashSet;
 import java.util.Set;
 
+import static com.example.agile.utils.HashUtil.sha256Hex;
+
 @Entity
 @Table( name = "users",
         uniqueConstraints = {
@@ -33,6 +35,12 @@ public class User {
     @Email
     private String email;
 
+    @Setter
+    @Getter
+    @NotBlank
+    @Size(max = 100)
+    private String gravatar;
+
     @NotBlank
     @Size(max = 120)
     private String password;
@@ -51,8 +59,9 @@ public class User {
 
     public User(String username, String email, String password) {
         this.username = username;
-        this.email = email;
+        setEmail(email);
         this.password = password;
+        this.label = "new";
     }
 
     public User() {
@@ -73,6 +82,7 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+        this.gravatar = sha256Hex(email.toLowerCase());
     }
 
     public String getPassword() {

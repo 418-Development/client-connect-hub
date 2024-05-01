@@ -4,6 +4,7 @@ import logo from "/LogoPulseWhite.svg";
 import Button from "./Button"; // Adjust the import path as necessary
 import { UserContext, UserUpdateContext } from "../UserContext";
 import SignUpForm from "./SignUpForm";
+import Gravatar from "./Gravatar";
 
 function Navigation() {
     const navigate = useNavigate();
@@ -111,7 +112,7 @@ function Navigation() {
                                     placeholder="Username"
                                     aria-label="Username"
                                     style={{ height: "40px", maxWidth: "200px" }}
-                                    data-bs-toggle="tooltip" 
+                                    data-bs-toggle="tooltip"
                                     title="Enter your Username here."
                                 />
                                 <input
@@ -124,7 +125,7 @@ function Navigation() {
                                     placeholder="Password"
                                     aria-label="Password"
                                     style={{ height: "40px", maxWidth: "200px" }}
-                                    data-bs-toggle="tooltip" 
+                                    data-bs-toggle="tooltip"
                                     title="Enter your Password here."
                                 />
                                 <div className="d-flex justify-content-center">
@@ -138,8 +139,12 @@ function Navigation() {
                             </div>
                         ) : (
                             <div className="d-flex flex-row align-items-center justify-content-center justify-content-lg-end w-100">
-                                <span className="me-3 px-2 py-1">{userInfo.username}</span>
-                                <Button onClick={signOut} kind="primary" outline={true}>
+                                <Gravatar gravatar={userInfo.gravatar} />
+                                <div className="mx-2">
+                                    <h6 className="m-0">{userInfo.username}</h6>
+                                    <h6 className="m-0 text-secondary">{userInfo.email}</h6>
+                                </div>
+                                <Button onClick={signOut} kind="primary" outline>
                                     Sign out
                                 </Button>
                             </div>

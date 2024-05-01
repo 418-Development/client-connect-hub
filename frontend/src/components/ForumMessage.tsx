@@ -21,7 +21,7 @@ function ForumMessage({ message }: Props) {
         >
             <div className="message-container card">
                 <div className="message-header card-header d-flex align-items-center">
-                    <Gravatar email={message.user.email} />
+                    <Gravatar gravatar={message.user.gravatar} />
                     <h5 className="card-title my-0  mx-2">{message.user.username}</h5>
                     <span className="badge rounded-pill text-bg-secondary">{message.user.label}</span>
                 </div>

@@ -19,6 +19,7 @@ export function parseUserResponseObj(user: UserResponseObj): UserObj {
         role: (user.roles[0]?.id as UserRole) ?? UserRole.CLIENT,
         label: user.label ?? "N/A",
         email: user.email,
+        gravatar: user.gravatar,
     };
 }
 

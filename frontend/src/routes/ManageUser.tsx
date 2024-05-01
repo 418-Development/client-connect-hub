@@ -6,6 +6,7 @@ import Button from "../components/Button";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import ChangeUserRoleModal from "../components/ChangeUserRoleModal";
 import * as bootstrap from "bootstrap";
+import Gravatar from "../components/Gravatar";
 
 function ManageUser() {
     const navigate = useNavigate();
@@ -78,7 +79,13 @@ function ManageUser() {
                 </h1>
                 {allUsers.map((user: UserObj, index: number) => (
                     <div key={user.username} className="d-flex align-items-center">
-                        <div className="col p-2">{user.username}</div>
+                        <div className="col p-2 d-flex align-items-center">
+                            <Gravatar gravatar={user.gravatar} />
+                            <div className="mx-2">
+                                <h6 className="m-0">{user.username}</h6>
+                                <h6 className="m-0 text-secondary">{user.email}</h6>
+                            </div>
+                        </div>
                         <div className="col p-2">
                             <select className="form-control" value={user.role} onChange={(e) => handleRoleChange(e, index)}>
                                 <option value={UserRole.MANAGER}>Project Manager</option>
