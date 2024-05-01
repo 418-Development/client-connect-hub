@@ -1,5 +1,6 @@
 import React, { ReactNode, useEffect, useState } from "react";
 import { UserObj, UserResponseObj, UserRole } from "./interfaces/UserObj";
+import { parseUserResponseObj } from "./utils/user";
 
 export const UserContext = React.createContext<UserObj | null>(null);
 export const UserUpdateContext = React.createContext(() => {});
@@ -19,13 +20,14 @@ export function UserProvider({ children }: Props) {
                 email: "DEBUG@DEBUG.DEBUG",
                 role: UserRole.MANAGER,
                 label: "DEBUG",
+                gravatar: "asddsaasd",
             });
         }
     }, []);
 
     async function updateUserInfo() {
         if (localStorage.getItem("token")) {
-            const url = `${import.meta.env.VITE_API_URL as string  }users/test/userinfo`;
+            const url = `${import.meta.env.VITE_API_URL as string}users/test/userinfo`;
 
             const response = await fetch(url, {
                 method: "GET",
@@ -39,15 +41,8 @@ export function UserProvider({ children }: Props) {
                 const data = await response.json();
 
                 const userinfo = data as UserResponseObj;
-                const role = (userinfo.roles[0]?.id as UserRole) ?? UserRole.CLIENT;
 
-                setUser({
-                    id: userinfo.id,
-                    username: userinfo.username,
-                    email: userinfo.email,
-                    role: role,
-                    label: "Team Lead",
-                });
+                setUser(parseUserResponseObj(userinfo));
             } else {
                 // Sign out user, because the token is most likely expired.
                 localStorage.removeItem("token");
