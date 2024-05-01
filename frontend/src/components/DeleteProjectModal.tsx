@@ -19,7 +19,7 @@ function DeleteProjectModal({ project, onDeletion }: Props) {
             return;
         }
 
-        const url = (import.meta.env.VITE_API_URL as string) + `projects/delete-project/${project.id}`;
+        const url = `${import.meta.env.VITE_API_URL as string  }projects/delete-project/${project.id}`;
 
         await fetch(url, {
             method: "DELETE",

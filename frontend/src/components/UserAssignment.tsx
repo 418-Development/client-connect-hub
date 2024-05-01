@@ -36,7 +36,7 @@ function UserAssignment({ project, onUserEvent }: Props) {
         // Can't remove manager from project
         if (user.role === UserRole.MANAGER) return;
 
-        const url = (import.meta.env.VITE_API_URL as string) + "projects/" + id + "/removeUser/" + user.id;
+        const url = `${import.meta.env.VITE_API_URL as string}projects/${id}/removeUser/${user.id}`;
 
         const response = await fetch(url, {
             method: "DELETE",
@@ -52,7 +52,7 @@ function UserAssignment({ project, onUserEvent }: Props) {
     };
 
     const addUserToProject = async (user: UserObj) => {
-        const url = (import.meta.env.VITE_API_URL as string) + "projects/" + id + "/addUser/" + user.id;
+        const url = `${import.meta.env.VITE_API_URL as string}projects/${id}/addUser/${user.id}`;
 
         const response = await fetch(url, {
             method: "POST",
@@ -104,10 +104,10 @@ function UserAssignment({ project, onUserEvent }: Props) {
                     {roleSearch == UserRole.MANAGER
                         ? "All"
                         : roleSearch == UserRole.CLIENT
-                        ? "Client"
-                        : roleSearch == UserRole.TEAM
-                        ? "Team Member"
-                        : ""}
+                            ? "Client"
+                            : roleSearch == UserRole.TEAM
+                                ? "Team Member"
+                                : ""}
                 </label>
             </div>
             <div className="card">
@@ -135,6 +135,8 @@ function UserAssignment({ project, onUserEvent }: Props) {
                                                     kind="danger"
                                                     className="ms-2 iconButton"
                                                     onClick={() => removeUserFromProject(user)}
+                                                    data-bs-toggle="tooltip" 
+                                                    title="Remove User from the Project."
                                                 >
                                                     <i className="bi bi-caret-down" style={{ fontSize: "1.2rem" }}></i>
                                                 </Button>
@@ -162,7 +164,14 @@ function UserAssignment({ project, onUserEvent }: Props) {
                                             <div className="col p-2">{user.label}</div>
                                         </div>
                                         <div className="d-flex justify-content-end" style={{ flex: 1 }}>
-                                            <Button outline kind="success" className="ms-2 iconButton" onClick={() => addUserToProject(user)}>
+                                            <Button 
+                                                outline 
+                                                kind="success" 
+                                                className="ms-2 iconButton" 
+                                                onClick={() => addUserToProject(user)}
+                                                data-bs-toggle="tooltip" 
+                                                title="Add User to the Project."
+                                            >
                                                 <i className="bi bi-caret-up" style={{ fontSize: "1.2rem" }}></i>
                                             </Button>
                                         </div>
