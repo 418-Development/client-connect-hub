@@ -43,7 +43,7 @@ function ConfirmInput({ value, onInput, onConfirm, maxLength = 50, minLength = 1
                     <span className="visually-hidden">Loading...</span>
                 </div>
             </div>
-            <div className="form-text ms-3" style={{ position: "absolute", bottom: "-.55rem" }} hidden={!showIndicator}>
+            <div className="form-text ms-3" style={{ position: "absolute", bottom: "-1.25rem" }} hidden={!showIndicator}>
                 Press 'Enter' to confirm your changes
             </div>
         </form>

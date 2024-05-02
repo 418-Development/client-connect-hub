@@ -98,7 +98,7 @@ function ManageUser() {
                     User Role Management
                 </h1>
                 {allUsers.map((user, index) => (
-                    <div key={user.username} className="user-row">
+                    <div key={user.username} className="user-row mb-4" style={{ position: "relative" }}>
                         <div className="gravatar-container">
                             <Gravatar gravatar={user.gravatar} />
                             <div className="user-info">
