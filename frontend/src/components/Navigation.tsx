@@ -95,48 +95,62 @@ function Navigation() {
                         <ul className="navbar-nav me-auto mb-2 mb-lg-0"></ul>
 
                         {!userInfo ? (
-                            <div
-                                className={
-                                    "d-flex flex-column flex-lg-row align-items-center " +
-                                    "justify-content-center justify-content-lg-end w-100"
-                                }
-                                style={{ gap: "0.5rem" }}
+                            <form
+                                action=""
+                                onSubmit={(e) => {
+                                    e.preventDefault();
+                                    login();
+                                }}
                             >
-                                <input
-                                    className={`form-control form-control-sm mb-2 mb-lg-0 me-lg-2${isLoginInvalid ? " is-invalid" : ""}`}
-                                    type="text"
-                                    value={username}
-                                    onChange={(e) => setUsername(e.target.value)}
-                                    id="email"
-                                    autoComplete="username"
-                                    placeholder="Username"
-                                    aria-label="Username"
-                                    style={{ height: "40px", maxWidth: "200px" }}
-                                    data-bs-toggle="tooltip"
-                                    title="Enter your Username here."
-                                />
-                                <input
-                                    className={`form-control form-control-sm mb-2 mb-lg-0 me-lg-2${isLoginInvalid ? " is-invalid" : ""}`}
-                                    type="password"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    id="password"
-                                    autoComplete="current-password"
-                                    placeholder="Password"
-                                    aria-label="Password"
-                                    style={{ height: "40px", maxWidth: "200px" }}
-                                    data-bs-toggle="tooltip"
-                                    title="Enter your Password here."
-                                />
-                                <div className="d-flex justify-content-center">
-                                    <Button onClick={login} kind="success" outline={true} className="me-2 text-nowrap" type="submit">
-                                        Login
-                                    </Button>
-                                    <Button kind="primary" outline={true} className="text-nowrap" modalTarget="#modalSignUpForm">
-                                        Sign Up
-                                    </Button>
+                                <div
+                                    className={
+                                        "d-flex flex-column flex-lg-row align-items-center " +
+                                        "justify-content-center justify-content-lg-end w-100"
+                                    }
+                                    style={{ gap: "0.5rem" }}
+                                >
+                                    <input
+                                        className={`form-control form-control-sm mb-2 mb-lg-0 me-lg-2${isLoginInvalid ? " is-invalid" : ""}`}
+                                        type="text"
+                                        value={username}
+                                        onChange={(e) => setUsername(e.target.value)}
+                                        id="email"
+                                        autoComplete="username"
+                                        placeholder="Username"
+                                        aria-label="Username"
+                                        style={{ height: "40px", maxWidth: "200px" }}
+                                        data-bs-toggle="tooltip"
+                                        title="Enter your Username here."
+                                    />
+                                    <input
+                                        className={`form-control form-control-sm mb-2 mb-lg-0 me-lg-2${isLoginInvalid ? " is-invalid" : ""}`}
+                                        type="password"
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        id="password"
+                                        autoComplete="current-password"
+                                        placeholder="Password"
+                                        aria-label="Password"
+                                        style={{ height: "40px", maxWidth: "200px" }}
+                                        data-bs-toggle="tooltip"
+                                        title="Enter your Password here."
+                                    />
+                                    <div className="d-flex justify-content-center">
+                                        <Button kind="success" outline={true} className="me-2 text-nowrap" type="submit">
+                                            Login
+                                        </Button>
+                                        <Button
+                                            kind="primary"
+                                            outline={true}
+                                            className="text-nowrap"
+                                            type="button"
+                                            modalTarget="#modalSignUpForm"
+                                        >
+                                            Sign Up
+                                        </Button>
+                                    </div>
                                 </div>
-                            </div>
+                            </form>
                         ) : (
                             <div className="d-flex flex-row align-items-center justify-content-center justify-content-lg-end w-100">
                                 <Gravatar gravatar={userInfo.gravatar} />
