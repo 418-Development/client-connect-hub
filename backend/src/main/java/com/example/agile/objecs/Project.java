@@ -25,6 +25,7 @@ public class Project {
     @Size(max = 50)
     private String projectName;
 
+    @NotBlank
     @Size(max = 15000)
     private String description;
 
