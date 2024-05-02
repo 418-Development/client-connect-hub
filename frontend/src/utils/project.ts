@@ -1,4 +1,5 @@
 import { ProjectObj, ProjectRespondsObj } from "../interfaces/Project";
+import { parseMessageResponseObjArray } from "./Message";
 import { parseMilestoneResponseObjArray } from "./Milestone";
 import { parseUserResponseObjArray } from "./User";
 
@@ -27,6 +28,7 @@ export function parseProjectResponseObj(project: ProjectRespondsObj): ProjectObj
         description: project.description,
         milestones: parseMilestoneResponseObjArray(project.milestones),
         users: parseUserResponseObjArray(project.users),
+        messages: parseMessageResponseObjArray(project.messages)
     };
 }
 

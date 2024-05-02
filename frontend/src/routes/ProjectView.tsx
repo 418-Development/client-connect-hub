@@ -13,7 +13,6 @@ import { MilestoneObj } from "../interfaces/Milestone";
 import MilestoneModal from "../components/MilestoneModal";
 import { fetchProject } from "../utils/Project";
 import Forum from "../components/Forum";
-import { getDummyMessages } from "../utils/Message";
 
 function ProjectView() {
     const userInfo = useContext(UserContext);
@@ -36,6 +35,7 @@ function ProjectView() {
         try {
             const project = await fetchProject(projectId);
             setProject(project);
+            console.log("Messages: " + project?.messages)
         } catch (error) {
             /* eslint-disable no-console */
             console.error(error);
@@ -249,7 +249,7 @@ function ProjectView() {
                     )}
                 </div>
                 <div>
-                    <Forum messages={getDummyMessages()} />
+                    <Forum messages={project?.messages ?? []} projectId={project?.id ?? 0}/>
                 </div>
             </div>
             {project && (
