@@ -97,23 +97,23 @@ function ManageUser() {
                     </Button>
                     User Role Management
                 </h1>
-                {allUsers.map((user: UserObj, index: number) => (
-                    <div key={user.username} className="d-flex align-items-center" style={{ position: "relative" }}>
-                        <div className="col p-2 d-flex align-items-center">
+                {allUsers.map((user, index) => (
+                    <div key={user.username} className="user-row">
+                        <div className="gravatar-container">
                             <Gravatar gravatar={user.gravatar} />
-                            <div className="mx-2">
+                            <div className="user-info">
                                 <h6 className="m-0">{user.username}</h6>
-                                <h6 className="m-0 text-secondary">{user.email}</h6>
+                                <h6 className="m-0 text-secondary email-truncate">{user.email}</h6>
                             </div>
                         </div>
-                        <div className="col p-2">
+                        <div className="role-container me-3">
                             <select className="form-control" value={user.role} onChange={(e) => handleRoleChange(e, index)}>
                                 <option value={UserRole.MANAGER}>Project Manager</option>
                                 <option value={UserRole.TEAM}>Team Member</option>
                                 <option value={UserRole.CLIENT}>Client</option>
                             </select>
                         </div>
-                        <div className="col px-2">
+                        <div className="label-container">
                             <ConfirmInput
                                 value={user.label}
                                 onInput={(e) => handleLabelInput(e, index)}
