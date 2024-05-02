@@ -113,6 +113,7 @@ function ManageUser() {
                                 <option value={UserRole.CLIENT}>Client</option>
                             </select>
                         </div>
+
                         <div className="label-container">
                             <ConfirmInput
                                 value={user.label}
