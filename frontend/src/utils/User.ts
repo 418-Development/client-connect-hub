@@ -36,3 +36,25 @@ export async function fetchAllUsers() {
         return Promise.reject(`Error ${response.status}: ${error}`);
     }
 }
+
+export async function fetchUser(userId: number) {
+    const url = `${import.meta.env.VITE_API_URL as string}get/${userId}`;
+
+    const response = await fetch(url, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: localStorage.getItem("token") ?? "",
+        },
+    });
+
+    if (response.ok) {
+        const json = await response.json();
+        const userResponse = json as UserResponseObj;
+
+        return parseUserResponseObj(userResponse);
+    } else {
+        const error = await response.text();
+        return Promise.reject(`Error ${response.status}: ${error}`);
+    }
+}

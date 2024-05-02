@@ -30,7 +30,7 @@ export async function parseProjectResponseObj(project: ProjectRespondsObj): Prom
         description: project.description,
         milestones: parseMilestoneResponseObjArray(project.milestones),
         users: parseUserResponseObjArray(project.users),
-        messages: await parseMessageResponseObjArray(project.messages),
+        messages: await parseMessageResponseObjArray(project.posts),
     };
 }
 
@@ -69,6 +69,7 @@ export async function fetchProject(projectId: number | string) {
 
     if (response.ok) {
         const json = await response.json();
+        console.log(json);
         const projectResponse = json as ProjectRespondsObj;
 
         return parseProjectResponseObj(projectResponse);

@@ -1,8 +1,8 @@
 import { MessageObj, MessageResponseObj } from "../interfaces/MessageObj";
 import { UserRole } from "../interfaces/UserObj";
-import { fetchAllUsers } from "./User";
+import { fetchUser } from "./User";
 
-export async function parseMessageResponseObjArray(messages: MessageResponseObj[]) {
+export async function parseMessageResponseObjArray(messages: MessageResponseObj[]): Promise<MessageObj[]> {
     const parsedMessages: MessageObj[] = [];
     for (let index = 0; index < messages.length; index++) {
         const message = messages[index];
@@ -18,13 +18,14 @@ export async function parseMessageResponseObjArray(messages: MessageResponseObj[
     // await messages?.map(async (message) => await parseMessageResponseObj(message));
 }
 
-export async function parseMessageResponseObj(message: MessageResponseObj) {
-    const user = (await fetchAllUsers())[0];
+export async function parseMessageResponseObj(message: MessageResponseObj): Promise<MessageObj> {
+    const user = await fetchUser(message.userId);
     return {
         id: message.id,
         user: user,
+        projectId: message.projectId,
         content: message.content,
-        timestamp: new Date(message.timestamp),
+        timestamp: new Date(message.postedDate),
     };
 }
 

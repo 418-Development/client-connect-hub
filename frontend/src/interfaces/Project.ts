@@ -20,7 +20,7 @@ export interface ProjectRespondsObj {
     estimateDate: string;
     milestones: MilestoneResponseObj[];
     users: UserResponseObj[];
-    messages: MessageResponseObj[];
+    posts: MessageResponseObj[];
     projectId: number;
     projectName: string;
     startDate: string;
