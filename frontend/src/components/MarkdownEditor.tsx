@@ -147,16 +147,14 @@ function MarkdownEditor({ value, onValueChanged, label, maxLength = 15000 }: Pro
 
     return (
         <div>
-            <div className="d-flex align-items-center">
+            <div className="toolbar-wrapper d-flex flex-wrap align-items-center">
                 {label && <label htmlFor="markdownEditorTextArea">{label}</label>}
-                <div className="ms-3 m-2 d-flex">
+                <div className="toolbar-buttons d-flex ms-3 m-2">
                     <Button
                         type="button"
                         kind={showPreview ? "secondary" : "success"}
-                        style={{ borderRadius: 0, padding: "2px 10px", fontSize: "0.85rem" }}
-                        onClick={() => {
-                            setShowPreview(false);
-                        }}
+                        className="toolbar-btn"
+                        onClick={() => setShowPreview(false)}
                         outline={showPreview}
                     >
                         Write
@@ -164,47 +162,39 @@ function MarkdownEditor({ value, onValueChanged, label, maxLength = 15000 }: Pro
                     <Button
                         type="button"
                         kind={showPreview ? "success" : "secondary"}
-                        style={{ borderRadius: 0, padding: "2px 10px", fontSize: "0.85rem" }}
-                        onClick={() => {
-                            setShowPreview(true);
-                        }}
+                        className="toolbar-btn"
+                        onClick={() => setShowPreview(true)}
                         outline={!showPreview}
                     >
                         Preview
                     </Button>
                 </div>
-                <div className="markdown-toolbar">
-                    <Button kind="none" outline onClick={toggleBoldMarkdown}>
+                <div className="markdown-toolbar d-flex flex-wrap">
+                    <Button kind="none" outline onClick={toggleBoldMarkdown} className="toolbar-btn">
                         <i className="bi bi-type-bold"></i>
                     </Button>
-                    <Button kind="none" outline onClick={toggleItalicMarkdown}>
+                    <Button kind="none" outline onClick={toggleItalicMarkdown} className="toolbar-btn">
                         <i className="bi bi-type-italic"></i>
                     </Button>
-                    <Button kind="none" outline onClick={toggleBlockquoteMarkdown}>
+                    <Button kind="none" outline onClick={toggleBlockquoteMarkdown} className="toolbar-btn">
                         <i className="bi bi-quote"></i>
                     </Button>
-                    <Button kind="none" outline onClick={toggleHeadingMarkdown}>
-                        <i className="bi bi-code"></i>
-                    </Button>
-                    <Button kind="none" outline onClick={toggleHeadingMarkdown}>
+                    <Button kind="none" outline onClick={toggleHeadingMarkdown} className="toolbar-btn">
                         <i className="bi bi-type-h1"></i>
                     </Button>
-                    <Button kind="none" outline onClick={toggleHeading2Markdown}>
+                    <Button kind="none" outline onClick={toggleHeading2Markdown} className="toolbar-btn">
                         <i className="bi bi-type-h2"></i>
                     </Button>
-                    <Button kind="none" outline onClick={toggleBoldMarkdown}>
+                    <Button kind="none" outline onClick={toggleBoldMarkdown} className="toolbar-btn">
                         <i className="bi bi-list-ol"></i>
                     </Button>
-                    <Button kind="none" outline onClick={toggleBoldMarkdown}>
+                    <Button kind="none" outline onClick={toggleBoldMarkdown} className="toolbar-btn">
                         <i className="bi bi-list-ul"></i>
                     </Button>
-                    <Button kind="none" outline onClick={toggleBoldMarkdown}>
-                        <i className="bi bi-list-ul"></i>
-                    </Button>
-                    <Button kind="none" outline onClick={toggleBoldMarkdown}>
+                    <Button kind="none" outline onClick={toggleBoldMarkdown} className="toolbar-btn">
                         <i className="bi bi-link-45deg"></i>
                     </Button>
-                    <Button kind="none" outline onClick={addImageMarkdown}>
+                    <Button kind="none" outline onClick={addImageMarkdown} className="toolbar-btn">
                         <i className="bi bi-image"></i>
                     </Button>
                 </div>
@@ -214,9 +204,7 @@ function MarkdownEditor({ value, onValueChanged, label, maxLength = 15000 }: Pro
                 className="form-control"
                 id="markdownEditorTextArea"
                 placeholder={`Enter ${label ?? "..."}`}
-                onChange={(e) => {
-                    onValueChanged(e.target.value);
-                }}
+                onChange={(e) => onValueChanged(e.target.value)}
                 value={value}
                 hidden={showPreview}
                 maxLength={maxLength}
