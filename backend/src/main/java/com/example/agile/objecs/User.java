@@ -17,7 +17,7 @@ import java.util.Set;
 import static com.example.agile.utils.HashUtil.sha256Hex;
 
 @Entity
-@Table( name = "users",
+@Table(name = "users",
         uniqueConstraints = {
                 @UniqueConstraint(columnNames = "username"),
                 @UniqueConstraint(columnNames = "email")
@@ -59,6 +59,15 @@ public class User implements Comparable<User> {
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
+
+    @JsonIgnore
+    @OneToMany
+    @JoinTable(
+            name = "user_post",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "post_id")
+    )
+    private Set<Post> posts = new HashSet<>();
 
     public User(String username) {
         this.username = username;
@@ -107,6 +116,7 @@ public class User implements Comparable<User> {
     public Set<Role> getRoles() {
         return roles;
     }
+
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
