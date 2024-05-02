@@ -3,23 +3,25 @@ import { parseMessageResponseObjArray } from "./Message";
 import { parseMilestoneResponseObjArray } from "./Milestone";
 import { parseUserResponseObjArray } from "./User";
 
-export function parseProjectResponseObjArray(projects: ProjectRespondsObj[]): ProjectObj[] {
+export async function parseProjectResponseObjArray(projects: ProjectRespondsObj[]): Promise<ProjectObj[]> {
+    const parsedProjects: ProjectObj[] = [];
+    for (let index = 0; index < projects.length; index++) {
+        const project = projects[index];
+        parsedProjects.push(await parseProjectResponseObj(project));
+    }
+
     return (
-        projects
-            ?.map((project) => {
-                return parseProjectResponseObj(project);
-            })
-            .sort((a, b) => {
-                let comp = a.title.localeCompare(b.title);
-                if (comp === 0) {
-                    comp = a.id > b.id ? 1 : -1;
-                }
-                return comp;
-            }) ?? []
+        parsedProjects.sort((a, b) => {
+            let comp = a.title.localeCompare(b.title);
+            if (comp === 0) {
+                comp = a.id > b.id ? 1 : -1;
+            }
+            return comp;
+        }) ?? []
     );
 }
 
-export function parseProjectResponseObj(project: ProjectRespondsObj): ProjectObj {
+export async function parseProjectResponseObj(project: ProjectRespondsObj): Promise<ProjectObj> {
     return {
         id: project.projectId,
         title: project.projectName,
@@ -28,7 +30,7 @@ export function parseProjectResponseObj(project: ProjectRespondsObj): ProjectObj
         description: project.description,
         milestones: parseMilestoneResponseObjArray(project.milestones),
         users: parseUserResponseObjArray(project.users),
-        messages: parseMessageResponseObjArray(project.messages)
+        messages: await parseMessageResponseObjArray(project.messages),
     };
 }
 

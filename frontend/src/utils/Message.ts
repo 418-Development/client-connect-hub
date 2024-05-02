@@ -1,23 +1,28 @@
 import { MessageObj, MessageResponseObj } from "../interfaces/MessageObj";
 import { UserRole } from "../interfaces/UserObj";
-import { parseUserResponseObj } from "./User";
+import { fetchAllUsers } from "./User";
 
-export function parseMessageResponseObjArray(messages: MessageResponseObj[]): MessageObj[] {
+export async function parseMessageResponseObjArray(messages: MessageResponseObj[]) {
+    const parsedMessages: MessageObj[] = [];
+    for (let index = 0; index < messages.length; index++) {
+        const message = messages[index];
+        parsedMessages.push(await parseMessageResponseObj(message));
+    }
     return (
-        messages
-            ?.map((message) => parseMessageResponseObj(message))
-            .sort((a, b) => {
-                if (a.timestamp === b.timestamp) return a.content.localeCompare(b.content);
-                if (a.timestamp < b.timestamp) return 1;
-                return -1;
-            }) ?? []
+        parsedMessages.sort((a, b) => {
+            if (a.timestamp === b.timestamp) return a.content.localeCompare(b.content);
+            if (a.timestamp < b.timestamp) return 1;
+            return -1;
+        }) ?? []
     );
+    // await messages?.map(async (message) => await parseMessageResponseObj(message));
 }
 
-export function parseMessageResponseObj(message: MessageResponseObj): MessageObj {
+export async function parseMessageResponseObj(message: MessageResponseObj) {
+    const user = (await fetchAllUsers())[0];
     return {
         id: message.id,
-        user: parseUserResponseObj(message.user),
+        user: user,
         content: message.content,
         timestamp: new Date(message.timestamp),
     };
