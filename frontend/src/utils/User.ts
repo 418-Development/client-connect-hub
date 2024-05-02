@@ -38,7 +38,7 @@ export async function fetchAllUsers() {
 }
 
 export async function fetchUser(userId: number) {
-    const url = `${import.meta.env.VITE_API_URL as string}get/${userId}`;
+    const url = `${import.meta.env.VITE_API_URL as string}users/get/${userId}`;
 
     const response = await fetch(url, {
         method: "GET",

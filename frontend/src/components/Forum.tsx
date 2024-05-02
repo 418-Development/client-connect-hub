@@ -9,9 +9,10 @@ import { UserContext } from "../UserContext";
 interface Props {
     messages: MessageObj[];
     projectId: number;
+    onUserEvent: () => void;
 }
 
-function Forum({ messages, projectId }: Props) {
+function Forum({ messages, projectId, onUserEvent }: Props) {
     const userInfo = useContext(UserContext);
     const [messageContent, setMessageContent] = useState<string>("");
 
@@ -37,14 +38,20 @@ function Forum({ messages, projectId }: Props) {
         });
 
         if (response.ok) {
-            console.log("Worked")
+            onUserEvent();
         }
     };
 
     return (
         <div className="p-3">
             <div className="mt-3">
-                <div className="p-2 pt-1 border">
+                <form
+                    onSubmit={(e) => {
+                        e.preventDefault();
+                        createMessage();
+                    }}
+                    className="p-2 pt-1 border"
+                >
                     <MarkdownEditor
                         value={messageContent}
                         onValueChanged={(value) => {
@@ -54,11 +61,11 @@ function Forum({ messages, projectId }: Props) {
                     />
 
                     <div className="d-flex justify-content-end">
-                        <Button onClick={ () => createMessage() } kind="success" className="mt-2">
+                        <Button type="submit" kind="success" className="mt-2">
                             Send Message
                         </Button>
                     </div>
-                </div>
+                </form>
             </div>
             <div>
                 {messages.map((message: MessageObj) => (

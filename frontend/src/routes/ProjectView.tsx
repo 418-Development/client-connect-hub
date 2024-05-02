@@ -248,7 +248,13 @@ function ProjectView() {
                     )}
                 </div>
                 <div>
-                    <Forum messages={project?.messages ?? []} projectId={project?.id ?? 0}/>
+                    <Forum 
+                        messages={project?.messages ?? []} 
+                        projectId={project?.id ?? 0}
+                        onUserEvent={() => {
+                            reloadProject(project?.id ?? 0);
+                        }}
+                    />
                 </div>
             </div>
             {project && (

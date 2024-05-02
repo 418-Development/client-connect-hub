@@ -69,7 +69,6 @@ export async function fetchProject(projectId: number | string) {
 
     if (response.ok) {
         const json = await response.json();
-        console.log(json);
         const projectResponse = json as ProjectRespondsObj;
 
         return parseProjectResponseObj(projectResponse);
