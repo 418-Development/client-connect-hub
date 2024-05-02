@@ -1,6 +1,5 @@
 import { MessageObj, MessageResponseObj } from "../interfaces/MessageObj";
 import { UserRole } from "../interfaces/UserObj";
-import { parseUserResponseObj } from "./User";
 
 export function parseMessageResponseObjArray(messages: MessageResponseObj[]): MessageObj[] {
     return (
@@ -17,9 +16,10 @@ export function parseMessageResponseObjArray(messages: MessageResponseObj[]): Me
 export function parseMessageResponseObj(message: MessageResponseObj): MessageObj {
     return {
         id: message.id,
-        user: parseUserResponseObj(message.user),
+        userid: message.userid,
+        projectid: message.projectid,
         content: message.content,
-        timestamp: new Date(message.timestamp),
+        timestamp: new Date(message.postedDate),
     };
 }
 

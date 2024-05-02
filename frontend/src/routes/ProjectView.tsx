@@ -35,7 +35,6 @@ function ProjectView() {
         try {
             const project = await fetchProject(projectId);
             setProject(project);
-            console.log("Messages: " + project?.messages)
         } catch (error) {
             /* eslint-disable no-console */
             console.error(error);

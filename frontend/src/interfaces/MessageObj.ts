@@ -1,15 +1,17 @@
-import { UserObj, UserResponseObj } from "./UserObj";
+import { UserObj } from "./UserObj";
 
 export interface MessageObj {
     id: number;
     user: UserObj;
+    projectid: number;
     content: string;
     timestamp: Date;
 }
 
 export interface MessageResponseObj {
     id: number;
-    user: UserResponseObj;
+    userid: number;
     content: string;
-    timestamp: string;
+    postedDate: string;
+    projectid: number;
 }
