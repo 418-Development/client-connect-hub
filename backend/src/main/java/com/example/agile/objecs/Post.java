@@ -1,5 +1,6 @@
 package com.example.agile.objecs;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -20,9 +21,12 @@ public class Post {
 
     private Date postedDate;
 
-    private Long projectId;
+    @ManyToOne
+    private Project project;
 
-    private Long userId;
+    @ManyToOne
+    private User author;
+
     public Post() {
     }
 

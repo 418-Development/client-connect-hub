@@ -1,5 +1,6 @@
 package com.example.agile.objecs;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -50,7 +51,7 @@ public class Project {
     )
     private Set<Milestone> milestones = new HashSet<>();
 
-
+    @JsonIgnore
     @OneToMany
     @JoinTable(
             name = "project_post",
