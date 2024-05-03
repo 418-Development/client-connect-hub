@@ -62,12 +62,8 @@ public class PostController {
         Project project = optionalProject.get();
 
         List<Post> posts = postRepository.findAllByProject(project);
-        if (!posts.isEmpty()) {
-            posts.sort(Comparator.comparing(Post::getPostedDate));
-            return ResponseEntity.ok(posts);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        posts.sort(Comparator.comparing(Post::getPostedDate));
+        return ResponseEntity.ok(posts);
     }
 
     @PostMapping("/send-post/{projectId}")

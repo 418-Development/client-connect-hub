@@ -1,4 +1,4 @@
-import { UserObj } from "./UserObj";
+import { UserObj, UserResponseObj } from "./UserObj";
 
 export interface MessageObj {
     id: number;
@@ -10,7 +10,7 @@ export interface MessageObj {
 
 export interface MessageResponseObj {
     id: number;
-    userId: number;
+    author: UserResponseObj;
     content: string;
     postedDate: string;
     projectId: number;

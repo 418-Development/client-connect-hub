@@ -1,32 +1,51 @@
 import { MessageObj, MessageResponseObj } from "../interfaces/MessageObj";
 import { UserRole } from "../interfaces/UserObj";
-import { fetchUser } from "./User";
+import { parseUserResponseObj } from "./User";
 
-export async function parseMessageResponseObjArray(messages: MessageResponseObj[]): Promise<MessageObj[]> {
-    const parsedMessages: MessageObj[] = [];
-    for (let index = 0; index < messages.length; index++) {
-        const message = messages[index];
-        parsedMessages.push(await parseMessageResponseObj(message));
-    }
+export function parseMessageResponseObjArray(messages: MessageResponseObj[]): MessageObj[] {
     return (
-        parsedMessages.sort((a, b) => {
-            if (a.timestamp === b.timestamp) return a.content.localeCompare(b.content);
-            if (a.timestamp < b.timestamp) return 1;
-            return -1;
-        }) ?? []
+        messages
+            ?.map((message) => parseMessageResponseObj(message))
+            .sort((a, b) => {
+                if (a.timestamp === b.timestamp) return a.content.localeCompare(b.content);
+                if (a.timestamp < b.timestamp) return 1;
+                return -1;
+            }) ?? []
     );
-    // await messages?.map(async (message) => await parseMessageResponseObj(message));
 }
 
-export async function parseMessageResponseObj(message: MessageResponseObj): Promise<MessageObj> {
-    const user = await fetchUser(message.userId);
+export function parseMessageResponseObj(message: MessageResponseObj): MessageObj {
     return {
         id: message.id,
-        user: user,
+        user: parseUserResponseObj(message.author),
         projectId: message.projectId,
         content: message.content,
         timestamp: new Date(message.postedDate),
     };
+}
+
+export async function fetchMessagesOfProject(projectId: number) {
+    const url = `${import.meta.env.VITE_API_URL as string}posts/get-post-by-project/${projectId}`;
+
+    const response = await fetch(url, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: localStorage.getItem("token") ?? "",
+        },
+    });
+
+    if (response.ok) {
+        const json = await response.json();
+        const messageResponse = json as MessageResponseObj[];
+
+        console.log("json", json);
+
+        return parseMessageResponseObjArray(messageResponse);
+    } else {
+        const error = await response.text();
+        return Promise.reject(`Error ${response.status}: ${error}`);
+    }
 }
 
 export function getDummyMessages() {

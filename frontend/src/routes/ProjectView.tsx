@@ -13,6 +13,8 @@ import { MilestoneObj } from "../interfaces/Milestone";
 import MilestoneModal from "../components/MilestoneModal";
 import { fetchProject } from "../utils/Project";
 import Forum from "../components/Forum";
+import { fetchMessagesOfProject } from "../utils/Message";
+import { MessageObj } from "../interfaces/MessageObj";
 
 function ProjectView() {
     const userInfo = useContext(UserContext);
@@ -23,6 +25,7 @@ function ProjectView() {
     const [isExpanded, setIsExpanded] = useState(false);
     const [hasOverflow, setHasOverflow] = useState(false);
     const [progress, setProgress] = useState(0);
+    const [messages, setMessages] = useState<MessageObj[]>([]);
     const contentRef = useRef<HTMLDivElement>(null);
 
     const [selectedMilestone, setSelectedMilestone] = useState<MilestoneObj | null>(null);
@@ -30,6 +33,13 @@ function ProjectView() {
     useEffect(() => {
         if (id !== undefined) reloadProject(id);
     }, [id]);
+
+    useEffect(() => {
+        if (project?.id)
+            fetchMessagesOfProject(project?.id).then((messageObjs) => {
+                setMessages(messageObjs);
+            });
+    }, [project]);
 
     const reloadProject = async (projectId: number | string) => {
         try {
@@ -248,8 +258,8 @@ function ProjectView() {
                     )}
                 </div>
                 <div>
-                    <Forum 
-                        messages={project?.messages ?? []} 
+                    <Forum
+                        messages={messages}
                         projectId={project?.id ?? 0}
                         onUserEvent={() => {
                             reloadProject(project?.id ?? 0);
