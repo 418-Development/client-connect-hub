@@ -53,16 +53,22 @@ public class PostController {
 
     private static final Logger logger = LoggerFactory.getLogger(PostController.class);
 
-//    @GetMapping("/get-post-by-project/{project_id}")
-//    public ResponseEntity<?> getMilestoneByProjectId(@PathVariable Long project_id) {
-//        List<Post> posts = postRepository.findByProjectId(project_id);
-//        if (!posts.isEmpty()) {
-//            posts.sort(Comparator.comparing(Post::getPostedDate));
-//            return ResponseEntity.ok(posts);
-//        } else {
-//            return ResponseEntity.notFound().build();
-//        }
-//    }
+    @GetMapping("/get-post-by-project/{project_id}")
+    public ResponseEntity<?> getMilestoneByProjectId(@PathVariable Long project_id) {
+        Optional<Project> optionalProject = projectRepository.findById(project_id);
+        if (optionalProject.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("Project not found"));
+        }
+        Project project = optionalProject.get();
+
+        List<Post> posts = postRepository.findAllByProject(project);
+        if (!posts.isEmpty()) {
+            posts.sort(Comparator.comparing(Post::getPostedDate));
+            return ResponseEntity.ok(posts);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
     @PostMapping("/send-post/{projectId}")
     public ResponseEntity<?> postForumPost(@PathVariable("projectId") Long projectId, @Valid @RequestBody Post post) {
@@ -90,25 +96,39 @@ public class PostController {
         Project project = optionalProject.get();
 
         // Set user and project for the post
-        post.setUserId(currentUser.getId());
-        post.setProjectId(project.getProjectId());
+        post.setAuthor(currentUser);
+        post.setProject(project);
 
         // Save the post
         Post savedPost = postRepository.save(post);
         project.getPosts().add(savedPost);
         projectRepository.save(project);
 
-        return ResponseEntity.ok(new MessageResponse("Post posted successfully with id: " + savedPost.getId()));
+        return ResponseEntity.ok(savedPost);
     }
 
-    @DeleteMapping("/delete-post/{project_id}")
-    public ResponseEntity<?> deleteMilestone(@PathVariable Long project_id, @RequestBody Long post_id) {
+    @DeleteMapping("/delete-post/{project_id}/{post_id}")
+    public ResponseEntity<?> deletePost(@PathVariable Long project_id, @PathVariable Long post_id) {
         Optional<Post> optionalPost = postRepository.findById(post_id);
         Optional<Project> tempProject = projectRepository.findById(project_id);
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated() || !(authentication.getPrincipal() instanceof UserDetails)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new MessageResponse("Unauthorized"));
+        }
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        User currentUser = userRepository.findByUsername(userDetails.getUsername()).orElse(null);
+        if (currentUser == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new MessageResponse("User not found"));
+        }
         if (tempProject.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
         if (optionalPost.isPresent()) {
+            if (optionalPost.get().getAuthor() != currentUser){
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new MessageResponse("Unauthorized delete"));
+            }
             Project project = tempProject.get();
             project.getPosts().remove(optionalPost.get());
             projectRepository.save(project);
