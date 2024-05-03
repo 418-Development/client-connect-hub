@@ -46,6 +46,7 @@ function EditMilestones({ project, onMilestoneEvent }: Props) {
         });
 
         if (response.ok) {
+            setInEditMode(false);
             setDescription("");
             setMilestoneName("");
             setEndDate("");
@@ -92,6 +93,11 @@ function EditMilestones({ project, onMilestoneEvent }: Props) {
                         style={{ marginLeft: "10px" }}
                         deleteMilestone={(milestone) => {
                             setSelectedMilestone(milestone);
+
+                            setInEditMode(false);
+                            setDescription("");
+                            setEndDate("");
+                            setMilestoneName("");
                         }}
                         editMilestone={(milestone) => {
                             setSelectedMilestone(milestone);

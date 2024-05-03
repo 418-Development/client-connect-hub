@@ -3,13 +3,15 @@ import { UserObj, UserResponseObj } from "./UserObj";
 export interface MessageObj {
     id: number;
     user: UserObj;
+    projectId: number;
     content: string;
     timestamp: Date;
 }
 
 export interface MessageResponseObj {
     id: number;
-    user: UserResponseObj;
+    author: UserResponseObj;
     content: string;
-    timestamp: string;
+    postedDate: string;
+    projectId: number;
 }

@@ -28,11 +28,15 @@ public class InitialDataLoader implements CommandLineRunner {
     private RoleRepo roleRepository;
     @Autowired
     PasswordEncoder encoder;
+    @Autowired
+    private RoleService roleService;
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Override
     public void run(String... args) throws Exception {
+        roleService.insertRolesIfNotExist();
+
         if (userRepository.count() == 0) {
             User user = new User(
                     "Admin",
@@ -40,12 +44,12 @@ public class InitialDataLoader implements CommandLineRunner {
                     encoder.encode("418Development")
             );
 
-            Set<Role> roles = new HashSet<>();
-            Role userRole = roleRepository.findByName(ERole.ROLE_MANAGER).orElseThrow(
-                    () -> new RuntimeException("Error: Role is not found.")
-            );
-            roles.add(userRole);
-            user.setRoles(roles);
+            Optional<Role> roleToAdd = roleRepository.findById(3L);
+            if (roleToAdd.isPresent()) {
+                Set<Role> roles = new HashSet<>();
+                roles.add(roleToAdd.get());
+                user.setRoles(roles);
+            }
 
             logger.info("ADD initial admin user!");
             userRepository.save(user);
