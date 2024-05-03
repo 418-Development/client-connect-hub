@@ -4,6 +4,7 @@ import Button from "./Button";
 import { useParams } from "react-router";
 import { ProjectObj } from "../interfaces/Project";
 import { fetchAllUsers } from "../utils/User";
+import DropdownButton from "./DropdownButton";
 
 interface Props {
     project: ProjectObj;
@@ -70,36 +71,13 @@ function UserAssignment({ project, onUserEvent }: Props) {
     return (
         <div>
             <div className="dropdown-wrapper mt-0 mb-3 d-flex align-items-center">
-                <div className="btn-group dropend">
-                    <Button
-                        className="btn white-btn-text dropdown-toggle"
-                        type="button"
-                        id="roleSelect"
-                        dataBsToggle="dropdown"
-                        outline
-                        kind="secondary"
-                        ariaExpanded={false}
-                    >
-                        Filter by Role
-                    </Button>
-                    <ul className="dropdown-menu" aria-labelledby="roleSelect">
-                        <li>
-                            <Button className="dropdown-item" type="button" onClick={() => setRoleSearch(UserRole.MANAGER)}>
-                                Show All
-                            </Button>
-                        </li>
-                        <li>
-                            <Button className="dropdown-item" type="button" onClick={() => setRoleSearch(UserRole.TEAM)}>
-                                Team Member
-                            </Button>
-                        </li>
-                        <li>
-                            <Button className="dropdown-item" type="button" onClick={() => setRoleSearch(UserRole.CLIENT)}>
-                                Client
-                            </Button>
-                        </li>
-                    </ul>
-                </div>
+                <DropdownButton
+                    items={[
+                        { title: "Show All", callback: () => setRoleSearch(UserRole.MANAGER) },
+                        { title: "Team Member", callback: () => setRoleSearch(UserRole.TEAM) },
+                        { title: "Client", callback: () => setRoleSearch(UserRole.CLIENT) },
+                    ]}
+                />
                 <label htmlFor="roleSelect" className="form-label ms-3 mb-0">
                     {roleSearch == UserRole.MANAGER && "All"}
                     {roleSearch == UserRole.CLIENT && "Client"}

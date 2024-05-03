@@ -14,8 +14,6 @@ interface Props {
     dismissModal?: boolean;
     ariaLabel?: string;
     id?: string;
-    dataBsToggle?: string;
-    ariaExpanded?: boolean;
     title?: string;
     disposeTitle?: boolean;
 }
@@ -34,8 +32,6 @@ const Button = forwardRef<HTMLButtonElement, Props>(
             ariaLabel,
             style,
             id,
-            dataBsToggle,
-            ariaExpanded,
             title,
             disposeTitle,
         },
@@ -68,7 +64,6 @@ const Button = forwardRef<HTMLButtonElement, Props>(
             additionalProps["aria-label"] = ariaLabel;
         }
 
-         
         React.useImperativeHandle(ref, () => buttonRef.current!);
 
         return (
@@ -77,8 +72,6 @@ const Button = forwardRef<HTMLButtonElement, Props>(
                 type={type}
                 style={style}
                 id={id}
-                aria-expanded={ariaExpanded}
-                data-bs-toggle={dataBsToggle}
                 className={`${kind != "close" ? "btn " : ""}btn-${outline ? "outline-" : ""}${kind} ${className}`}
                 onClick={() => {
                     tooltip?.hide();
