@@ -1,3 +1,4 @@
+import { ProjectRespondsObj } from "./Project";
 import { UserObj, UserResponseObj } from "./UserObj";
 
 export interface MessageObj {
@@ -13,5 +14,5 @@ export interface MessageResponseObj {
     author: UserResponseObj;
     content: string;
     postedDate: string;
-    projectId: number;
+    project: ProjectRespondsObj;
 }

@@ -38,6 +38,7 @@ function Forum({ messages, projectId, onUserEvent }: Props) {
         });
 
         if (response.ok) {
+            setMessageContent("");
             onUserEvent();
         }
     };
@@ -70,7 +71,7 @@ function Forum({ messages, projectId, onUserEvent }: Props) {
             <div>
                 {messages.map((message: MessageObj) => (
                     <React.Fragment key={message.id}>
-                        <ForumMessage message={message} />
+                        <ForumMessage onMessageEvent={onUserEvent} message={message} />
                     </React.Fragment>
                 ))}
             </div>

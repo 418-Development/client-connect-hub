@@ -18,7 +18,7 @@ export function parseMessageResponseObj(message: MessageResponseObj): MessageObj
     return {
         id: message.id,
         user: parseUserResponseObj(message.author),
-        projectId: message.projectId,
+        projectId: message.project.projectId,
         content: message.content,
         timestamp: new Date(message.postedDate),
     };
@@ -38,8 +38,6 @@ export async function fetchMessagesOfProject(projectId: number) {
     if (response.ok) {
         const json = await response.json();
         const messageResponse = json as MessageResponseObj[];
-
-        console.log("json", json);
 
         return parseMessageResponseObjArray(messageResponse);
     } else {
