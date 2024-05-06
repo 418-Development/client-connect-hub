@@ -13,10 +13,20 @@
     --ch-modal-header: #f8f9fa;
     --cch-blockquote-color: #f8f9fa;
     --cch-blockquote-border-color: #004daa;
+    --cch-nav-background-color: #312880;
+    --cch-white-btn-text: #ececec;
+    --cch-code-background-color: rgb(59, 59, 59);
+    --cch-code-color: #dee2e6;
+    --cch-code-secondary-color: #ff86c3;
 }
 
 .logo {
-    filter: invert(100%);
+    filter: none;
+}
+
+#navbarSupportedContent,
+.navbar-brand {
+    color: rgba(255, 255, 255) !important;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -30,10 +40,11 @@
         --ch-modal-header: #343a40;
         --cch-blockquote-color: #272b30;
         --cch-blockquote-border-color: #004daa;
-    }
-
-    .logo {
-        filter: none;
+        --cch-nav-background-color: rgb(38, 23, 114);
+        --cch-white-btn-text: #ececec;
+        --cch-code-background-color: rgb(24, 24, 24);
+        --cch-code-color: #dee2e6;
+        --cch-code-secondary-color: #d63384;
     }
 }
 
@@ -75,11 +86,15 @@
 }
 
 .custom-client-color {
-    background-color: rgb(38, 23, 114) !important;
+    background-color: var(--cch-nav-background-color) !important;
 }
 
 .white-btn-text {
     color: var(--ch-secondary-btn-text) !important;
+}
+
+nav .white-btn-text {
+    color: var(--cch-white-btn-text) !important;
 }
 
 .modal-header {
