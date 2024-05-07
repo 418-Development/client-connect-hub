@@ -64,7 +64,7 @@ function Timeline({
     const setMilestoneStatus = async (milestone: MilestoneObj, isDone: boolean) => {
         if (!userInfo) return;
 
-        const url = (import.meta.env.VITE_API_URL as string) + `milestones/milestone-status/${milestone.id}`;
+        const url = `${import.meta.env.VITE_API_URL as string}milestones/milestone-status/${milestone.id}`;
 
         const response = await fetch(url, {
             method: "PUT",
@@ -86,17 +86,14 @@ function Timeline({
             {displayedMilestones.map((milestone, index) => (
                 <li
                     key={milestone.id}
-                    className={
-                        "pt-2 pb-2 d-flex " +
-                        (milestone.isDone ? " is-done" : "") +
-                        (index == isActiveIndex ? " is-active" : "") +
-                        (indicateMoreAtBeginning && index == 0 ? " indicate-more" : "") +
-                        (indicateMoreAtEnd && index == displayedMilestones.length - 1 ? " indicate-more" : "")
-                    }
+                    className={`pt-2 pb-2 d-flex ${milestone.isDone ? " is-done" : ""}${index == isActiveIndex ? " is-active" : ""}${
+                        indicateMoreAtBeginning && index == 0 ? " indicate-more" : ""
+                    }${indicateMoreAtEnd && index == displayedMilestones.length - 1 ? " indicate-more" : ""}`}
                 >
                     <Button
                         outline
                         className="ms-3 text-truncate"
+                        title="Show milestone data and description"
                         modalTarget="#milestoneModal"
                         onClick={() => {
                             showMilestone(milestone);
@@ -109,6 +106,7 @@ function Timeline({
                         <Button
                             outline
                             kind="danger"
+                            title="Delete this milestone"
                             className="ms-2 iconButton"
                             onClick={() => {
                                 deleteMilestone(milestone);
@@ -122,6 +120,7 @@ function Timeline({
                         <Button
                             outline
                             kind="secondary"
+                            title="Edit this milestone"
                             className="ms-2 iconButton"
                             onClick={() => {
                                 editMilestone(milestone);
@@ -135,6 +134,8 @@ function Timeline({
                         <Button
                             outline
                             kind="danger"
+                            title="Mark this milestone as not done"
+                            disposeTitle
                             className="ms-2 iconButton"
                             onClick={() => {
                                 setMilestoneStatus(milestone, false);
@@ -147,6 +148,8 @@ function Timeline({
                         <Button
                             outline
                             kind="success"
+                            title="Mark this milestone as done"
+                            disposeTitle
                             className="ms-2 iconButton"
                             onClick={() => {
                                 setMilestoneStatus(milestone, true);

@@ -6,7 +6,7 @@ import UserAssignment from "../components/UserAssignment";
 import { ProjectObj, ProjectRespondsObj } from "../interfaces/Project";
 import EditMilestones from "../components/EditMilestones";
 import MarkdownEditor from "../components/MarkdownEditor";
-import { fetchProject } from "../utils/project";
+import { fetchProject } from "../utils/Project";
 
 interface Props {
     isEditing?: boolean;
@@ -50,7 +50,7 @@ function ProjectCreation({ isEditing = false }: Props) {
         if (!userInfo) return;
 
         const currentDate = new Date();
-        const url = (import.meta.env.VITE_API_URL as string) + "projects/create-project";
+        const url = `${import.meta.env.VITE_API_URL as string}projects/create-project`;
 
         const response = await fetch(url, {
             method: "POST",
@@ -86,7 +86,7 @@ function ProjectCreation({ isEditing = false }: Props) {
     const updateProject = async () => {
         if (!userInfo) return;
 
-        const url = (import.meta.env.VITE_API_URL as string) + `projects/update-project/${id}`;
+        const url = `${import.meta.env.VITE_API_URL as string}projects/update-project/${id}`;
 
         const response = await fetch(url, {
             method: "PUT",
@@ -113,11 +113,21 @@ function ProjectCreation({ isEditing = false }: Props) {
         <div className="container">
             {isEditing ? (
                 <>
-                    <h1 className="mt-3">Edit "{title}"</h1>
+                    <h1 className="mt-3">
+                        <Button onClick={() => navigate("/")} className="me-3" outline>
+                            <i className="bi bi-arrow-left"></i>
+                        </Button>
+                        Edit "{title}"
+                    </h1>
                 </>
             ) : (
                 <>
-                    <h1 className="mt-3">Create a new Project</h1>
+                    <h1 className="mt-3">
+                        <Button onClick={() => navigate("/")} className="me-3" outline>
+                            <i className="bi bi-arrow-left"></i>
+                        </Button>
+                        Create a new Project
+                    </h1>
                 </>
             )}
 
@@ -146,12 +156,15 @@ function ProjectCreation({ isEditing = false }: Props) {
                                     autoComplete="title"
                                     className="form-control mt-2"
                                     id="projectTitle"
-                                    placeholder="Enter title"
+                                    placeholder="Enter Title"
                                     onChange={(e) => {
                                         setTitle(e.target.value);
                                     }}
                                     value={title}
+                                    maxLength={50}
                                     required
+                                    data-bs-toggle="tooltip"
+                                    title="Enter the Title of the Project here."
                                 />
                                 <div className="invalid-feedback"></div>
                             </div>
@@ -178,6 +191,8 @@ function ProjectCreation({ isEditing = false }: Props) {
                                     }}
                                     value={startDate}
                                     required
+                                    data-bs-toggle="tooltip"
+                                    title="Enter the Start Date of the Project here."
                                 />
                                 <div className="invalid-feedback"></div>
                             </div>
@@ -193,6 +208,8 @@ function ProjectCreation({ isEditing = false }: Props) {
                                     }}
                                     value={endDate}
                                     required
+                                    data-bs-toggle="tooltip"
+                                    title="Enter the End Date of the Project here."
                                 />
                                 <div className="invalid-feedback"></div>
                             </div>
@@ -201,19 +218,25 @@ function ProjectCreation({ isEditing = false }: Props) {
                         <div className="d-flex justify-content-end">
                             {isEditing ? (
                                 <>
-                                    <Button kind="link" className="mt-3">
+                                    <Button kind="link" className="mt-3" data-bs-toggle="tooltip" title="Revert unsaved Edits.">
                                         Cancel
                                     </Button>
-                                    <Button type="submit" kind="success" className="mt-3">
+                                    <Button type="submit" kind="success" className="mt-3" data-bs-toggle="tooltip" title="Save Edits made.">
                                         Save Changes
                                     </Button>
                                 </>
                             ) : (
                                 <>
-                                    <Button kind="link" className="mt-3">
+                                    <Button
+                                        onClick={() => navigate("/")}
+                                        kind="link"
+                                        className="mt-3"
+                                        data-bs-toggle="tooltip"
+                                        title="Cancel Creation."
+                                    >
                                         Cancel
                                     </Button>
-                                    <Button type="submit" kind="success" className="mt-3">
+                                    <Button type="submit" kind="success" className="mt-3" data-bs-toggle="tooltip" title="Create Project.">
                                         Create Project
                                     </Button>
                                 </>

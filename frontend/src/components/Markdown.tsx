@@ -4,9 +4,10 @@ import remarkGfm from "remark-gfm";
 interface Props {
     children?: string;
     small?: boolean;
+    medium?: boolean;
 }
 
-function Markdown({ children, small = false }: Props) {
+function Markdown({ children, small = false, medium = false }: Props) {
     let components: Partial<Components> = {
         img(props) {
             const { src, alt, title, ...rest } = props;
@@ -22,9 +23,9 @@ function Markdown({ children, small = false }: Props) {
         },
         code(props) {
             return (
-                <div className="code-container p-3">
+                <span className="code-container p-3">
                     <code {...props}></code>
-                </div>
+                </span>
             );
         },
     };
@@ -37,6 +38,13 @@ function Markdown({ children, small = false }: Props) {
             h5: "h6",
         };
         components = { ...components, ...smallComponents };
+    } else if (medium) {
+        const mediumComponents: Partial<Components> = {
+            h1: "h3",
+            h2: "h3",
+            h3: "h4",
+        };
+        components = { ...components, ...mediumComponents };
     }
     return (
         <ReactMarkdown remarkPlugins={[remarkGfm]} components={components}>

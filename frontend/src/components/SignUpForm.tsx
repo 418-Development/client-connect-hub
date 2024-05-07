@@ -37,7 +37,7 @@ function SignUpForm({ login, setUsername, setPassword, username = "", password =
     };
 
     const signUp = async () => {
-        const url = (import.meta.env.VITE_API_URL as string) + "users/auth/signup";
+        const url = `${import.meta.env.VITE_API_URL as string}users/auth/signup`;
 
         const response = await fetch(url, {
             method: "POST",
@@ -99,6 +99,9 @@ function SignUpForm({ login, setUsername, setPassword, username = "", password =
                                     aria-describedby="emailHelp"
                                     placeholder="Enter email"
                                     required
+                                    maxLength={50}
+                                    data-bs-toggle="tooltip"
+                                    title="Enter your Email here."
                                 />
                                 <div className="invalid-feedback" ref={emailValidation}></div>
                                 <small id="emailHelp" className="form-text text-muted">
@@ -119,6 +122,10 @@ function SignUpForm({ login, setUsername, setPassword, username = "", password =
                                     id="username"
                                     placeholder="Username"
                                     value={username}
+                                    required
+                                    maxLength={20}
+                                    data-bs-toggle="tooltip"
+                                    title="Enter your Username here."
                                 />
                                 <div className="invalid-feedback" ref={usernameValidation}></div>
                             </div>
@@ -134,7 +141,11 @@ function SignUpForm({ login, setUsername, setPassword, username = "", password =
                                     id="userPassword"
                                     placeholder="Password"
                                     value={password}
+                                    required
                                     min={6}
+                                    maxLength={120}
+                                    data-bs-toggle="tooltip"
+                                    title="Enter your Password here."
                                 />
                             </div>
                             <div className="form-group mt-3">
@@ -149,7 +160,11 @@ function SignUpForm({ login, setUsername, setPassword, username = "", password =
                                     className="form-control"
                                     id="verifyUserPassword"
                                     placeholder="Verify Password"
+                                    required
                                     min={6}
+                                    maxLength={120}
+                                    data-bs-toggle="tooltip"
+                                    title="Enter your Password here again to verify it."
                                 />
                                 <div className="invalid-feedback" ref={passwordValidation}></div>
                             </div>

@@ -11,7 +11,10 @@ import DeleteProjectModal from "../components/DeleteProjectModal";
 import Markdown from "../components/Markdown";
 import { MilestoneObj } from "../interfaces/Milestone";
 import MilestoneModal from "../components/MilestoneModal";
-import { fetchProject } from "../utils/project";
+import { fetchProject } from "../utils/Project";
+import Forum from "../components/Forum";
+import { fetchMessagesOfProject } from "../utils/Message";
+import { MessageObj } from "../interfaces/MessageObj";
 
 function ProjectView() {
     const userInfo = useContext(UserContext);
@@ -22,6 +25,7 @@ function ProjectView() {
     const [isExpanded, setIsExpanded] = useState(false);
     const [hasOverflow, setHasOverflow] = useState(false);
     const [progress, setProgress] = useState(0);
+    const [messages, setMessages] = useState<MessageObj[]>([]);
     const contentRef = useRef<HTMLDivElement>(null);
 
     const [selectedMilestone, setSelectedMilestone] = useState<MilestoneObj | null>(null);
@@ -29,6 +33,13 @@ function ProjectView() {
     useEffect(() => {
         if (id !== undefined) reloadProject(id);
     }, [id]);
+
+    useEffect(() => {
+        if (project?.id)
+            fetchMessagesOfProject(project?.id).then((messageObjs) => {
+                setMessages(messageObjs);
+            });
+    }, [project]);
 
     const reloadProject = async (projectId: number | string) => {
         try {
@@ -84,7 +95,12 @@ function ProjectView() {
         <>
             <div className="card m-3 mx-auto" style={{ width: "85%", boxSizing: "border-box" }}>
                 <div className="card-header" style={{ textDecoration: "none" }}>
-                    <h2 className="m-0 text-truncate">{project?.title}</h2>
+                    <h2 className="m-0 text-truncate">
+                        <Button onClick={() => navigate("/")} className="me-3 mb-1" outline>
+                            <i className="bi bi-arrow-left"></i>
+                        </Button>
+                        {project?.title}
+                    </h2>
                 </div>
                 <div className="card-body">
                     <div className="row">
@@ -217,7 +233,13 @@ function ProjectView() {
 
                     {userInfo?.role === UserRole.MANAGER ? (
                         <div className="d-flex justify-content-end me-2">
-                            <Button kind="danger" className="me-2" outline modalTarget="#deleteProjectModal">
+                            <Button
+                                kind="danger"
+                                className="me-2"
+                                outline
+                                modalTarget="#deleteProjectModal"
+                                title={`Delete '${project?.title}'`}
+                            >
                                 <i className="bi bi-trash"></i>
                             </Button>
                             <Button
@@ -226,6 +248,7 @@ function ProjectView() {
                                 onClick={() => {
                                     navigate(`/edit-project/${project?.id}`);
                                 }}
+                                title={`Edit '${project?.title}'`}
                             >
                                 <i className="bi bi-pencil"></i>
                             </Button>
@@ -233,6 +256,15 @@ function ProjectView() {
                     ) : (
                         <></>
                     )}
+                </div>
+                <div>
+                    <Forum
+                        messages={messages}
+                        projectId={project?.id ?? 0}
+                        onUserEvent={() => {
+                            reloadProject(project?.id ?? 0);
+                        }}
+                    />
                 </div>
             </div>
             {project && (

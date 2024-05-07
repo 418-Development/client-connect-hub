@@ -1,5 +1,6 @@
 @import url("css/markdown.css");
 @import url("css/timeline.css");
+@import url("css/message.css");
 
 :root {
     box-sizing: border-box;
@@ -11,6 +12,10 @@
     --cch-card-hover-2: #dbdbdb;
     --ch-secondary-btn-text: #292c35;
     --ch-modal-header: #f8f9fa;
+    --cch-blockquote-color: #f8f9fa;
+    --cch-blockquote-border-color: #004daa;
+    --cch-tooltip-bg-color: #0d6efd;
+    --cch-tooltip-color: #ffffff;
 }
 
 .logo {
@@ -26,6 +31,10 @@
         --cch-card-hover-2: #313641;
         --ch-secondary-btn-text: #ececec;
         --ch-modal-header: #343a40;
+        --cch-blockquote-color: #272b30;
+        --cch-blockquote-border-color: #004daa;
+        --cch-tooltip-bg-color: #0d6efd;
+        --cch-tooltip-color: #ffffff;
     }
 
     .logo {
@@ -80,4 +89,88 @@
 
 .modal-header {
     background-color: var(--ch-modal-header) !important;
+}
+
+.tooltip {
+    --bs-tooltip-bg: var(--cch-tooltip-bg-color) !important;
+    --bs-tooltip-color: var(--cch-tooltip-color) !important;
+}
+
+.gravatar {
+    border-radius: 100%;
+    width: 32px;
+    height: 32px;
+}
+
+.user-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+}
+
+.gravatar-container {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    min-width: 200px;
+}
+
+.user-info {
+    margin-left: 10px;
+}
+
+.role-container {
+    flex: 1;
+    min-width: 150px;
+}
+
+.label-container {
+    flex: 1;
+    min-width: 90px;
+}
+
+.email-truncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.toolbar-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.toolbar-btn {
+    padding: 4px 8px;
+    font-size: 0.85rem;
+    margin-right: 4px;
+}
+
+.markdown-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+@media (max-width: 768px) {
+    .user-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .role-container,
+    .label-container {
+        width: 100%;
+        margin-top: 5px;
+    }
+
+    .toolbar-btn {
+        padding: 2px 6px;
+        font-size: 0.75rem;
+    }
 }

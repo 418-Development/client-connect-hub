@@ -7,9 +7,11 @@
         "dev": "vite",
         "build": "tsc && vite build --mode production",
         "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+        "lint-fix": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0 --fix",
         "preview": "vite preview"
     },
     "dependencies": {
+        "@types/crypto-js": "^4.2.2",
         "bootstrap": "^5.3.3",
         "bootstrap-icons": "^1.11.3",
         "react": "^18.2.0",
@@ -19,6 +21,7 @@
         "remark-gfm": "^4.0.0"
     },
     "devDependencies": {
+        "@types/bootstrap": "^5.2.10",
         "@types/react": "^18.2.56",
         "@types/react-dom": "^18.2.19",
         "@typescript-eslint/eslint-plugin": "^7.0.2",

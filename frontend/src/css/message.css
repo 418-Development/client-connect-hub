@@ -1,0 +1,27 @@
+.message {
+    display: flex;
+    align-items: center;
+}
+
+.message .message-container {
+    width: 80%;
+}
+
+.message-other {
+    justify-content: start;
+}
+
+.message-own {
+    justify-content: end;
+}
+
+.message-own {
+    justify-content: end;
+}
+
+.message-own .message-header {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: end;
+    align-items: center;
+}

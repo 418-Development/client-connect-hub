@@ -2,16 +2,17 @@ export interface UserObj {
     id: number;
     username: string;
     role: UserRole;
-    label: string;
     email: string;
+    gravatar: string;
+    label: string;
 }
 
 export interface UserResponseObj {
     id: number;
     username: string;
     roles: { id: number; name: string }[];
-    password: string;
     email: string;
+    gravatar: string;
     label: string;
 }
 

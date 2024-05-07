@@ -8,13 +8,16 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
 
+import static com.example.agile.utils.HashUtil.sha256Hex;
+
 @Entity
-@Table( name = "users",
+@Table(name = "users",
         uniqueConstraints = {
                 @UniqueConstraint(columnNames = "username"),
                 @UniqueConstraint(columnNames = "email")
@@ -34,10 +37,17 @@ public class User implements Comparable<User> {
     @Email
     private String email;
 
+    @Setter
+    @Getter
+    @NotBlank
+    @Size(max = 100)
+    private String gravatar;
+
     @NotBlank
     @Size(max = 120)
     private String password;
 
+    @Setter
     @NotBlank
     @Size(max = 50)
     private String label;
@@ -50,14 +60,24 @@ public class User implements Comparable<User> {
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
+    @JsonIgnore
+    @OneToMany
+    @JoinTable(
+            name = "user_post",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "post_id")
+    )
+    private Set<Post> posts = new HashSet<>();
+
     public User(String username) {
         this.username = username;
     }
 
     public User(String username, String email, String password) {
         this.username = username;
-        this.email = email;
+        setEmail(email);
         this.password = password;
+        this.label = "new";
     }
 
     public User() {
@@ -78,6 +98,7 @@ public class User implements Comparable<User> {
 
     public void setEmail(String email) {
         this.email = email;
+        this.gravatar = sha256Hex(email.toLowerCase());
     }
 
     public String getPassword() {
@@ -92,13 +113,10 @@ public class User implements Comparable<User> {
         return label;
     }
 
-    public void setLabel(String label) {
-        this.label = label;
-    }
-
     public Set<Role> getRoles() {
         return roles;
     }
+
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
