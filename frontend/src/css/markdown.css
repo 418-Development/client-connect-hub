@@ -18,14 +18,27 @@
 }
 
 .markdown .code-container {
-    background-color: rgb(24, 24, 24);
+    background-color: var(--cch-code-background-color) !important;
+
     width: fit-content;
     display: block;
+}
+
+.markdown .code-container code {
+    color: var(--cch-code-secondary-color) !important;
+}
+
+.markdown pre .code-container code {
+    color: var(--cch-code-color) !important;
 }
 
 .markdown p .code-container {
     display: inline;
     width: auto;
     margin: 0;
-    padding: 0 0.3rem !important;
+    padding: 0 0.3rem 0.3rem 0.3rem !important;
+}
+
+.markdown pre {
+    overflow: initial;
 }
