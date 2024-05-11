@@ -22,6 +22,7 @@ public class Milestone {
     private String milestoneName;
 
     @Setter
+    @NotBlank
     @Size(max = 1500)
     private String description;
 

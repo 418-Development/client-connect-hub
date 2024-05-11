@@ -71,7 +71,7 @@ function Navigation() {
 
     return (
         <>
-            <nav className="navbar navbar-expand-lg custom-client-color" style={{ minWidth: "335px" }}>
+            <nav className="navbar navbar-expand-lg custom-client-color" style={{ minWidth: "335px" }} data-bs-theme="dark">
                 <div className="container-fluid justify-content-between">
                     <div className="d-flex align-items-center">
                         <img
@@ -87,7 +87,7 @@ function Navigation() {
                             Client Connect Hub
                         </Button>
                     </div>
-                    <Button onClick={toggleNav} className="navbar-toggler ms-auto">
+                    <Button onClick={toggleNav} className="navbar-toggler ms-auto white white-btn-text">
                         <span className="navbar-toggler-icon"></span>
                     </Button>
 

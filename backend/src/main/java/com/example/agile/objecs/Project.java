@@ -24,6 +24,7 @@ public class Project {
     @Size(max = 50)
     private String projectName;
 
+    @NotBlank
     @Size(max = 15000)
     private String description;
 
@@ -52,7 +53,7 @@ public class Project {
     private Set<Milestone> milestones = new HashSet<>();
 
     @JsonIgnore
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "project_post",
             joinColumns = @JoinColumn(name = "project_id"),
