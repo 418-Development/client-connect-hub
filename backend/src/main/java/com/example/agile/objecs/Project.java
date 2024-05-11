@@ -53,7 +53,7 @@ public class Project {
     private Set<Milestone> milestones = new HashSet<>();
 
     @JsonIgnore
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "project_post",
             joinColumns = @JoinColumn(name = "project_id"),
